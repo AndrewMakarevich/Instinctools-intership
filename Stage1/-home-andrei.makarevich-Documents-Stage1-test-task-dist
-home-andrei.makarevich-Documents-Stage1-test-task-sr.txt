@@ -1,0 +1,5 @@
+/home/andrei.makarevich/Documents/Stage1-test-task/dist
+/home/andrei.makarevich/Documents/Stage1-test-task/src
+/home/andrei.makarevich/Documents/Stage1-test-task/package-lock.json
+/home/andrei.makarevich/Documents/Stage1-test-task/package.json
+/home/andrei.makarevich/Documents/Stage1-test-task/webpack.config.js
