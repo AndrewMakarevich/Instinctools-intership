@@ -1,14 +1,10 @@
-const calendarCreator = EventsCalendarObject.CalendarCreator();
-const eventCreator = EventsCalendarObject.EventCreator();
-
-const calendar = calendarCreator.createCalendar();
-
+Calendar.createEvent('Test', new Date(Date.now() + 5000), testFunc)
+const eventObj = Calendar.getEvent('Test');
+eventObj.changeExicutionTime(new Date(Date.now() + 2000));
 
 function testFunc() {
-  console.log('alalalal');
+  console.log('Event exicute');
 }
-const event1 = eventCreator.createEvent('test1', new Date(Date.now() + 10000), testFunc);
-const event2 = eventCreator.createEvent('test1', new Date(Date.now() - 10000), testFunc);
-calendar.addEvent(event1);
-calendar.addEvent(event2);
-console.log(calendar.events)
+console.log(eventObj.timeout);
+console.log(Calendar.getEvent('Test'));
+console.log(Calendar.getAllEvents());

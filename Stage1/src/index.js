@@ -1,53 +1,34 @@
 
-const EventsCalendarObject = {
+const Calendar = {
   events: [],
   createEvent(name, date, callback) {
-    this.events.push({
+    const event = {
       name,
       date,
-      callback
-    });
-    const timeout;
-    timeout = setTimeout(() => callback, date.getTime() - Date.now());
-  },
-  CalendarCreator() {
-    return {
-      createCalendar() {
-        return new EventsCalendarObject.CalendarClass();
-      },
-      addEvent(event) {
-        return EventsCalendarObject.CalendarClass.addEvent(event);
-      },
-      deleteEvent(event) {
-        return EventsCalendarObject.CalendarClass.deleteEvent(event)
+      callback,
+      changeExicutionTime: function (date) {
+        clearTimeout(this._timeout);
+        this._timeout = setTimeout(() => callback(), date.getTime() - Date.now());
       }
     }
-  },
-  EventCreator() {
-    return ({
-      createEvent(name, date, callback) {
-        return new EventsCalendarObject.EventClass(name, date, callback);
-      },
-      changeEventDate(date) {
-        return EventsCalendarObject.EventClass.changeEventDate(date);
-      },
-      chaneEventName(name) {
-        return EventsCalendarObject.EventClass.changeEventName(name);
+    Object.defineProperty(event, '_timeout', {
+      value: setTimeout(() => callback(), date.getTime() - Date.now()),
+      writable: true,
+      configurable: false,
+      enumerable: false,
+      get() {
+        return undefined
       }
-    })
+    });
+    this.events.push(event);
+  },
+  getEvent(name) {
+    return this.events.find((event) => event.name === name);
+  },
+  getAllEvents() {
+    return this.events;
   }
 }
-Object.defineProperty(EventsCalendarObject, 'CalendarClass', {
-  writable: false,
-  configurable: false,
-  enumerable: false
-});
-Object.defineProperty(EventsCalendarObject, 'EventClass', {
-  writable: false,
-  configurable: false,
-  enumerable: false
-});
-
 
 // class Calendar {
 //   constructor() {
