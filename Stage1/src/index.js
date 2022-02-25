@@ -32,21 +32,35 @@ const calendar = (function () {
     },
     getEvent(name) {
       const foundedEvent = this.events.find((event) => event.id === name);
-      console.log(this.events);
       if (!foundedEvent) {
         return null;
       }
       function createEventCopy(eventObj) {
-        const event = JSON.parse(JSON.stringify(eventObj));
-        event.date = new Date(event.date);
-        return event;
+        const stringifiedEvent = JSON.stringify(eventObj, function (key, value) {
+          if (typeof value === 'function') {
+            return value.toString()
+          }
+          return value;
+        });
+        const eventCopy = JSON.parse(stringifiedEvent, function (key, value) {
+          if (key === 'callback') {
+            return eval(value)
+          } else if (key === 'date') {
+            return new Date(value);
+          }
+          return value;
+        });
+        return eventCopy;
       }
       return {
         event: createEventCopy(foundedEvent),
         changeExicutionTime: function (date) {
           clearTimeout(foundedEvent._timeout);
           const dateDiff = date.getTime() - Date.now();
-          if (dateDiff > 0) foundedEvent._timeout = setTimeout(() => foundedEvent.callback(), date.getTime() - Date.now());
+          if (dateDiff > 0) {
+            foundedEvent._timeout = setTimeout(() => foundedEvent.callback(), date.getTime() - Date.now());
+            foundedEvent.date = date;
+          }
           return createEventCopy(foundedEvent);
         },
         editEventName(name) {
@@ -130,9 +144,7 @@ const calendar = (function () {
       if (dateDiff > 0) {
         return event._timeout = setTimeout(() => event.callback(), dateDiff);
       }
-      console.log(dateDiff)
     });
-    console.log(eventsFromLocal);
   };
   // ------
   const myCalendar = {
