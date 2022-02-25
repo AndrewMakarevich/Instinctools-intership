@@ -1,0 +1,35 @@
+.footer{
+  grid-column: 1/6;
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  border-top: solid black 2px;
+  padding: 10px 0 5px 0;
+}
+.footer__link-list{
+  list-style: none;
+  display: flex;
+  gap: 4px;
+}
+.footer__link-list__item:nth-child(n){
+  border-right: solid black 2px;
+  padding-right: 3px;
+}
+.footer__link-list__item:last-child{
+  border-right: 0;
+  padding-right: 0;
+}
+.footer__link-list__item a{
+  text-decoration: none;
+  color:black;
+}
+.footer__link-list_flex-end{
+  justify-self: end;
+}
+.footer__link-list__social-media-item{
+  width: 24px;
+  height: 24px;
+}
+.social-media-link{
+  width: 35px;
+  height: 35px;
+}
