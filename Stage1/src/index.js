@@ -153,6 +153,7 @@ const calendar = (function () {
         }, 1000 * 60 * 60 * 24);
       }, startOfTheNextDay - currentDate);
     }
+    // getRepeatingEvent(name)
   }
   window.onbeforeunload = () => {
     if (calendarObj.events.length) {
