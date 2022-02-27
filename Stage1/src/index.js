@@ -1,5 +1,6 @@
 const calendar = (function () {
   const calendarObj = {
+    // STANDART EVENT
     events: [],
     getStringifiedEvents() {
       return JSON.stringify(this.events, function (key, value) {
@@ -123,6 +124,34 @@ const calendar = (function () {
           }
         }
       }
+    },
+
+    // REPEATING EVENT
+    repEvents: [],
+    createRepeatingEvent(name, dayOfTheWeek, callback) {
+      const alreadyCreatedEvent = this.repEvents.find((repEvent) => repEvent.id === name);
+      if (alreadyCreatedEvent) {
+        alreadyCreatedEvent.dayOfTheWeek = dayOfTheWeek;
+        alreadyCreatedEvent.callback = callback;
+        return;
+      }
+      const eventObj = {
+        id: name,
+        name,
+        dayOfWeek: dayOfTheWeek,
+        callback
+      };
+      this.repEvents.push(eventObj);
+      const currentDate = new Date();
+      if (currentDate.getDay() === dayOfTheWeek) callback();
+      const nextDay = new Date(currentDate.getTime() + 1000 * 60 * 60 * 24);
+      const startOfTheNextDay = new Date(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getDate());
+      setTimeout(() => {
+        if (currentDate.getDay() === dayOfTheWeek) callback();
+        setInterval(() => {
+          if (currentDate.getDay() === dayOfTheWeek) callback();
+        }, 1000 * 60 * 60 * 24);
+      }, startOfTheNextDay - currentDate);
     }
   }
   window.onbeforeunload = () => {
@@ -145,21 +174,31 @@ const calendar = (function () {
         return event._timeout = setTimeout(() => event.callback(), dateDiff);
       }
     });
+
   };
+
   // ------
   const myCalendar = {
-    getEvent(name) {
-      return calendarObj.getEvent(name);
+    events: {
+      getEvent(name) {
+        return calendarObj.getEvent(name);
+      },
+      getAllEvents() {
+        return calendarObj.getAllEvents();
+      },
+      createEvent(name, date, callback) {
+        return calendarObj.createEvent(name, date, callback)
+      },
+      getEventsByYear(from, to) {
+        return calendarObj.getEventsByYear(from, to);
+      }
     },
-    getAllEvents() {
-      return calendarObj.getAllEvents();
-    },
-    createEvent(name, date, callback) {
-      return calendarObj.createEvent(name, date, callback)
-    },
-    getEventsByYear(from, to) {
-      return calendarObj.getEventsByYear(from, to);
+    repEvents: {
+      createRepeatingEvent(name, dayOfTheWeek, callback) {
+        return calendarObj.createRepeatingEvent(name, dayOfTheWeek, callback)
+      }
     }
+
   }
   Object.defineProperties(myCalendar, {
     getEvent: {
