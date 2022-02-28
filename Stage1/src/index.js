@@ -1,11 +1,22 @@
+// 'esversion: 6';
 const calendar = (function () {
   const calendarObj = {
     // STANDART EVENT
     events: [],
-    getStringifiedEvents() {
-      return JSON.stringify(this.events, function (key, value) {
+    getStringifiedEvent(event) {
+      return JSON.stringify(event, function (key, value) {
         if (typeof value === 'function') {
-          return value.toString()
+          return value.toString();
+        }
+        return value;
+      });
+    },
+    getParsedEvent(event) {
+      return JSON.parse(event, function (key, value) {
+        if (key === 'callback') {
+          return eval(value);
+        } else if (key === 'date') {
+          return new Date(value);
         }
         return value;
       });
@@ -13,8 +24,8 @@ const calendar = (function () {
     createEvent(name, date, callback) {
       const alreadySettledEvent = this.events.find(event => event.id === name);
       if (alreadySettledEvent) {
-        alreadySettledEvent.date = date,
-          alreadySettledEvent.callback = callback
+        alreadySettledEvent.date = date;
+        alreadySettledEvent.callback = callback;
         return;
       }
       const event = {
@@ -22,7 +33,7 @@ const calendar = (function () {
         name,
         date,
         callback
-      }
+      };
       Object.defineProperty(event, '_timeout', {
         value: setTimeout(() => callback(), date.getTime() - Date.now()),
         writable: true,
@@ -36,47 +47,30 @@ const calendar = (function () {
       if (!foundedEvent) {
         return null;
       }
-      function createEventCopy(eventObj) {
-        const stringifiedEvent = JSON.stringify(eventObj, function (key, value) {
-          if (typeof value === 'function') {
-            return value.toString()
-          }
-          return value;
-        });
-        const eventCopy = JSON.parse(stringifiedEvent, function (key, value) {
-          if (key === 'callback') {
-            return eval(value)
-          } else if (key === 'date') {
-            return new Date(value);
-          }
-          return value;
-        });
-        return eventCopy;
-      }
       return {
-        event: createEventCopy(foundedEvent),
-        changeExicutionTime: function (date) {
+        event: this.getParsedEvent(this.getStringifiedEvent(foundedEvent)),
+        changeExicutionTime: (date) => {
           clearTimeout(foundedEvent._timeout);
           const dateDiff = date.getTime() - Date.now();
           if (dateDiff > 0) {
             foundedEvent._timeout = setTimeout(() => foundedEvent.callback(), date.getTime() - Date.now());
             foundedEvent.date = date;
           }
-          return createEventCopy(foundedEvent);
+          return this.getParsedEvent(this.getStringifiedEvent(foundedEvent));
         },
-        editEventName(name) {
+        editEventName: (name) => {
           foundedEvent.name = name;
-          return createEventCopy(foundedEvent);
+          return this.getParsedEvent(this.getStringifiedEvent(foundedEvent));
         },
         deleteEvent: () => {
           clearTimeout(foundedEvent._timeout);
           this.events = this.events.filter((event) => event !== foundedEvent);
           return;
         }
-      }
+      };
     },
     getAllEvents() {
-      return JSON.parse(JSON.stringify(this.events));
+      return this.getParsedEvent(this.getStringifiedEvent(this.events));
     },
     getEventsByYear(from, to) {
       const eventsByYear = this.events.filter((event) => event.date.getFullYear() >= from && event.date.getFullYear() <= to);
@@ -96,7 +90,7 @@ const calendar = (function () {
                 const amountOfDays = Math.floor((date - firstJan) / (1000 * 60 * 60 * 24));
                 const currentWeek = Math.ceil(amountOfDays / 7);
                 return currentWeek;
-              };
+              }
               const eventsByWeek = from && to ? eventsByMonth.filter((event) => getWeekNumber(event.date) >= from && getWeekNumber(event.date) <= to) : eventsByMonth;
               eventsByWeek.forEach(event => {
                 event.date = new Date(event.date);
@@ -110,20 +104,20 @@ const calendar = (function () {
                   });
                   return {
                     events: eventsByWeekDay
-                  }
+                  };
                 }
-              }
+              };
             },
             getEventsByMonthDay(from, to) {
               const eventsByMonthDay = eventsByMonth.filter((event) => event.date.getDate() >= from && event.date.getDate() <= to);
               eventsByMonthDay.forEach(event => {
                 event.date = new Date(event.date);
               });
-              return { events: eventsByMonthDay }
+              return { events: eventsByMonthDay };
             }
-          }
+          };
         }
-      }
+      };
     },
 
     // REPEATING EVENT
@@ -138,7 +132,7 @@ const calendar = (function () {
       const eventObj = {
         id: name,
         name,
-        dayOfWeek: dayOfTheWeek,
+        dayOfTheWeek,
         callback
       };
       this.repEvents.push(eventObj);
@@ -152,12 +146,30 @@ const calendar = (function () {
           if (currentDate.getDay() === dayOfTheWeek) callback();
         }, 1000 * 60 * 60 * 24);
       }, startOfTheNextDay - currentDate);
+    },
+    getRepeatingEvent(name) {
+      const foundedEvent = this.repEvents.find(repEvent => repEvent.id === name);
+      console.log('olololol');
+      if (foundedEvent) {
+        return {
+          event: this.getParsedEvent(this.getStringifiedEvent(foundedEvent)),
+          changeRepEventName: (name) => {
+            foundedEvent.name = name;
+            return this.getParsedEvent(this.getStringifiedEvent(foundedEvent));
+          },
+          deleteRepEvent: () => {
+            this.events.filter(event => event.id !== name);
+          }
+        };
+      }
+      return null;
     }
-    // getRepeatingEvent(name)
-  }
+  };
+
+  // LOCAL STORAGE SAVE
   window.onbeforeunload = () => {
     if (calendarObj.events.length) {
-      localStorage.setItem('calendar-events', calendarObj.getStringifiedEvents());
+      localStorage.setItem('calendar-events', calendarObj.getStringifiedEvent(calendarObj.events));
     }
   };
   // TAKING EVENTS FROM LOCAL STORAGE
@@ -176,7 +188,7 @@ const calendar = (function () {
       }
     });
 
-  };
+  }
 
   // ------
   const myCalendar = {
@@ -188,7 +200,7 @@ const calendar = (function () {
         return calendarObj.getAllEvents();
       },
       createEvent(name, date, callback) {
-        return calendarObj.createEvent(name, date, callback)
+        return calendarObj.createEvent(name, date, callback);
       },
       getEventsByYear(from, to) {
         return calendarObj.getEventsByYear(from, to);
@@ -196,12 +208,24 @@ const calendar = (function () {
     },
     repEvents: {
       createRepeatingEvent(name, dayOfTheWeek, callback) {
-        return calendarObj.createRepeatingEvent(name, dayOfTheWeek, callback)
+        return calendarObj.createRepeatingEvent(name, dayOfTheWeek, callback);
+      },
+      getRepeatingEvent(name) {
+        return calendarObj.getRepeatingEvent(name);
       }
     }
 
-  }
+  };
+
   Object.defineProperties(myCalendar, {
+    events: {
+      writable: false
+    },
+    repEvents: {
+      writable: false
+    }
+  });
+  Object.defineProperties(myCalendar.events, {
     getEvent: {
       writable: false
     },
@@ -214,6 +238,14 @@ const calendar = (function () {
     getEventsByYear: {
       writable: false
     }
-  })
+  });
+  Object.defineProperties(myCalendar.repEvents, {
+    createRepeatingEvent: {
+      writable: false
+    },
+    getRepeatingEvent: {
+      writable: false
+    }
+  });
   return myCalendar;
 })();
