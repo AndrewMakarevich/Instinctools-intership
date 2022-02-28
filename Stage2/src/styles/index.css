@@ -15,3 +15,8 @@ body{
   grid-auto-rows: min-content 1fr min-content;
   grid-gap: 35px;
 }
+@media (max-width:768px) {
+  body{
+    grid-gap: 15px;
+  }
+}

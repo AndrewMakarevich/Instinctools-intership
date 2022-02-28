@@ -9,7 +9,7 @@
 }
 .main__news{
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   grid-gap: 15px;
 }
 .news__item{
@@ -19,4 +19,9 @@
 }
 .news__item__content{
 
+}
+@media (max-width: 768px) {
+  .main{
+    grid-column: 1/6;
+  }
 }
