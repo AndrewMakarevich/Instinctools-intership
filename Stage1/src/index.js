@@ -1,10 +1,7 @@
 // 'esversion: 6';
 const calendar = new (function Calendar() {
 
-
-
   const calendarObj = {
-
     // STANDART EVENT
     events: [],
     getStringifiedEvent(event) {
@@ -25,6 +22,20 @@ const calendar = new (function Calendar() {
         return value;
       });
     },
+    setNewExicutionParam(event, date) {
+      clearTimeout(event._timeout);
+      const dateDiff = date.getTime() - Date.now();
+      if (dateDiff > 0) {
+        event._timeout = setTimeout(() => event.callback(), date.getTime() - Date.now());
+        event.date = date;
+      }
+    },
+    removeAndStopEvent(event) {
+      clearTimeout(event._timeout);
+      this.events = this.events.filter((eventItem) => eventItem !== event);
+      return;
+    },
+
     createEvent(name, date, callback) {
       const alreadySettledEvent = this.events.find(event => event.id === name);
       if (alreadySettledEvent) {
@@ -55,12 +66,7 @@ const calendar = new (function Calendar() {
         event: this.getParsedEvent(this.getStringifiedEvent(foundedEvent)),
 
         changeExicutionTime: (date) => {
-          clearTimeout(foundedEvent._timeout);
-          const dateDiff = date.getTime() - Date.now();
-          if (dateDiff > 0) {
-            foundedEvent._timeout = setTimeout(() => foundedEvent.callback(), date.getTime() - Date.now());
-            foundedEvent.date = date;
-          }
+          this.setNewExicutionParam(foundedEvent, date);
           return this.getParsedEvent(this.getStringifiedEvent(foundedEvent));
         },
 
@@ -70,19 +76,17 @@ const calendar = new (function Calendar() {
         },
 
         deleteEvent: () => {
-          clearTimeout(foundedEvent._timeout);
-          this.events = this.events.filter((event) => event !== foundedEvent);
+          this.removeAndStopEvent(foundedEvent);
           return;
         }
 
       };
     },
     getAllEvents() {
-      console.log(this);
       return this.getParsedEvent(this.getStringifiedEvent(this.events));
     },
     getEventsByYear(from, to) {
-      const eventsByYear = events.filter((event) => event.date.getFullYear() >= from && event.date.getFullYear() <= to);
+      const eventsByYear = this.events.filter((event) => event.date.getFullYear() >= from && event.date.getFullYear() <= to);
       return {
 
         events: eventsByYear,
@@ -138,28 +142,38 @@ const calendar = new (function Calendar() {
     },
   };
 
+  this.deleteEvent = function (eventName) {
+    const foundedEvent = calendarObj.events.find(event => event.id === eventName);
 
-  // LOCAL STORAGE SAVE
-  window.onbeforeunload = () => {
-    if (calendarObj.events.length) {
-      localStorage.setItem('calendar-events', calendarObj.getStringifiedEvent(calendarObj.events));
+    if (foundedEvent) {
+      calendarObj.events = calendarObj.events.filter((eventItem) => eventItem !== foundedEvent);
+      if (foundedEvent._timeout) clearTimeout(foundedEvent._timeout);
+      if (foundedEvent._interval) clearInterval(foundedEvent._interval);
     }
-  };
+  },
+    // // LOCAL STORAGE SAVE
+    // window.onbeforeunload = () => {
+    //   if (calendarObj.events.length) {
+    //     localStorage.setItem('calendar-events', calendarObj.getStringifiedEvent(calendarObj.events));
+    //   }
+    // };
 
-  // TAKING EVENTS FROM LOCAL STORAGE
-  let eventsFromLocal = localStorage.getItem('calendar-events') ? calendarObj.getParsedEvent(localStorage.getItem('calendar-events')) : null;
-  if (eventsFromLocal && Array.isArray(eventsFromLocal)) {
-    calendarObj.events = eventsFromLocal;
-    calendarObj.events.forEach(event => {
-      const dateDiff = event.date.getTime() - Date.now();
-      if (dateDiff > 0) {
-        return event._timeout = setTimeout(() => event.callback(), dateDiff);
-      }
-    });
-  }
-  this.createEvent = function (name, date, callback) {
-    return calendarObj.createEvent(name, date, callback);
-  };
+    // // TAKING EVENTS FROM LOCAL STORAGE
+    // let eventsFromLocal = localStorage.getItem('calendar-events') ? calendarObj.getParsedEvent(localStorage.getItem('calendar-events')) : null;
+    // if (eventsFromLocal && Array.isArray(eventsFromLocal)) {
+    //   calendarObj.events = eventsFromLocal;
+    //   calendarObj.events.forEach(event => {
+    //     if (event.date) {
+    //       const dateDiff = event.date.getTime() - Date.now();
+    //       if (dateDiff > 0) {
+    //         return event._timeout = setTimeout(() => event.callback(), dateDiff);
+    //       }
+    //     }
+    //   });
+    // }
+    this.createEvent = function (name, date, callback) {
+      return calendarObj.createEvent(name, date, callback);
+    };
   this.getEvent = function (name) {
     return calendarObj.getEvent(name);
   };
@@ -169,9 +183,11 @@ const calendar = new (function Calendar() {
   this.getEventsByYear = function (from, to) {
     return calendarObj.getEventsByYear(from, to);
   };
+  Calendar.prototype.events = calendarObj.events;
   Calendar.prototype.getStringifiedEvent = calendarObj.getStringifiedEvent;
   Calendar.prototype.getParsedEvent = calendarObj.getParsedEvent;
   Calendar.prototype.getEvent = calendarObj.getEvent;
   Calendar.prototype.getAllEvents = calendarObj.getAllEvents;
   Calendar.prototype.getEventsByYear = calendarObj.getEventsByYear;
+  Calendar.prototype.deleteEvent = calendarObj.deleteEvent;
 })();
