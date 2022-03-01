@@ -1,10 +1,30 @@
 // 'esversion: 6';
 const calendar = new (function Calendar() {
-  const calendarObj = {
 
+
+
+  const calendarObj = {
 
     // STANDART EVENT
     events: [],
+    getStringifiedEvent(event) {
+      return JSON.stringify(event, function (key, value) {
+        if (typeof value === 'function') {
+          return value.toString();
+        }
+        return value;
+      });
+    },
+    getParsedEvent(event) {
+      return JSON.parse(event, function (key, value) {
+        if (key === 'callback') {
+          return eval(value);
+        } else if (key === 'date') {
+          return new Date(value);
+        }
+        return value;
+      });
+    },
     createEvent(name, date, callback) {
       const alreadySettledEvent = this.events.find(event => event.id === name);
       if (alreadySettledEvent) {
@@ -58,6 +78,7 @@ const calendar = new (function Calendar() {
       };
     },
     getAllEvents() {
+      console.log(this);
       return this.getParsedEvent(this.getStringifiedEvent(this.events));
     },
     getEventsByYear(from, to) {
@@ -126,7 +147,7 @@ const calendar = new (function Calendar() {
   };
 
   // TAKING EVENTS FROM LOCAL STORAGE
-  let eventsFromLocal = localStorage.getItem('calendar-events') ? this.getParsedEvent(localStorage.getItem('calendar-events')) : null;
+  let eventsFromLocal = localStorage.getItem('calendar-events') ? calendarObj.getParsedEvent(localStorage.getItem('calendar-events')) : null;
   if (eventsFromLocal && Array.isArray(eventsFromLocal)) {
     calendarObj.events = eventsFromLocal;
     calendarObj.events.forEach(event => {
@@ -136,27 +157,20 @@ const calendar = new (function Calendar() {
       }
     });
   }
-  this.getStringifiedEvent = function (event) {
-    return JSON.stringify(event, function (key, value) {
-      if (typeof value === 'function') {
-        return value.toString();
-      }
-      return value;
-    });
-  };
-  this.getParsedEvent = function (event) {
-    return JSON.parse(event, function (key, value) {
-      if (key === 'callback') {
-        return eval(value);
-      } else if (key === 'date') {
-        return new Date(value);
-      }
-      return value;
-    });
-  };
   this.createEvent = function (name, date, callback) {
     return calendarObj.createEvent(name, date, callback);
   };
+  this.getEvent = function (name) {
+    return calendarObj.getEvent(name);
+  };
+  this.getAllEvents = function () {
+    return calendarObj.getAllEvents();
+  };
+  this.getEventsByYear = function (from, to) {
+    return calendarObj.getEventsByYear(from, to);
+  };
+  Calendar.prototype.getStringifiedEvent = calendarObj.getStringifiedEvent;
+  Calendar.prototype.getParsedEvent = calendarObj.getParsedEvent;
   Calendar.prototype.getEvent = calendarObj.getEvent;
   Calendar.prototype.getAllEvents = calendarObj.getAllEvents;
   Calendar.prototype.getEventsByYear = calendarObj.getEventsByYear;

@@ -69,8 +69,9 @@ const repEvents = new (function RepEventsAddon() {
     //   return this.getParsedEvent(this.getStringifiedEvent(this.repEvents));
     // }
   };
+  Object.setPrototypeOf(repEventsCalendar, calendar);
   this.createEvent = function (name, dayOfTheWeek, callback) {
     return repEventsCalendar.createRepeatingEvent(name, dayOfTheWeek, callback);
   };
+  this.getAllEvents = repEventsCalendar.getAllEvents();
 })();
-Object.setPrototypeOf(repEvents, calendar);
