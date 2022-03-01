@@ -22,20 +22,6 @@ const calendar = new (function Calendar() {
         return value;
       });
     },
-    setNewExicutionParam(event, date) {
-      clearTimeout(event._timeout);
-      const dateDiff = date.getTime() - Date.now();
-      if (dateDiff > 0) {
-        event._timeout = setTimeout(() => event.callback(), date.getTime() - Date.now());
-        event.date = date;
-      }
-    },
-    removeAndStopEvent(event) {
-      clearTimeout(event._timeout);
-      this.events = this.events.filter((eventItem) => eventItem !== event);
-      return;
-    },
-
     createEvent(name, date, callback) {
       const alreadySettledEvent = this.events.find(event => event.id === name);
       if (alreadySettledEvent) {
@@ -62,25 +48,7 @@ const calendar = new (function Calendar() {
       if (!foundedEvent) {
         return null;
       }
-      return {
-        event: this.getParsedEvent(this.getStringifiedEvent(foundedEvent)),
-
-        changeExicutionTime: (date) => {
-          this.setNewExicutionParam(foundedEvent, date);
-          return this.getParsedEvent(this.getStringifiedEvent(foundedEvent));
-        },
-
-        editEventName: (name) => {
-          foundedEvent.name = name;
-          return this.getParsedEvent(this.getStringifiedEvent(foundedEvent));
-        },
-
-        deleteEvent: () => {
-          this.removeAndStopEvent(foundedEvent);
-          return;
-        }
-
-      };
+      return this.getParsedEvent(this.getStringifiedEvent(foundedEvent));
     },
     getAllEvents() {
       return this.getParsedEvent(this.getStringifiedEvent(this.events));
@@ -140,40 +108,56 @@ const calendar = new (function Calendar() {
         }
       };
     },
+    changeExicutionTime(eventName, date) {
+      const foundedEvent = this.events.find(event => event.id === eventName);
+      if (foundedEvent) {
+        clearTimeout(foundedEvent._timeout);
+        const dateDiff = date.getTime() - Date.now();
+        if (dateDiff > 0) {
+          foundedEvent._timeout = setTimeout(() => foundedEvent.callback(), date.getTime() - Date.now());
+          foundedEvent.date = date;
+        }
+      }
+    },
+    editEventName(eventName, name) {
+      const foundedEvent = this.events.find(event => event.id === eventName);
+      if (foundedEvent) {
+        foundedEvent.name = name;
+        return this.getParsedEvent(this.getStringifiedEvent(foundedEvent));
+      }
+    },
+    deleteEvent(eventName) {
+      const foundedEvent = this.events.find(event => event.id === eventName);
+      if (foundedEvent) {
+        this.events = this.events.filter((eventItem) => eventItem !== foundedEvent);
+        if (this._timeout) clearTimeout(this._timeout);
+        if (this._interval) clearInterval(this._interval);
+      }
+    }
+  };
+  // LOCAL STORAGE SAVE
+  window.onbeforeunload = () => {
+    if (calendarObj.events.length) {
+      localStorage.setItem('calendar-events', calendarObj.getStringifiedEvent(calendarObj.events));
+    }
   };
 
-  this.deleteEvent = function (eventName) {
-    const foundedEvent = calendarObj.events.find(event => event.id === eventName);
-
-    if (foundedEvent) {
-      calendarObj.events = calendarObj.events.filter((eventItem) => eventItem !== foundedEvent);
-      if (foundedEvent._timeout) clearTimeout(foundedEvent._timeout);
-      if (foundedEvent._interval) clearInterval(foundedEvent._interval);
-    }
-  },
-    // // LOCAL STORAGE SAVE
-    // window.onbeforeunload = () => {
-    //   if (calendarObj.events.length) {
-    //     localStorage.setItem('calendar-events', calendarObj.getStringifiedEvent(calendarObj.events));
-    //   }
-    // };
-
-    // // TAKING EVENTS FROM LOCAL STORAGE
-    // let eventsFromLocal = localStorage.getItem('calendar-events') ? calendarObj.getParsedEvent(localStorage.getItem('calendar-events')) : null;
-    // if (eventsFromLocal && Array.isArray(eventsFromLocal)) {
-    //   calendarObj.events = eventsFromLocal;
-    //   calendarObj.events.forEach(event => {
-    //     if (event.date) {
-    //       const dateDiff = event.date.getTime() - Date.now();
-    //       if (dateDiff > 0) {
-    //         return event._timeout = setTimeout(() => event.callback(), dateDiff);
-    //       }
-    //     }
-    //   });
-    // }
-    this.createEvent = function (name, date, callback) {
-      return calendarObj.createEvent(name, date, callback);
-    };
+  // TAKING EVENTS FROM LOCAL STORAGE
+  let eventsFromLocal = localStorage.getItem('calendar-events') ? calendarObj.getParsedEvent(localStorage.getItem('calendar-events')) : null;
+  if (eventsFromLocal && Array.isArray(eventsFromLocal)) {
+    calendarObj.events = eventsFromLocal;
+    calendarObj.events.forEach(event => {
+      if (event.date) {
+        const dateDiff = event.date.getTime() - Date.now();
+        if (dateDiff > 0) {
+          return event._timeout = setTimeout(() => event.callback(), dateDiff);
+        }
+      }
+    });
+  }
+  this.createEvent = function (name, date, callback) {
+    return calendarObj.createEvent(name, date, callback);
+  };
   this.getEvent = function (name) {
     return calendarObj.getEvent(name);
   };
@@ -182,6 +166,15 @@ const calendar = new (function Calendar() {
   };
   this.getEventsByYear = function (from, to) {
     return calendarObj.getEventsByYear(from, to);
+  };
+  this.changeExicutionTime = function (eventName, date) {
+    return calendarObj.changeExicutionTime(eventName, date);
+  }
+  this.editEventName = function (eventName, name) {
+    return calendarObj.editEventName(eventName, name);
+  };
+  this.deleteEvent = function (eventName) {
+    return calendarObj.deleteEvent(eventName);
   };
   Calendar.prototype.events = calendarObj.events;
   Calendar.prototype.getStringifiedEvent = calendarObj.getStringifiedEvent;
