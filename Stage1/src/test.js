@@ -3,16 +3,18 @@
 //   console.log(a);
 //   console.log(b);
 // }
-// console.log(calendar.getAllEvents());
-calendar.createEvent('Test1', new Date(2022, 2, 3, 12, 52, 59), () => { console.log('Test it'); });
+console.log(calendar.getAllEvents());
+calendar.createEvent('Test1', new Date(2022, 2, 3, 14, 40, 01), () => { console.log('Test it'); });
 calendar.editEventName('Test1', 'Test2');
 calendar.editEventName('Test1', 'Test3');
-calendar.changeExicutionTime('Test1', new Date(2022, 2, 2, 14, 10, 59));
+calendar.changeExicutionTime('Test1', new Date(2022, 2, 3, 14, 46, 59));
 // calendar.deleteEvent('Test1');
 console.log(calendar.getAllEvents());
-calendar.createRepEvent('Rep', 3, () => console.log('Repeat function'));
-calendar.changeExicutionTime('Rep', 'daily');
-console.log(calendar.getAllEvents());
+calendar.createRepEvent('Rep', 'daily', () => console.log('Repeat function'));
+// calendar.changeExicutionTime('Rep', new Date(2022, 2, 3));
+// console.log(calendar.dateFiltering.getEventsByYear(2022).getEventsByMonth(2).getEventsByWeek(9).getEventsByWeekDay(3, 4));
 
-console.log(calendar.dateFiltering);
+calendar.createPreEventFunction('all', 10000, () => console.log('Pre event function'));
+
+// const timeout = setTimeout(() => console.log('hahaha'), 12345);
 

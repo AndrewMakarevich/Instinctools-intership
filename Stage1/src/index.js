@@ -8,9 +8,9 @@ const calendar = new (function Calendar() {
         eventsByYear = eventsItems;
       }
       else if (!to) {
-        eventsByYear = eventsItems.filter((event) => !event.date || event.date.getFullYear() >= from);
+        eventsByYear = eventsItems.filter((event) => isNaN(event.date) || event.date.getFullYear() >= from);
       } else {
-        eventsByYear = eventsItems.filter((event) => !event.date || (event.date.getFullYear() >= from && event.date.getFullYear() <= to));
+        eventsByYear = eventsItems.filter((event) => isNaN(event.date) || (event.date.getFullYear() >= from && event.date.getFullYear() <= to));
       }
       return new eventsArray(eventsByYear);
     };
@@ -20,9 +20,9 @@ const calendar = new (function Calendar() {
         eventsByMonth = eventsItems;
       }
       else if (!to) {
-        eventsByMonth = eventsItems.filter((event) => !event.date || event.date.getMonth() >= from);
+        eventsByMonth = eventsItems.filter((event) => isNaN(event.date) || event.date.getMonth() >= from);
       } else {
-        eventsByMonth = eventsItems.filter((event) => !event.date || (event.date.getMonth() >= from && event.date.getMonth() <= to));
+        eventsByMonth = eventsItems.filter((event) => isNaN(event.date) || (event.date.getMonth() >= from && event.date.getMonth() <= to));
       }
       return new eventsArray(eventsByMonth);
     };
@@ -31,9 +31,9 @@ const calendar = new (function Calendar() {
       if (!from && !to) {
         eventsByMonthDay = eventsItems;
       } else if (!to) {
-        eventsByMonthDay = eventsItems.filter((event) => !event.date || event.date.getDate() >= from);
+        eventsByMonthDay = eventsItems.filter((event) => isNaN(event.date) || event.date.getDate() >= from);
       } else {
-        eventsByMonthDay = eventsItems.filter((event) => !event.date || (event.date.getDate() >= from && event.date.getDate() <= to));
+        eventsByMonthDay = eventsItems.filter((event) => isNaN(event.date) || (event.date.getDate() >= from && event.date.getDate() <= to));
       }
       return new eventsArray(eventsByMonthDay);
     };
@@ -48,9 +48,9 @@ const calendar = new (function Calendar() {
       if (!from & !to) {
         eventsByWeek = eventsItems;
       } else if (!to) {
-        eventsByWeek = eventsItems.filter((event) => !event.date || getWeekNumber(event.date) >= from);
+        eventsByWeek = eventsItems.filter((event) => isNaN(event.date) || getWeekNumber(event.date) >= from);
       } else {
-        eventsByWeek = eventsItems.filter((event) => !event.date || (getWeekNumber(event.date) >= from && getWeekNumber(event.date) <= to));
+        eventsByWeek = eventsItems.filter((event) => isNaN(event.date) || (getWeekNumber(event.date) >= from && getWeekNumber(event.date) <= to));
       }
       return new eventsArray(eventsByWeek);
     };
@@ -59,9 +59,9 @@ const calendar = new (function Calendar() {
       if (!from && !to) {
         eventsByWeekDay = eventsItems;
       } else if (!to) {
-        eventsByWeekDay = eventsItems.filter((event) => event.date.getDay() >= from);
+        eventsByWeekDay = eventsItems.filter((event) => isNaN(event.date) || event.date.getDay() >= from);
       } else {
-        eventsByWeekDay = eventsItems.filter((event) => event.date.getDay() >= from && event.date.getDay() <= to);
+        eventsByWeekDay = eventsItems.filter((event) => isNaN(event.date) || event.date.getDay() >= from && event.date.getDay() <= to);
       }
       return new eventsArray(eventsByWeekDay);
     };
@@ -81,7 +81,7 @@ const calendar = new (function Calendar() {
       return JSON.parse(event, function (key, value) {
         if (key === 'callback') {
           return eval(value);
-        } else if (key === 'date') {
+        } else if (key === 'date' && !isNaN(new Date(value))) {
           return new Date(value);
         }
         return value;
@@ -154,8 +154,10 @@ const calendar = new (function Calendar() {
   if (eventsFromLocal && Array.isArray(eventsFromLocal)) {
     calendarObj.events = new eventsArray(eventsFromLocal);
     calendarObj.events.array.forEach(event => {
-      if (event.date) {
+      if (event.date && !isNaN(new Date(event.date)) && !event.eventType) {
+        console.log(event);
         const dateDiff = event.date.getTime() - Date.now();
+        console.log(dateDiff);
         if (dateDiff > 0) {
           return event._timeout = setTimeout(() => event.callback(), dateDiff);
         }
