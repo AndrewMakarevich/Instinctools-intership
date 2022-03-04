@@ -4,13 +4,16 @@ calendar.createRepEvent('Repeat-event', new Date(2022, 2, 6), () => { console.lo
 
 calendar.changeExicutionTime('Standart-event', new Date(2022, 2, 4, 15, 21, 59));
 calendar.changeExicutionTime('Repeat-event', new Date(2022, 2, 5));
-calendar.changeExicutionTime('Repeat-event', 'daily');
+// calendar.changeExicutionTime('Repeat-event', 'daily');
 
 calendar.editEventName('Standart-event', 'Standart-event__changed');
 calendar.editEventName('Repeat-event', 'Repeat-event__changed');
 
 calendar.createPreEventFunction('all', 10000, () => console.log('Pre callback exicuted'));
+
+calendar.deleteEvent('Event-to-delete');
 console.log(calendar.getAllEvents());
+console.log(calendar.getEvent('Repeat-event'));
 console.log(calendar.dateFiltering.getEventsByYear(2022, 2022).getEventsByMonth(2, 2).getEventsByMonthDay(4, 6));
 
 

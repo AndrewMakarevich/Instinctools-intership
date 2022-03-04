@@ -145,26 +145,26 @@ const calendar = new (function Calendar() {
       }
     }
   };
-  // // LOCAL STORAGE SAVE
-  // window.onbeforeunload = () => {
-  //   if (calendarObj.events.array.length) {
-  //     localStorage.setItem('calendar-events', calendarObj.getStringifiedEvent(calendarObj.events.array));
-  //   }
-  // };
+  // LOCAL STORAGE SAVE
+  window.onbeforeunload = () => {
+    if (calendarObj.events.array.length) {
+      localStorage.setItem('calendar-events', calendarObj.getStringifiedEvent(calendarObj.events.array));
+    }
+  };
 
-  // // TAKING EVENTS FROM LOCAL STORAGE
-  // let eventsFromLocal = localStorage.getItem('calendar-events') ? calendarObj.getParsedEvent(localStorage.getItem('calendar-events')) : null;
-  // if (eventsFromLocal && Array.isArray(eventsFromLocal)) {
-  //   calendarObj.events = new eventsArray(eventsFromLocal);
-  //   calendarObj.events.array.forEach(event => {
-  //     if (event.date && !isNaN(new Date(event.date)) && !event.eventType) {
-  //       const dateDiff = event.date.getTime() - Date.now();
-  //       if (dateDiff > 0) {
-  //         return event._timeout = setTimeout(() => event.callback(), dateDiff);
-  //       }
-  //     }
-  //   });
-  // }
+  // TAKING EVENTS FROM LOCAL STORAGE
+  let eventsFromLocal = localStorage.getItem('calendar-events') ? calendarObj.getParsedEvent(localStorage.getItem('calendar-events')) : null;
+  if (eventsFromLocal && Array.isArray(eventsFromLocal)) {
+    calendarObj.events = new eventsArray(eventsFromLocal);
+    calendarObj.events.array.forEach(event => {
+      if (event.date && !isNaN(new Date(event.date)) && !event.eventType) {
+        const dateDiff = event.date.getTime() - Date.now();
+        if (dateDiff > 0) {
+          return event._timeout = setTimeout(() => event.callback(), dateDiff);
+        }
+      }
+    });
+  }
 
   this.createEvent = function (name, date, callback) {
     return calendarObj.createEvent(name, date, callback);
