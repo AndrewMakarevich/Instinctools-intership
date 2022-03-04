@@ -5,11 +5,17 @@
   row-gap: 25px;
 }
 .main__form{
+  display: flex;
+  justify-content: stretch;
+  align-items:flex-end;
   align-self:flex-end;
+}
+.subscribe-btn{
+ 
 }
 .main__news{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   grid-gap: 15px;
 }
 .news__item{
@@ -17,11 +23,9 @@
   padding: 10px;
   padding-bottom: 20px;
 }
-.news__item__content{
+.news__item__header{
 
 }
-@media (max-width: 768px) {
-  .main{
-    grid-column: 1/6;
-  }
+.news__item__content{
+
 }

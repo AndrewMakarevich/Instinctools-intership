@@ -4,14 +4,10 @@
   grid-template-rows: min-content 1fr;
   border: solid black 2px;
   padding: 25px;
+  min-height: 200px;
 }
 .header__content{
   display: flex;
   justify-content: center;
   align-items:center;
-}
-@media (max-width: 768px){
-  .header{
-    grid-column: 1/6;
-  }
 }

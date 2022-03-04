@@ -1,0 +1,19 @@
+@media (max-width: 600px){
+  .nav-bar{
+    justify-content: left;
+  }
+  .link-list__item{
+    gap: 5px;
+    border-right: 1px solid black;
+  }
+  .link-list__item:last-child{
+    border-right: none;
+  }
+  .link-list__item__icon{
+    visibility: hidden;
+    width:0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+  }
+}

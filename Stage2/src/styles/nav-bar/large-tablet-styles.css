@@ -1,0 +1,18 @@
+@media (max-width: 768px) {
+  .nav-bar{
+    grid-column: 1/6;
+    grid-row: 1/1;
+    flex-direction: row;
+    row-gap: 5px;
+    column-gap: 20px;
+    justify-content: space-between;
+  }
+  .link-list{
+    flex-direction: row;
+    border:none;
+  }
+  .link-list__item{
+    padding:0 5px 0 5px;
+    font-size: 1.5rem;
+  }
+}

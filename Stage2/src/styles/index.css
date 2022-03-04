@@ -1,7 +1,7 @@
-@import url(./nav-bar.css);
-@import url(./header.css);
-@import url(./main.css);
-@import url(./footer.css);
+@import url(./nav-bar/index.css);
+@import url(./header/index.css);
+@import url(./main/index.css);
+@import url(./footer/index.css);
 *{
   box-sizing: border-box;
   margin: 0;
@@ -18,5 +18,16 @@ body{
 @media (max-width:768px) {
   body{
     grid-gap: 15px;
+    grid-auto-rows: min-content 1fr 1fr min-content;
+  }
+}
+@media (max-width: 768px){
+  body{
+    grid-auto-rows: min-content 1fr 2fr min-content;
+  }
+}
+@media (max-width: 480px){
+  body{
+    padding: 25px;
   }
 }
