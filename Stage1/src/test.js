@@ -1,22 +1,16 @@
+calendar.createEvent('Standart-event', new Date(2022, 2, 4, 19, 54, 59), () => { console.log('Standart event callback exicute'); });
+calendar.createEvent('Event-to-delete', new Date(2022, 2, 4, 15, 22, 11), () => { console.log('One more event'); });
+calendar.createRepEvent('Repeat-event', new Date(2022, 2, 6), () => { console.log('Repeat event callback exicute'); });
 
-// function testFunc(a, b) {
-//   console.log(a);
-//   console.log(b);
-// }
-// console.log(calendar.getAllEvents());
-calendar.createEvent('Test1', new Date(2022, 2, 3, 14, 40, 01), () => { console.log('Test it'); });
-calendar.editEventName('Test1', 'Test2');
-calendar.editEventName('Test1', 'Test3');
-calendar.changeExicutionTime('Test1', new Date(2022, 2, 4, 12, 27, 59));
-// calendar.deleteEvent('Test1');
+calendar.changeExicutionTime('Standart-event', new Date(2022, 2, 4, 15, 21, 59));
+calendar.changeExicutionTime('Repeat-event', new Date(2022, 2, 5));
+calendar.changeExicutionTime('Repeat-event', 'daily');
+
+calendar.editEventName('Standart-event', 'Standart-event__changed');
+calendar.editEventName('Repeat-event', 'Repeat-event__changed');
+
+calendar.createPreEventFunction('all', 10000, () => console.log('Pre callback exicuted'));
 console.log(calendar.getAllEvents());
-calendar.createRepEvent('Rep', 'daily', () => console.log('Repeat function'));
-calendar.editEventName('Rep', 'Rep1');
-console.log(calendar.getAllEvents());
-// calendar.changeExicutionTime('Rep', new Date(2022, 2, 3));
-console.log(calendar.dateFiltering.getEventsByYear(2022).getEventsByMonth(2).getEventsByWeek(9).getEventsByWeekDay(5));
+console.log(calendar.dateFiltering.getEventsByYear(2022, 2022).getEventsByMonth(2, 2).getEventsByMonthDay(4, 6));
 
-calendar.createPreEventFunction('all', 10000, () => console.log('Pre event function'));
-
-// const timeout = setTimeout(() => console.log('hahaha'), 12345);
 

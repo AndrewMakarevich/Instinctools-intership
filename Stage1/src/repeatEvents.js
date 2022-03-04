@@ -62,6 +62,9 @@
   const changeExicutionTime = calendarPrototype.changeExicutionTime;
   calendarPrototype.changeExicutionTime = function (eventName, date) {
     const foundedEvent = calendarPrototype.events.find(eventItem => eventItem.id === eventName);
+    if (!foundedEvent) {
+      return;
+    }
     if (foundedEvent.eventType === 'repeat') {
       clearTimeout(foundedEvent._timeout);
       foundedEvent.date = date;
