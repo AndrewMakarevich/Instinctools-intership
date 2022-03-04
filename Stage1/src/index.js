@@ -3,37 +3,38 @@ const calendar = new (function Calendar() {
   function eventsArray(eventsItems) {
     this.array = eventsItems;
     eventsArray.prototype.getEventsByYear = function (from, to) {
+      console.log(eventsItems);
       let eventsByYear;
       if (!from && !to) {
-        eventsByYear = eventsItems;
+        eventsByYear = this.array;
       }
       else if (!to) {
-        eventsByYear = eventsItems.filter((event) => isNaN(event.date) || event.date.getFullYear() >= from);
+        eventsByYear = this.array.filter((event) => isNaN(event.date) || event.date.getFullYear() >= from);
       } else {
-        eventsByYear = eventsItems.filter((event) => isNaN(event.date) || (event.date.getFullYear() >= from && event.date.getFullYear() <= to));
+        eventsByYear = this.array.filter((event) => isNaN(event.date) || (event.date.getFullYear() >= from && event.date.getFullYear() <= to));
       }
       return new eventsArray(eventsByYear);
     };
     eventsArray.prototype.getEventsByMonth = function (from, to) {
       let eventsByMonth;
       if (!from && !to) {
-        eventsByMonth = eventsItems;
+        eventsByMonth = this.array;
       }
       else if (!to) {
-        eventsByMonth = eventsItems.filter((event) => isNaN(event.date) || event.date.getMonth() >= from);
+        eventsByMonth = this.array.filter((event) => isNaN(event.date) || event.date.getMonth() >= from);
       } else {
-        eventsByMonth = eventsItems.filter((event) => isNaN(event.date) || (event.date.getMonth() >= from && event.date.getMonth() <= to));
+        eventsByMonth = this.array.filter((event) => isNaN(event.date) || (event.date.getMonth() >= from && event.date.getMonth() <= to));
       }
       return new eventsArray(eventsByMonth);
     };
     eventsArray.prototype.getEventsByMonthDay = function (from, to) {
       let eventsByMonthDay;
       if (!from && !to) {
-        eventsByMonthDay = eventsItems;
+        eventsByMonthDay = this.array;
       } else if (!to) {
-        eventsByMonthDay = eventsItems.filter((event) => isNaN(event.date) || event.date.getDate() >= from);
+        eventsByMonthDay = this.array.filter((event) => isNaN(event.date) || event.date.getDate() >= from);
       } else {
-        eventsByMonthDay = eventsItems.filter((event) => isNaN(event.date) || (event.date.getDate() >= from && event.date.getDate() <= to));
+        eventsByMonthDay = this.array.filter((event) => isNaN(event.date) || (event.date.getDate() >= from && event.date.getDate() <= to));
       }
       return new eventsArray(eventsByMonthDay);
     };
@@ -46,22 +47,22 @@ const calendar = new (function Calendar() {
       }
       let eventsByWeek;
       if (!from & !to) {
-        eventsByWeek = eventsItems;
+        eventsByWeek = this.array;
       } else if (!to) {
-        eventsByWeek = eventsItems.filter((event) => isNaN(event.date) || getWeekNumber(event.date) >= from);
+        eventsByWeek = this.array.filter((event) => isNaN(event.date) || getWeekNumber(event.date) >= from);
       } else {
-        eventsByWeek = eventsItems.filter((event) => isNaN(event.date) || (getWeekNumber(event.date) >= from && getWeekNumber(event.date) <= to));
+        eventsByWeek = this.array.filter((event) => isNaN(event.date) || (getWeekNumber(event.date) >= from && getWeekNumber(event.date) <= to));
       }
       return new eventsArray(eventsByWeek);
     };
     eventsArray.prototype.getEventsByWeekDay = function (from, to) {
       let eventsByWeekDay;
       if (!from && !to) {
-        eventsByWeekDay = eventsItems;
+        eventsByWeekDay = this.array;
       } else if (!to) {
-        eventsByWeekDay = eventsItems.filter((event) => isNaN(event.date) || event.date.getDay() >= from);
+        eventsByWeekDay = this.array.filter((event) => isNaN(event.date) || event.date.getDay() >= from);
       } else {
-        eventsByWeekDay = eventsItems.filter((event) => isNaN(event.date) || event.date.getDay() >= from && event.date.getDay() <= to);
+        eventsByWeekDay = this.array.filter((event) => isNaN(event.date) || event.date.getDay() >= from && event.date.getDay() <= to);
       }
       return new eventsArray(eventsByWeekDay);
     };
@@ -138,7 +139,6 @@ const calendar = new (function Calendar() {
       if (foundedEvent) {
         this.events.array = this.events.array.filter((eventItem) => eventItem !== foundedEvent);
         if (this._timeout) clearTimeout(this._timeout);
-        if (this._interval) clearInterval(this._interval);
       }
     }
   };
@@ -155,9 +155,7 @@ const calendar = new (function Calendar() {
     calendarObj.events = new eventsArray(eventsFromLocal);
     calendarObj.events.array.forEach(event => {
       if (event.date && !isNaN(new Date(event.date)) && !event.eventType) {
-        console.log(event);
         const dateDiff = event.date.getTime() - Date.now();
-        console.log(dateDiff);
         if (dateDiff > 0) {
           return event._timeout = setTimeout(() => event.callback(), dateDiff);
         }
@@ -181,6 +179,12 @@ const calendar = new (function Calendar() {
     return calendarObj.deleteEvent(eventName);
   };
   Calendar.prototype.events = calendarObj.events.array;
-  Calendar.prototype.dateFiltering = Object.getPrototypeOf(calendarObj.events);
+  Calendar.prototype.dateFiltering = {
+    getEventsByYear: calendarObj.events.getEventsByYear.bind(calendarObj.events),
+    getEventsByMonth: calendarObj.events.getEventsByMonth.bind(calendarObj.events),
+    getEventsByMonthDay: calendarObj.events.getEventsByMonthDay.bind(calendarObj.events),
+    getEventsByWeek: calendarObj.events.getEventsByWeek.bind(calendarObj.events),
+    getEventsByWeekDay: calendarObj.events.getEventsByWeekDay.bind(calendarObj.events)
+  };
   Calendar.prototype.changeExicutionTime = calendarObj.changeExicutionTime.bind(calendarObj);
 })();
