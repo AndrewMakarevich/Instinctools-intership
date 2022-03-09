@@ -135,7 +135,7 @@ const calendar = (function Calendar() {
       getEventsByWeek: events.getEventsByWeek.bind(events),
       getEventsByWeekDay: events.getEventsByWeekDay.bind(events)
     },
-    changeExicutionTime(eventName, date) {
+    changeExecutionTime(eventName, date) {
       const foundedEvent = events.array.find(event => event.id === eventName);
       if (foundedEvent) {
         clearTimeout(foundedEvent._timeout);

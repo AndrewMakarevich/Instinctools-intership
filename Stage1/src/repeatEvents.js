@@ -52,8 +52,8 @@
     calendar._events.push(eventObj);
     initializeRepEventInterval(eventObj, date);
   };
-  const changeExicutionTime = calendar.changeExicutionTime;
-  calendar.changeExicutionTime = function (eventName, date) {
+  const changeExecutionTime = calendar.changeExicutionTime;
+  calendar.changeExecutionTime = function (eventName, date) {
     const foundedEvent = calendar._events.find(eventItem => eventItem.id === eventName);
     if (!foundedEvent) {
       return;
@@ -63,7 +63,7 @@
       foundedEvent.date = date;
       initializeRepEventInterval(foundedEvent, date);
     } else {
-      changeExicutionTime(eventName, date);
+      changeExecutionTime(eventName, date);
     }
   };
 })(calendar);
