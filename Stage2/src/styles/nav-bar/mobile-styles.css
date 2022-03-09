@@ -2,4 +2,7 @@
   .nav-bar{
     flex-direction: column;
   }
+  .link-list__item{
+    font-size: 1rem;
+  }
 }
