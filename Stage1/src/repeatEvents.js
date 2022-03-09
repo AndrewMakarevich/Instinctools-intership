@@ -1,7 +1,6 @@
-(function RepEventsAddon() {
-  const calendarPrototype = Object.getPrototypeOf(calendar);
+(function RepEventsAddon(calendar) {
 
-  calendarPrototype.events.forEach(eventItem => {
+  calendar._events.forEach(eventItem => {
     if (eventItem.eventType === 'repeat') {
       initializeRepEventInterval(eventItem, eventItem.date);
     }
@@ -40,28 +39,22 @@
     createRepEventTimeout(eventObj, 1000 * 60 * 60 * 24 * (Math.abs(dayOfTheWeek - currentDayOfTheWeek)) - millisecondsToTheNextDay);
   }
 
-  calendarPrototype.createRepEvent = function (name, date, callback) {
-    const alreadyCreatedEvent = calendarPrototype.events.find((repEvent) => repEvent.id === name);
-    let eventObj;
-    if (alreadyCreatedEvent && alreadyCreatedEvent.eventType === 'repeat') {
-      eventObj = alreadyCreatedEvent;
-      eventObj.callback = callback;
-    } else {
-      eventObj = {
-        id: name,
-        eventType: 'repeat',
-        name,
-        date,
-        callback,
-        _timeout: 0,
-      };
-      calendarPrototype.events.push(eventObj);
-      initializeRepEventInterval(eventObj, date);
+  calendar.createRepEvent = function (name, date, callback) {
+    calendar._events.filter((repEvent) => repEvent.name !== name);
+    const eventObj = {
+      id: name,
+      eventType: 'repeat',
+      name,
+      date,
+      callback,
+      _timeout: 0,
     }
+    calendar._events.push(eventObj);
+    initializeRepEventInterval(eventObj, date);
   };
-  const changeExicutionTime = calendarPrototype.changeExicutionTime;
-  calendarPrototype.changeExicutionTime = function (eventName, date) {
-    const foundedEvent = calendarPrototype.events.find(eventItem => eventItem.id === eventName);
+  const changeExicutionTime = calendar.changeExicutionTime;
+  calendar.changeExicutionTime = function (eventName, date) {
+    const foundedEvent = calendar._events.find(eventItem => eventItem.id === eventName);
     if (!foundedEvent) {
       return;
     }
@@ -73,4 +66,4 @@
       changeExicutionTime(eventName, date);
     }
   };
-})();
+})(calendar);
