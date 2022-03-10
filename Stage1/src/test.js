@@ -1,23 +1,21 @@
 
-// calendar.createEvent('Standart-event', new Date(2022, 2, 9, 14, 39, 59), () => { console.log('Standart event callback exicute'); });
-// calendar.createEvent('Event-to-delete', new Date(2022, 2, 9, 14, 38, 59), () => { console.log('One more event'); });
-// // calendar.createRepEvent('Repeat-event', new Date(2022, 2, 10), () => { console.log('Repeat event callback exicute'); });
-
-// // calendar.createPreEventFunction('all', 10000, () => console.log('Pre callback exicuted'));
-// // calendar.changeExicutionTime('Standart-event', new Date(2022, 2, 9, 15, 02, 59));
-// // calendar.changeExicutionTime('Repeat-event', 'daily');
-// // // calendar.changeExicutionTime('Repeat-event', 'daily');
-
-// calendar.editEventName('Standart-event', 'Standart-event__changed');
-// // calendar.editEventName('Repeat-event', 'Repeat-event__changed');
-// calendar.deleteEvent('Event-to-delete');
-// console.log(calendar.getAllEvents());
+calendar.createEvent('Standart-event', new Date(2022, 2, 10, 15, 02, 59), () => { console.log('Standart event callback execute'); });
+calendar.createEvent('Event-to-delete', new Date(2022, 2, 10, 15, 03, 59), () => { console.log('One more event'); });
+calendar.createRepEvent('Repeat-event', new Date(2022, 2, 12), () => { console.log('Repeat event callback execute'); });
 
 
 
 
-// // console.log(calendar.getAllEvents());
-// // console.log(calendar.getEvent('Repeat-event'));
-// console.log(calendar.dateFiltering.getEventsByYear(2022, 2022).getEventsByMonth(2, 2).getEventsByMonthDay(9, 10));
+calendar.changeExecutionTime('Repeat-event', 'daily');
+calendar.changeExecutionTime('Standart-event', new Date(2022, 2, 10, 15, 14, 59));
+
+calendar.createPreEventFunction('all', 10000, () => console.log('Pre callback executed'));
+
+calendar.editEventName('Standart-event', 'Standart-event__changed');
+// calendar.editEventName('Repeat-event', 'Repeat-event__changed');
+calendar.deleteEvent('Event-to-delete');
+console.log(calendar.getAllEvents());
+// console.log(calendar.getEvent('Repeat-event'));
+console.log(calendar.dateFiltering.getEventsByYear(2022, 2022).getEventsByMonth(2, 2).getEventsByMonthDay(9, 10));
 
 
