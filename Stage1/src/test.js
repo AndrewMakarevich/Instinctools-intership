@@ -1,12 +1,13 @@
 
-calendar.createEvent('Standart-event', new Date(2022, 2, 9, 14, 39, 59), () => { console.log('Standart event callback exicute'); });
-calendar.createEvent('Event-to-delete', new Date(2022, 2, 9, 14, 38, 59), () => { console.log('One more event'); });
+calendar.createEvent('Standart-event', new Date(2022, 2, 10, 9, 52, 59), () => { console.log('Standart event callback exicute'); });
+calendar.createEvent('Event-to-delete', new Date(2022, 2, 10, 9, 52, 59), () => { console.log('One more event'); });
 calendar.createRepEvent('Repeat-event', new Date(2022, 2, 9), () => { console.log('Repeat event callback exicute'); });
 
-// calendar.createPreEventFunction('all', 10000, () => console.log('Pre callback exicuted'));
+
+calendar.createPreEventFunction('all', 10000, () => console.log('Pre callback exicuted'));
 // calendar.changeExicutionTime('Standart-event', new Date(2022, 2, 9, 15, 02, 59));
 // calendar.changeExicutionTime('Repeat-event', 'daily');
-// // calendar.changeExicutionTime('Repeat-event', 'daily');
+calendar.changeExecutionTime('Repeat-event', new Date(2022, 2, 10));
 
 calendar.editEventName('Standart-event', 'Standart-event__changed');
 // calendar.editEventName('Repeat-event', 'Repeat-event__changed');

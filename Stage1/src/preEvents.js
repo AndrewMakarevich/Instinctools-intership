@@ -1,8 +1,7 @@
-(function preEventsAddon() {
-  const calendarPrototype = Object.getPrototypeOf(calendar);
+(function preEventsAddon(calendar) {
   function setPreEventFunctionTimeout(foundedEvent, callback, timeout, timeBeforeExicute, type) {
     setTimeout(() => {
-      if (!calendar.getEvent(foundedEvent.id)) {
+      if (!calendar.getEvent(foundedEvent.name)) {
         return;
       }
       callback();
@@ -18,7 +17,7 @@
     }
     if (foundedEvent.eventType !== 'repeat') {
       setTimeout(() => {
-        if (calendar.getEvent(foundedEvent.id)) {
+        if (calendar.getEvent(foundedEvent.name)) {
           callback();
         }
       }, foundedEvent.date.getTime() - Date.now() - timeBeforeExicute);
@@ -48,14 +47,14 @@
     }
   }
 
-  calendarPrototype.createPreEventFunction = function (eventName, timeBeforeExicute, callback) {
+  calendar.createPreEventFunction = function (eventName, timeBeforeExicute, callback) {
     if (eventName === 'all') {
-      calendarPrototype.events.forEach(event => {
+      calendar._events.forEach(event => {
         setPreEventFunction(event, timeBeforeExicute, callback);
       });
       return;
     }
-    const foundedEvent = calendarPrototype.events.find(eventItem => eventItem.id === eventName);
+    const foundedEvent = calendar._events.find(eventItem => eventItem.id === eventName);
     setPreEventFunction(foundedEvent, timeBeforeExicute, callback);
   };
-})();
+})(calendar);

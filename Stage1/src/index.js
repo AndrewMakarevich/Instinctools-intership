@@ -105,7 +105,7 @@ const calendar = (function Calendar() {
       if (date.getTime() - Date.now() > 2147483647) {
         return;
       }
-      events.array.filter(event => event.name !== name);
+      this.deleteEvent(name);
       events.array.push({
         id: name,
         name,
@@ -119,7 +119,7 @@ const calendar = (function Calendar() {
       });
     },
     getEvent(name) {
-      const foundedEvent = this.events.array.find((event) => event.id === name);
+      const foundedEvent = events.array.find((event) => event.id === name);
       if (!foundedEvent) {
         return null;
       }

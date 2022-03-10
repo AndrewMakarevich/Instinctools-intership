@@ -40,9 +40,8 @@
   }
 
   calendar.createRepEvent = function (name, date, callback) {
-    calendar._events.filter((repEvent) => repEvent.name !== name);
+    calendar.deleteEvent(name);
     const eventObj = {
-      id: name,
       eventType: 'repeat',
       name,
       date,
@@ -54,7 +53,7 @@
   };
   const changeExecutionTime = calendar.changeExicutionTime;
   calendar.changeExecutionTime = function (eventName, date) {
-    const foundedEvent = calendar._events.find(eventItem => eventItem.id === eventName);
+    const foundedEvent = calendar._events.find(eventItem => eventItem.name === eventName);
     if (!foundedEvent) {
       return;
     }
