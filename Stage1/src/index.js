@@ -59,26 +59,6 @@ const calendar = (function Calendar() {
 
   let events = new eventsArray([]);
 
-  function getStringifiedEvent(event) {
-    return JSON.stringify(event, function (key, value) {
-      if (typeof value === 'function') {
-        return value.toString();
-      }
-      return value;
-    });
-  }
-
-  function getParsedEvent(event) {
-    return JSON.parse(event, function (key, value) {
-      if (key === 'callback') {
-        return eval(value);
-      } else if (key === 'date' && !isNaN(new Date(value))) {
-        return new Date(value);
-      }
-      return value;
-    });
-  }
-
   // LOCAL STORAGE SAVE
   window.onbeforeunload = () => {
     if (events.array.length) {
@@ -100,6 +80,27 @@ const calendar = (function Calendar() {
       }
     });
   }
+
+  function getStringifiedEvent(event) {
+    return JSON.stringify(event, function (key, value) {
+      if (typeof value === 'function') {
+        return value.toString();
+      }
+      return value;
+    });
+  }
+
+  function getParsedEvent(event) {
+    return JSON.parse(event, function (key, value) {
+      if (key === 'callback') {
+        return eval(value);
+      } else if (key === 'date' && !isNaN(new Date(value))) {
+        return new Date(value);
+      }
+      return value;
+    });
+  }
+
 
   return {
     _events: events.array,
