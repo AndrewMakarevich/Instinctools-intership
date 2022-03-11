@@ -1,6 +1,5 @@
 // 'esversion: 6';
 const calendar = (function Calendar() {
-
   function eventsArray(eventsItems) {
 
     this.array = eventsItems;
@@ -68,11 +67,14 @@ const calendar = (function Calendar() {
 
   // TAKING EVENTS FROM LOCAL STORAGE
   let eventsFromLocal = localStorage.getItem('calendar-events') ? getParsedEvent(localStorage.getItem('calendar-events')) : null;
+
   if (eventsFromLocal && Array.isArray(eventsFromLocal)) {
     events = new eventsArray(eventsFromLocal);
+
     events.array.forEach(event => {
       if (!event.eventType) {
         const dateDiff = event.date.getTime() - Date.now();
+
         if (dateDiff > 0) {
           event._timeout = setTimeout(() => event.callback(), dateDiff);
           return;
@@ -83,27 +85,30 @@ const calendar = (function Calendar() {
 
   function getStringifiedEvent(event) {
     return JSON.stringify(event, function (key, value) {
+
       if (typeof value === 'function') {
         return value.toString();
       }
+
       return value;
     });
   }
 
   function getParsedEvent(event) {
     return JSON.parse(event, function (key, value) {
+
       if (key === 'callback') {
         return eval(value);
       } else if (key === 'date' && !isNaN(new Date(value))) {
         return new Date(value);
       }
+
       return value;
     });
   }
 
-
   return {
-    _events: events.array,
+    _events: events,
     createEvent(name, date, callback) {
       if (date.getTime() - Date.now() > 2147483647) {
         return;
@@ -149,7 +154,6 @@ const calendar = (function Calendar() {
       }
     },
     editEventName(eventName, name) {
-
       const eventToRename = events.array.find(event => event.name === eventName);
       const foundedEvent = events.array.find(event => event.name === name);
 
@@ -159,17 +163,20 @@ const calendar = (function Calendar() {
 
       if (eventToRename) {
         eventToRename.name = name;
+
         return getParsedEvent(getStringifiedEvent(eventToRename));
       }
-
     },
     deleteEvent(eventName) {
-      // const foundedEvent = events.array.find(event => event.name === eventName);
       const foundedEvents = events.array.filter(event => event.name === eventName);
+
       if (foundedEvents.length) {
         foundedEvents.forEach(eventToDelete => {
           events.array = events.array.filter((eventItem) => eventItem !== eventToDelete);
-          if (eventToDelete._timeout) clearTimeout(eventToDelete._timeout);
+
+          if (eventToDelete._timeout) {
+            return clearTimeout(eventToDelete._timeout)
+          }
         });
       }
     }

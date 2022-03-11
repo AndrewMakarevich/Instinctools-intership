@@ -1,16 +1,22 @@
 (function preEventsAddon(calendar) {
+
   // function, that recursevly setting timeouts for  pre-event function
   function setPreEventFunctionTimeout(event, callback, timeout, timeBeforeExecute, type) {
 
     const preEventTimeout = setTimeout(() => {
+
       if (!calendar.getEvent(event.name)) {
         return;
       }
+
       callback();
+
       if (type && type === 'daily') {
         return setPreEventFunctionTimeout(event, callback, 1000 * 60 * 60 * 24 - timeBeforeExecute, 'daily');
       }
+
       return setPreEventFunctionTimeout(event, callback, 1000 * 60 * 60 * 24 * 7 - timeBeforeExecute);
+
     }, timeout);
 
     event.preEventFuncTimeout = {
@@ -20,17 +26,22 @@
     };
 
   }
+
   //setting pre-event function 
   function setPreEventFunction(event, timeBeforeExecute, callback) {
     // Setting pre-event function for the standart event
     if (event.eventType !== 'repeat') {
+
       if (event.date.getTime() - Date.now() < 0) {
         return;
       }
+
       event.preEventFuncTimeout = setTimeout(() => {
+
         if (calendar.getEvent(event.name)) {
           callback();
         }
+
       }, event.date.getTime() - Date.now() - timeBeforeExecute);
     } else {
       // Setting pre-event function for the repeat event
@@ -50,6 +61,7 @@
       }
       // ... for the repeat event wich execution day will be
       const daysBefore = Math.abs(currentDate.getDay() - event.date.getDay());
+
       return setPreEventFunctionTimeout(
         event,
         callback,
@@ -58,17 +70,18 @@
     }
   }
 
-
-
   calendar.createPreEventFunction = function (eventName, timeBeforeExecute, callback) {
+
     if (eventName === 'all') {
-      calendar._events.forEach(event => {
+
+      calendar._events.array.forEach(event => {
         setPreEventFunction(event, timeBeforeExecute, callback);
       });
+
       return;
     }
 
-    const foundedEvent = calendar._events.find(eventItem => eventItem.name === eventName);
+    const foundedEvent = calendar._events.array.find(eventItem => eventItem.name === eventName);
 
     setPreEventFunction(foundedEvent, timeBeforeExecute, callback);
   };
@@ -79,9 +92,14 @@
   calendar.changeExecutionTime = function (eventName, date) {
     changeExecutionTime(eventName, date);
 
-    const foundedEvent = calendar._events.find(event => event.name === eventName);
+    const foundedEvent = calendar._events.array.find(event => event.name === eventName);
 
-    if (foundedEvent && foundedEvent.eventType === 'repeat') {
+    if (!foundedEvent) {
+      return;
+    }
+
+    if (foundedEvent.eventType === 'repeat') {
+
       if (foundedEvent.preEventFuncTimeout) {
         clearTimeout(foundedEvent.preEventFuncTimeout.timeout);
         setPreEventFunction(
@@ -89,6 +107,7 @@
           foundedEvent.preEventFuncTimeout.timeBeforeExecute,
           foundedEvent.preEventFuncTimeout.callback);
       }
+
     }
   };
 })(calendar);
