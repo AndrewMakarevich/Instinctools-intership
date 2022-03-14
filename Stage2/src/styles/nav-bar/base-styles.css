@@ -37,11 +37,13 @@
   text-decoration: none;
   color: black;
 }
-.link-list__item:hover{
+.link-list__item:hover,
+.link-list__item:focus-within{
   background-color: black;
   color: white;
 }
-.link-list__item:hover a{
+.link-list__item:hover a,
+.link-list__item a:focus{
   color: white;
 }
 .link-list__item__icon{
