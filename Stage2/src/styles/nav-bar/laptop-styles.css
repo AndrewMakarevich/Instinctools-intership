@@ -1,6 +1,6 @@
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .nav-bar{
-    grid-column: 1/6;
+    grid-column: 1/-1;
     grid-row: 1/1;
     flex-direction: row;
     row-gap: 5px;
@@ -12,7 +12,7 @@
     border:none;
   }
   .link-list__item{
-    padding:0 5px 0 5px;
+    padding:0 10px 0 10px;
     font-size: 1.5rem;
   }
 }

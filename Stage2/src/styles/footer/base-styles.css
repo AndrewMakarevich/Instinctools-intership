@@ -1,7 +1,8 @@
 .footer{
-  grid-column: 1/6;
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
   border-top: solid black 2px;
   padding: 10px 0 5px 0;
 }
@@ -31,6 +32,11 @@
 }
 .footer__link-list_flex-end{
   justify-self: end;
+}
+.footer__social-media-link-list{
+  display:flex;
+  list-style: none;
+  column-gap:5px;
 }
 .footer__link-list__social-media-item{
   width: 24px;

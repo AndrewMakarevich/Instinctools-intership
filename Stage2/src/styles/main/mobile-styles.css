@@ -1,7 +1,11 @@
-@media (max-width: 480px){
-  .input{
-    width: 100%;
+@media (max-width: 425px){
+  .input__label{
+    flex-direction: column;
   }
+  .input{
+    /* width: 100%; */
+  }
+  
   .main__news{
     grid-template-columns: 1fr;
   }

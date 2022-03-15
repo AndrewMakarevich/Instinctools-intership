@@ -1,6 +1,9 @@
-@media(max-width:480px){
+@media(max-width:425px){
   .footer{
-    grid-template-columns: 1fr;
-    row-gap: 15px;
+    flex-direction: column;
+    row-gap: 10px;
+  }
+  .footer__social-media-link-list{
+    align-self: flex-end;
   }
 }

@@ -6,17 +6,26 @@
 }
 .main__form{
   display: flex;
-  justify-content: stretch;
-  align-items:flex-end;
-  align-self:flex-end;
+  /* width: 100%; */
+  /* justify-content: stretch; */
+  column-gap: 5px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content:flex-end;
+}
+.input__label{
+  display: flex;
+}
+.input{
+  width:auto
 }
 .subscribe-btn{
- 
+  
 }
 .main__news{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  grid-gap: 15px;
+  grid-gap: 35px;
 }
 .news__item{
   border: solid black 2px;

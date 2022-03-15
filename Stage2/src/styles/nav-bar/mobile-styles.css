@@ -1,6 +1,7 @@
-@media (max-width: 480px){
+@media (max-width: 425px){
   .nav-bar{
-    flex-direction: column;
+    flex-direction: column-reverse;
+    row-gap: 15px;
   }
   .link-list__item{
     font-size: 1rem;

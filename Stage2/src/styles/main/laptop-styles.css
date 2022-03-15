@@ -1,6 +1,6 @@
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .main{
-    grid-column: 1/6;
+    grid-column: 1/-1;
   }
   .news__item__header{
     font-size: 1.8rem;

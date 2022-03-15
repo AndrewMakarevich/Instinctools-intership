@@ -5,6 +5,7 @@
   border: solid black 2px;
   padding: 25px;
   min-height: 200px;
+  text-transform: capitalize;
 }
 .header__content{
   display: flex;
