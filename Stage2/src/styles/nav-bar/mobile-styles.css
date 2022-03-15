@@ -1,4 +1,4 @@
-@media (max-width: 425px){
+@media (max-width: 768px){
   .nav-bar{
     flex-direction: column-reverse;
     row-gap: 15px;

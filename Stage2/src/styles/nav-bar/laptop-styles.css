@@ -1,4 +1,4 @@
-@media (max-width: 1024px) {
+@media (max-width: 1440px) {
   .nav-bar{
     grid-column: 1/-1;
     grid-row: 1/1;

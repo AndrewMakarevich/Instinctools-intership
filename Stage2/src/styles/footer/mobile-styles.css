@@ -1,4 +1,4 @@
-@media(max-width:425px){
+@media(max-width:768px){
   .footer{
     flex-direction: column;
     row-gap: 10px;
