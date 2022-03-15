@@ -24,6 +24,8 @@
   flex-direction: column;
   list-style: none;
   border: solid black 2px;
+  padding: 25px 10px 45px 10px;
+  row-gap: 15px;
 }
 .link-list__item{
   width: 100%;
