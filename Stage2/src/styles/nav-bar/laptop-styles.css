@@ -10,6 +10,8 @@
   .link-list{
     flex-direction: row;
     border:none;
+    padding: 0;
+    gap:0;
   }
   .link-list__item{
     padding:0 10px 0 10px;
