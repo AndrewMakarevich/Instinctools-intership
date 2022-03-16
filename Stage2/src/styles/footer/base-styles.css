@@ -16,7 +16,6 @@
 }
 .footer__link-list__item:last-child{
   border-right: 0;
-  padding-right: 0;
 }
 .footer__link-list__item a{
   text-decoration: none;
