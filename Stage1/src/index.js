@@ -113,6 +113,7 @@ const calendar = (function Calendar() {
       if (date.getTime() - Date.now() > 2147483647) {
         return;
       }
+
       this.deleteEvent(name);
       events.array.push({
         name,
@@ -125,6 +126,7 @@ const calendar = (function Calendar() {
             undefined
       });
     },
+
     getEvent(name) {
       const foundedEvent = events.array.find((event) => event.name === name);
       if (!foundedEvent) {
@@ -132,9 +134,11 @@ const calendar = (function Calendar() {
       }
       return getParsedEvent(getStringifiedEvent(foundedEvent));
     },
+
     getAllEvents() {
       return getParsedEvent(getStringifiedEvent(events.array));
     },
+
     dateFiltering: {
       getEventsByYear: events.getEventsByYear.bind(events),
       getEventsByMonth: events.getEventsByMonth.bind(events),
@@ -142,16 +146,20 @@ const calendar = (function Calendar() {
       getEventsByWeek: events.getEventsByWeek.bind(events),
       getEventsByWeekDay: events.getEventsByWeekDay.bind(events)
     },
+
     changeExecutionTime(eventName, date) {
       if (date.getTime() - Date.now() < 0) {
         return;
       }
+
       const foundedEvent = events.array.find(event => event.name === eventName);
+
       if (foundedEvent) {
         clearTimeout(foundedEvent._timeout);
         foundedEvent._timeout = setTimeout(() => foundedEvent.callback(), date.getTime() - Date.now());
         foundedEvent.date = date;
       }
+
     },
     editEventName(eventName, name) {
       const eventToRename = events.array.find(event => event.name === eventName);

@@ -11,10 +11,13 @@
       if (!calendar.getEvent(event.name)) {
         return;
       }
-      event.callback(); // if event still exists, execute callback
+
+      event.callback();
+      // if event still exists, execute callback
       if (type && type === 'daily') {
         return createRepEventTimeout(event, 1000 * 60 * 60 * 24); //if type of repeat event is daily, set timeout to the next day
       }
+
       return createRepEventTimeout(event, 1000 * 60 * 60 * 24 * 7); //instead, set timeout to the nex week day, wich is equal to the settled week day
     }, timeout);
   }
@@ -31,6 +34,7 @@
     if (date === 'daily') {
       eventObj.callback();
       createRepEventTimeout(eventObj, 1000 * 60 * 60 * 24 - millisecondsToTheNextDay, 'daily');
+
       return;
     }
 
@@ -41,6 +45,7 @@
     if (currentDate.getDay() === executeDayOfTheWeek) {
       eventObj.callback();
       createRepEventTimeout(eventObj, 1000 * 60 * 60 * 24 * 7 - millisecondsToTheNextDay);
+
       return;
     }
 

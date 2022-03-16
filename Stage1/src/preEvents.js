@@ -2,7 +2,6 @@
 
   // function, that recursevly setting timeouts for  pre-event function
   function setPreEventFunctionTimeout(event, callback, timeout, timeBeforeExecute, type) {
-
     const preEventTimeout = setTimeout(() => {
 
       if (!calendar.getEvent(event.name)) {
@@ -31,13 +30,11 @@
   function setPreEventFunction(event, timeBeforeExecute, callback) {
     // Setting pre-event function for the standart event
     if (event.eventType !== 'repeat') {
-
       if (event.date.getTime() - Date.now() < 0) {
         return;
       }
 
       event.preEventFuncTimeout = setTimeout(() => {
-
         if (calendar.getEvent(event.name)) {
           callback();
         }
@@ -73,7 +70,6 @@
   calendar.createPreEventFunction = function (eventName, timeBeforeExecute, callback) {
 
     if (eventName === 'all') {
-
       calendar._events.array.forEach(event => {
         setPreEventFunction(event, timeBeforeExecute, callback);
       });
