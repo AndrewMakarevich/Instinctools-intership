@@ -6,6 +6,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  --extra-dark: rgb(5, 5, 5);
+  --extra-light: white;
 }
 body{
   display: grid;

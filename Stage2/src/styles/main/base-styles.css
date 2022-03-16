@@ -21,7 +21,7 @@
   grid-gap: 35px;
 }
 .news__item{
-  border: solid black 2px;
+  border: solid var(--extra-dark) 2px;
   padding: 10px;
   padding-bottom: 20px;
 }

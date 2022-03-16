@@ -7,7 +7,7 @@
     justify-self: center;
   }
   .link-list__item{
-    border-right: 1px solid black;
+    border-right: 1px solid var(--extra-dark);
   }
   .link-list__item:last-child{
     border-right: none;

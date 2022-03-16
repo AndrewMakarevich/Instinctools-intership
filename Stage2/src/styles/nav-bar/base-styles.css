@@ -10,7 +10,7 @@
     height: 80px;
     padding: 10px;
     border-radius: 50%;
-    border: solid black 1px;
+    border: solid var(--extra-dark) 1px;
     background-color: beige;
 }
 .logo{
@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   list-style: none;
-  border: solid black 2px;
+  border: solid var(--extra-dark) 2px;
   padding: 25px 10px 45px 10px;
   row-gap: 15px;
 }
@@ -32,16 +32,16 @@
 }
 .link-list__item a{
   text-decoration: none;
-  color: black;
+  color: var(--extra-dark);
 }
 .link-list__item:hover,
 .link-list__item:focus-within{
-  background-color: black;
-  color: white;
+  background-color: var(--extra-dark);
+  color: var(--extra-light);
 }
 .link-list__item:hover a,
 .link-list__item a:focus{
-  color: white;
+  color: var(--extra-light);
 }
 .link-list__item__icon{
   width: 35px;
