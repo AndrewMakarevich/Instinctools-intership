@@ -2,13 +2,11 @@
   .nav-bar{
     justify-content: left;
     align-items: center;
-    flex-wrap: wrap;
   }
   .logo-wrapper{
     justify-self: center;
   }
   .link-list__item{
-    /* gap: 5px; */
     border-right: 1px solid black;
   }
   .link-list__item:last-child{
