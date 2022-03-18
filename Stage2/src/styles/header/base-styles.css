@@ -6,6 +6,7 @@
   padding: 25px;
   min-height: 200px;
 }
+
 .header__content{
   display: flex;
   justify-content: center;

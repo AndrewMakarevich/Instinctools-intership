@@ -6,32 +6,40 @@
   border-top: solid var(--extra-dark) 2px;
   padding: 10px 0 5px 0;
 }
+
 .footer ul{
   display: flex;
   list-style: none;
 }
+
 .footer__link-list__item{
   border-right: solid var(--extra-dark) 2px;
   padding: 0 3px 0 3px;
 }
+
 .footer__link-list__item:last-child{
   border-right: 0;
 }
+
 .footer__link-list__item a{
   text-decoration: none;
   color:var(--extra-dark);
 }
+
 .footer__link-list__item:hover{
   background-color:  var(--extra-dark);
   transition: background-color .3s;
 }
+
 .footer__link-list__item:hover a{
   color: var(--extra-light);
   transition: color .2s;
 }
+
 .footer__social-media-link-list{
   column-gap:5px;
 }
+
 .footer__link-list__social-media-item{
   width: 24px;
   height: 24px;

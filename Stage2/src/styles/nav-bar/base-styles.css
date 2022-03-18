@@ -4,6 +4,7 @@
   flex-direction: column;
   row-gap: 10px;
 }
+
 .logo-wrapper{
     align-self: center;
     width: 80px;
@@ -13,9 +14,11 @@
     border: solid var(--extra-dark) 1px;
     background-color: beige;
 }
+
 .logo{
   width: 100%;
 }
+
 .link-list{
   display: flex;
   flex-direction: column;
@@ -24,25 +27,30 @@
   padding: 25px 10px 45px 10px;
   row-gap: 15px;
 }
+
 .link-list__item{
   width: 100%;
   display: flex;
   align-items: center;
   transition: color .2s, background-color .3s;
 }
+
 .link-list__item a{
   text-decoration: none;
   color: var(--extra-dark);
 }
+
 .link-list__item:hover,
 .link-list__item:focus-within{
   background-color: var(--extra-dark);
   color: var(--extra-light);
 }
+
 .link-list__item:hover a,
 .link-list__item a:focus{
   color: var(--extra-light);
 }
+
 .link-list__item__icon{
   width: 35px;
   height: 35px;

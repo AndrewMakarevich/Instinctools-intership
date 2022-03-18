@@ -2,9 +2,11 @@
   .input__label{
     flex-direction: column;
   }
+
   .main__news{
     grid-template-columns: 1fr;
   }
+  
   .news__item__header{
     font-size: 1.5rem;
   }
