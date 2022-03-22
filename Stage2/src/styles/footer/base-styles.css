@@ -1,14 +1,14 @@
 .footer{
-  grid-column: 1/-1;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   border-top: solid var(--extra-dark) 2px;
-  padding: 10px 0 5px 0;
+  padding: var(--spacing-2) 0 var(--spacing-1) 0;
 }
 
 .footer ul{
   display: flex;
+  align-items: center;
   list-style: none;
 }
 
@@ -37,7 +37,7 @@
 }
 
 .footer__social-media-link-list{
-  column-gap:5px;
+  column-gap:var(--spacing-1);
 }
 
 .footer__link-list__social-media-item{

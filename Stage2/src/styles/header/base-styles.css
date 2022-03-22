@@ -1,10 +1,11 @@
 .header{
-  display:grid;
-  grid-column: 2/-1;
-  grid-template-rows: min-content 1fr;
   border: solid var(--extra-dark) 2px;
-  padding: 25px;
+  padding: var(--spacing-5);;
+  height: fit-content;
   min-height: 200px;
+}
+.header__text{
+  height: min-content;
 }
 
 .header__content{

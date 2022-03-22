@@ -1,10 +1,16 @@
 @media(max-width:768px){
+
   .footer{
     flex-direction: column;
-    row-gap: 10px;
+    row-gap: var(--spacing-2);;
   }
   
   .footer__social-media-link-list{
     align-self: flex-end;
   }
+
+  .rights-text{
+    font-size: .7rem;
+  }
+  
 }

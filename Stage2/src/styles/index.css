@@ -2,33 +2,53 @@
 @import url(./header/index.css);
 @import url(./main/index.css);
 @import url(./footer/index.css);
+
 *{
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   --extra-dark: rgb(5, 5, 5);
   --extra-light: white;
+  --spacing-1: 5px;
+  --spacing-2: calc(var(--spacing-1) * 2);
+  --spacing-3: calc(var(--spacing-1) * 3);
+  --spacing-4: calc(var(--spacing-1) * 4);
+  --spacing-5: calc(var(--spacing-1) * 5);
+  --spacing-6: calc(var(--spacing-1) * 6);
 }
+
 body{
-  display: grid;
-  padding: 10px;
   height: 100vh;
-  grid-template-columns: min-content repeat(2,1fr);
-  grid-auto-rows: min-content 1fr min-content;
-  grid-gap: 25px 15px;
+  min-height: 100vh;
 }
-@media (max-width:1440px) {
-  body{
-    grid-auto-rows: min-content 1fr 1fr min-content;
-  }
+
+ul,h1,h2,h3{
+   margin: 0;
+  padding: 0;
 }
-@media (max-width:1024px) {
-  body{
-    grid-gap: 25px 0;
-  }
+
+.body__wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 15px;
+  height: 100%;
+  padding: 10px;
 }
-@media (max-width: 425px){
-  body{
+
+.page-content__wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.main-content__wrapper{
+  flex: 80%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+
+@media (max-width: 768px){
+  .body__wrapper{
     padding: 25px;
   }
 }
