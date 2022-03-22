@@ -1,0 +1,22 @@
+@media (max-width: 1024px){
+  .nav-bar{
+    justify-content: left;
+    align-items: center;
+  }
+
+  .logo-wrapper{
+    justify-self: center;
+  }
+
+  .link-list__item{
+    border-right: 1px solid var(--extra-dark);
+  }
+
+  .link-list__item:last-child{
+    border-right: none;
+  }
+  
+  .link-list__item__icon{
+    display: none;
+  }
+}

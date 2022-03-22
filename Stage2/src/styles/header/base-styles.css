@@ -1,0 +1,15 @@
+.header{
+  border: solid var(--extra-dark) 2px;
+  padding: var(--spacing-5);;
+  height: fit-content;
+  min-height: 200px;
+}
+.header__text{
+  height: min-content;
+}
+
+.header__content{
+  display: flex;
+  justify-content: center;
+  align-items:center;
+}
