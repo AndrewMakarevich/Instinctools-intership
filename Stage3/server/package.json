@@ -1,0 +1,40 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Stage 3 instinctools test task",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode development --watch",
+    "start": "nodemon ./dist/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndrewMakarevich/InstinctoolsTestTask.git"
+  },
+  "keywords": [
+    "NodeJs",
+    "Express",
+    "MongoDB",
+    "Mongoose",
+    "Webpack",
+    "ReactJs",
+    "Redux"
+  ],
+  "author": "Andrew Makarevich <andreimakarevich2001@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndrewMakarevich/InstinctoolsTestTask/issues"
+  },
+  "homepage": "https://github.com/AndrewMakarevich/InstinctoolsTestTask#readme",
+  "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "nodemon": "^2.0.15",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
