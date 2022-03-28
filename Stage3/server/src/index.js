@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import express from 'express';
-import mongoose from 'mongoose';
 import { connectToTheMongoDB } from './db';
 import errorMiddleware from './middleware/errorMiddleware';
 import mainRouter from './routes';

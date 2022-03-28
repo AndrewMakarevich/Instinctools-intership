@@ -8,28 +8,36 @@ export function connectToTheMongoDB() {
 }
 
 async function checkForTheDuplication(Model, document, fieldsToCheck) {
-  for (let filedVal of fieldsToCheck) {
+
+  async function findDuplicate(document, paramName) {
     const duplicate = await Model.findOne({
-      [filedVal]: document[filedVal]
+      [paramName]: document[paramName]
     });
+
     if (duplicate) {
-      throw ApiError.badRequest(`${filedVal} for ${Model.collection.name} must be unique`);
+      throw ApiError.badRequest(`${paramName} for ${Model.collection.name} must be unique`);
     }
   }
-  // try {
-  //   fieldsToCheck.forEach(async (field) => {
-  //     const duplicate = await Model.findOne({
-  //       [field]: document[field]
-  //     });
-  //     if (duplicate) {
-  //       throw ApiError.badRequest(`${field} for ${Model.collection.name} must be unique`);
-  //     }
-  //   });
-  // } catch (e) {
-  //   throw ApiError.badRequest(`Error`);
-  // }
+
+  for (let fieldVal of fieldsToCheck) {
+    if (!Model.schema.obj[fieldVal]) {
+      continue;
+    }
+
+    if (Array.isArray(document)) {
+
+      for (let docVal of document) {
+        await findDuplicate(docVal, fieldVal);
+      }
+
+    }
+
+    await findDuplicate(document, fieldVal);
+  }
 
 }
+
+// OVERWRITE mongoose.Model.create method
 
 const create = mongoose.Model.create;
 
@@ -37,5 +45,6 @@ mongoose.Model.create = async function (docs, options, callback) {
   if (options && options.checkForDuplications) {
     await checkForTheDuplication(this, docs, options.checkForDuplications);
   }
+
   return create.apply(this, arguments);
 };
