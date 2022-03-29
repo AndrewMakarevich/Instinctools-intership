@@ -39,12 +39,24 @@ async function checkForTheDuplication(Model, document, fieldsToCheck) {
 
 // OVERWRITE mongoose.Model.create method
 
-const create = mongoose.Model.create;
+const createRef = mongoose.Model.create;
 
 mongoose.Model.create = async function (docs, options, callback) {
   if (options && options.checkForDuplications) {
     await checkForTheDuplication(this, docs, options.checkForDuplications);
   }
 
-  return create.apply(this, arguments);
+  return createRef.apply(this, arguments);
+};
+
+// OVERWRITE mongoose.Model.updateOne method
+
+const updateRef = mongoose.Model.updateOne;
+
+mongoose.Model.updateOne = async function (filter, update, options, callback) {
+  if (options && options.checkForDuplications) {
+    await checkForTheDuplication(this, update, options.checkForDuplications);
+  }
+  console.log(arguments);
+  return updateRef.apply(this, arguments);
 };

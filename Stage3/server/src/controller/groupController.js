@@ -20,8 +20,8 @@ class GroupController {
 
   static async getGroups(req, res, next) {
     try {
-      const { filterObject } = req.query;
-      const response = await GroupService.getGroups(filterObject);
+      const { filterObject, page, limit } = req.query;
+      const response = await GroupService.getGroups(filterObject, page, limit);
 
       return res.json(response);
     } catch (e) {
@@ -40,6 +40,18 @@ class GroupController {
     }
   };
 
+  static async editGroup(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { groupName, groupTitle } = req.body;
+      const response = await GroupService.editGroup(id, groupName, groupTitle);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  };
+
   static async deleteGroup(req, res, next) {
     try {
       const { id } = req.params;
@@ -49,7 +61,7 @@ class GroupController {
     } catch (e) {
       next(e);
     }
-  }
+  };
 
 }
 

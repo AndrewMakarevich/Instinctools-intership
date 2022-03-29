@@ -16,9 +16,9 @@ class GroupService {
     return group;
   }
 
-  static async getGroups(searchObj) {
+  static async getGroups(searchObj, page, limit) {
     let searchQuery = createModelSearchQuery(searchObj);
-    const groups = await GroupModel.find(searchQuery);
+    const groups = await GroupModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
 
     return groups;
   }
@@ -38,6 +38,24 @@ class GroupService {
 
     return { message: `Group ${groupName} created successfully` };
   };
+
+  static async editGroup(groupId, groupName, groupTitle) {
+    const groupToEdit = await GroupModel.findById(groupId).catch(() => {
+      throw ApiError.badRequest("Incorrect group's id");
+    });
+
+    if (!groupToEdit) {
+      throw ApiError.badRequest("Group you try to edit doesn't exists");
+    }
+
+    await GroupModel.updateOne(
+      { _id: groupId },
+      { groupName, groupTitle },
+      { checkForDuplications: ["groupName"] }
+    );
+
+    return { message: "Group updated successfully" };
+  }
 
   static async deleteGroup(groupId) {
     const groupToDelete = await GroupModel.findById(groupId).catch(() => {

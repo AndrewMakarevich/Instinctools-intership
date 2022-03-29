@@ -16,9 +16,12 @@ class UserService {
     return user;
   };
 
-  static async getUsers(filterObj) {
+  static async getUsers(filterObj, page, limit) {
+    page = Number(page) || 1;
+    limit = Number(limit) || 5;
+
     const searchQuery = createModelSearchQuery(filterObj);
-    const users = await UserModel.find(searchQuery);
+    const users = await UserModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
 
     return users;
   }
@@ -39,6 +42,29 @@ class UserService {
 
     return { message: "User created successfully" };
   };
+
+  static async editUser(userId, username, firstName, lastName, email) {
+    const userToEdit = await UserModel.findById(userId).catch(() => {
+      throw ApiError.badRequest("Incorrect user's id");
+    });
+
+    if (!userToEdit) {
+      throw ApiError.badRequest("User you try to edit doesn't exists");
+    }
+
+    await UserModel.updateOne(
+      { _id: userId },
+      {
+        username,
+        firstName,
+        lastName,
+        email
+      },
+      { checkForDuplications: ["username", "email"] }
+    );
+
+    return { message: "User updated successfully" };
+  }
 
   static async deleteUser(userId) {
     const userToDelete = await UserModel.findById(userId).catch(() => {

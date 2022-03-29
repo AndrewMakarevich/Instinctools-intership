@@ -17,8 +17,8 @@ class UserController {
 
   static async getUsers(req, res, next) {
     try {
-      const { filterObject } = req.query;
-      const response = await UserService.getUsers(filterObject);
+      const { filterObject, page, limit } = req.query;
+      const response = await UserService.getUsers(filterObject, page, limit);
 
       return res.json(response);
     } catch (e) {
@@ -28,7 +28,6 @@ class UserController {
 
   static async createUser(req, res, next) {
     try {
-      console.log(req.body);
       const { username, firstName, lastName, email } = req.body;
       const userCreationResponse = await UserService.createUser(username, firstName, lastName, email);
 
@@ -37,6 +36,18 @@ class UserController {
       next(e);
     }
   };
+
+  static async editUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { username, firstName, lastName, email } = req.body;
+      const response = await UserService.editUser(id, username, firstName, lastName, email);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
 
   static async deleteUser(req, res, next) {
     try {
