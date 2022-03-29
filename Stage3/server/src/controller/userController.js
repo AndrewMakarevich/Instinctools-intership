@@ -1,4 +1,3 @@
-import { UserModel } from "../models/models";
 import UserService from "../service/userService";
 
 class UserController {
@@ -16,6 +15,17 @@ class UserController {
     }
   };
 
+  static async getUsers(req, res, next) {
+    try {
+      const { filterObject } = req.query;
+      const response = await UserService.getUsers(filterObject);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  };
+
   static async createUser(req, res, next) {
     try {
       console.log(req.body);
@@ -23,6 +33,17 @@ class UserController {
       const userCreationResponse = await UserService.createUser(username, firstName, lastName, email);
 
       return res.json(userCreationResponse);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  static async deleteUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const response = await UserService.deleteUser(id);
+
+      return res.json(response);
     } catch (e) {
       next(e);
     }

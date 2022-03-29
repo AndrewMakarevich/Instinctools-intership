@@ -1,5 +1,6 @@
 import ApiError from "../apiError/apiError";
 import { GroupModel } from "../models/models";
+import createModelSearchQuery from "../utils/createModelSearchQuery";
 
 class GroupService {
 
@@ -13,6 +14,13 @@ class GroupService {
     });
 
     return group;
+  }
+
+  static async getGroups(searchObj) {
+    let searchQuery = createModelSearchQuery(searchObj);
+    const groups = await GroupModel.find(searchQuery);
+
+    return groups;
   }
 
   static async createGroup(groupName, groupTitle) {
@@ -30,6 +38,20 @@ class GroupService {
 
     return { message: `Group ${groupName} created successfully` };
   };
+
+  static async deleteGroup(groupId) {
+    const groupToDelete = await GroupModel.findById(groupId).catch(() => {
+      throw ApiError.badRequest("Incorrect group's id");
+    });
+
+    if (!groupToDelete) {
+      throw ApiError.badRequest("Group you try to delete doesn't exists");
+    }
+
+    await groupToDelete.deleteOne({ _id: groupId });
+
+    return { message: `Group deleted succesfully` };
+  }
 
 };
 
