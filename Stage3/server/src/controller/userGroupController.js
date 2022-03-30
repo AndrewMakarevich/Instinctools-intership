@@ -12,6 +12,17 @@ class UserGroupController {
       next(e);
     }
   }
+
+  static async deleteUserFromGroup(req, res, next) {
+    try {
+      const { userId, groupId } = req.query;
+      const response = await UserGroupService.deleteUserFromGroup(userId, groupId);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export default UserGroupController;

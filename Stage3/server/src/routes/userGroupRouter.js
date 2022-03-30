@@ -3,6 +3,7 @@ import UserGroupController from '../controller/userGroupController';
 
 const userGroupRouter = Router();
 
-userGroupRouter.post('/add', UserGroupController.addUserToGroup);
+userGroupRouter.post('/add-user', UserGroupController.addUserToGroup);
+userGroupRouter.delete('/delete-user', UserGroupController.deleteUserFromGroup);
 
 export default userGroupRouter;

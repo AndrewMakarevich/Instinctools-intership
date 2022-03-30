@@ -1,8 +1,6 @@
 import ApiError from "../apiError/apiError";
 
 function createModelSearchQuery(obj) {
-
-  console.log(obj);
   if (!obj) {
     return {};
   }
