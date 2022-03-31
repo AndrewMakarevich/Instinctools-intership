@@ -1,6 +1,6 @@
-import ApiError from "../apiError/apiError";
-import { GroupModel } from "../models/models";
-import createModelSearchQuery from "../utils/createModelSearchQuery";
+const ApiError = require("../apiError/apiError.js");
+const { GroupModel } = require("../models/models.js");
+const createModelSearchQuery = require("../utils/createModelSearchQuery.js");
 
 class GroupService {
 
@@ -34,10 +34,12 @@ class GroupService {
       }
     }
 
-    await GroupModel.create([{
+    const group = await GroupModel.create([{
       groupName,
       groupTitle
     }], { checkForDuplications: ["groupName"] });
+
+    console.log('GROUP CREATED', group);
 
     return { message: `Group ${groupName} created successfully` };
   };
@@ -76,4 +78,4 @@ class GroupService {
 
 };
 
-export default GroupService;
+module.exports = GroupService;

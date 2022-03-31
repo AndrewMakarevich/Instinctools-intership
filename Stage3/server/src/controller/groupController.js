@@ -1,4 +1,4 @@
-import GroupService from "../service/groupService";
+const GroupService = require("../service/groupService.js");
 
 class GroupController {
 
@@ -65,4 +65,4 @@ class GroupController {
 
 }
 
-export default GroupController;
+module.exports = GroupController;

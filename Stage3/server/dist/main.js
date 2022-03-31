@@ -1,22 +1,25 @@
-/*
- * ATTENTION: An "eval-source-map" devtool has been used.
- * This devtool is neither made for production nor for readable output files.
- * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
- * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
- * or disable the default devtool with "devtool: false".
- * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
- */
 /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/apiError/apiError.js":
 /*!**********************************!*\
   !*** ./src/apiError/apiError.js ***!
   \**********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nclass ApiError extends Error {\n  constructor(code, message) {\n    super();\n    this.code = code;\n    this.message = message;\n  }\n\n  static badRequest(message) {\n    return new ApiError(400, message);\n  }\n}\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ApiError);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvYXBpRXJyb3IvYXBpRXJyb3IuanMuanMiLCJtYXBwaW5ncyI6Ijs7OztBQUFBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLGlFQUFlLFFBQVEiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zZXJ2ZXIvLi9zcmMvYXBpRXJyb3IvYXBpRXJyb3IuanM/ZjJlYSJdLCJzb3VyY2VzQ29udGVudCI6WyJjbGFzcyBBcGlFcnJvciBleHRlbmRzIEVycm9yIHtcbiAgY29uc3RydWN0b3IoY29kZSwgbWVzc2FnZSkge1xuICAgIHN1cGVyKCk7XG4gICAgdGhpcy5jb2RlID0gY29kZTtcbiAgICB0aGlzLm1lc3NhZ2UgPSBtZXNzYWdlO1xuICB9XG5cbiAgc3RhdGljIGJhZFJlcXVlc3QobWVzc2FnZSkge1xuICAgIHJldHVybiBuZXcgQXBpRXJyb3IoNDAwLCBtZXNzYWdlKTtcbiAgfVxufVxuZXhwb3J0IGRlZmF1bHQgQXBpRXJyb3I7Il0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/apiError/apiError.js\n");
+class ApiError extends Error {
+  constructor(code, message) {
+    super();
+    this.code = code;
+    this.message = message;
+  }
+
+  static badRequest(message) {
+    return new ApiError(400, message);
+  }
+}
+
+module.exports = ApiError;
 
 /***/ }),
 
@@ -24,9 +27,76 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!*******************************************!*\
   !*** ./src/controller/groupController.js ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _service_groupService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../service/groupService */ \"./src/service/groupService.js\");\n\n\nclass GroupController {\n\n  static async getGroup(req, res, next) {\n    try {\n      const groupsParamValueToFind = req.params.paramValue;\n      const groupsParamNameToFind = req.query.paramName;\n\n      console.log(groupsParamNameToFind);\n      console.log(groupsParamValueToFind);\n\n      const response = await _service_groupService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].getGroup(groupsParamNameToFind, groupsParamValueToFind);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  }\n\n  static async getGroups(req, res, next) {\n    try {\n      const { filterObject, page, limit } = req.query;\n      const response = await _service_groupService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].getGroups(filterObject, page, limit);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  }\n\n  static async createGroup(req, res, next) {\n    try {\n      const { groupName, groupTitle } = req.body;\n      const response = await _service_groupService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].createGroup(groupName, groupTitle);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  };\n\n  static async editGroup(req, res, next) {\n    try {\n      const { id } = req.params;\n      const { groupName, groupTitle } = req.body;\n      const response = await _service_groupService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].editGroup(id, groupName, groupTitle);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  };\n\n  static async deleteGroup(req, res, next) {\n    try {\n      const { id } = req.params;\n      const response = await _service_groupService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].deleteGroup(id);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  };\n\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (GroupController);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvY29udHJvbGxlci9ncm91cENvbnRyb2xsZXIuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBbUQ7O0FBRW5EOztBQUVBO0FBQ0E7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUEsNkJBQTZCLHNFQUFxQjs7QUFFbEQ7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSxjQUFjLDRCQUE0QjtBQUMxQyw2QkFBNkIsdUVBQXNCOztBQUVuRDtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBLGNBQWMsd0JBQXdCO0FBQ3RDLDZCQUE2Qix5RUFBd0I7O0FBRXJEO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsY0FBYyxLQUFLO0FBQ25CLGNBQWMsd0JBQXdCO0FBQ3RDLDZCQUE2Qix1RUFBc0I7O0FBRW5EO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsY0FBYyxLQUFLO0FBQ25CLDZCQUE2Qix5RUFBd0I7O0FBRXJEO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQSxpRUFBZSxlQUFlIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vc2VydmVyLy4vc3JjL2NvbnRyb2xsZXIvZ3JvdXBDb250cm9sbGVyLmpzPzU2MGYiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IEdyb3VwU2VydmljZSBmcm9tIFwiLi4vc2VydmljZS9ncm91cFNlcnZpY2VcIjtcblxuY2xhc3MgR3JvdXBDb250cm9sbGVyIHtcblxuICBzdGF0aWMgYXN5bmMgZ2V0R3JvdXAocmVxLCByZXMsIG5leHQpIHtcbiAgICB0cnkge1xuICAgICAgY29uc3QgZ3JvdXBzUGFyYW1WYWx1ZVRvRmluZCA9IHJlcS5wYXJhbXMucGFyYW1WYWx1ZTtcbiAgICAgIGNvbnN0IGdyb3Vwc1BhcmFtTmFtZVRvRmluZCA9IHJlcS5xdWVyeS5wYXJhbU5hbWU7XG5cbiAgICAgIGNvbnNvbGUubG9nKGdyb3Vwc1BhcmFtTmFtZVRvRmluZCk7XG4gICAgICBjb25zb2xlLmxvZyhncm91cHNQYXJhbVZhbHVlVG9GaW5kKTtcblxuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBHcm91cFNlcnZpY2UuZ2V0R3JvdXAoZ3JvdXBzUGFyYW1OYW1lVG9GaW5kLCBncm91cHNQYXJhbVZhbHVlVG9GaW5kKTtcblxuICAgICAgcmV0dXJuIHJlcy5qc29uKHJlc3BvbnNlKTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBuZXh0KGUpO1xuICAgIH1cbiAgfVxuXG4gIHN0YXRpYyBhc3luYyBnZXRHcm91cHMocmVxLCByZXMsIG5leHQpIHtcbiAgICB0cnkge1xuICAgICAgY29uc3QgeyBmaWx0ZXJPYmplY3QsIHBhZ2UsIGxpbWl0IH0gPSByZXEucXVlcnk7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IEdyb3VwU2VydmljZS5nZXRHcm91cHMoZmlsdGVyT2JqZWN0LCBwYWdlLCBsaW1pdCk7XG5cbiAgICAgIHJldHVybiByZXMuanNvbihyZXNwb25zZSk7XG4gICAgfSBjYXRjaCAoZSkge1xuICAgICAgbmV4dChlKTtcbiAgICB9XG4gIH1cblxuICBzdGF0aWMgYXN5bmMgY3JlYXRlR3JvdXAocmVxLCByZXMsIG5leHQpIHtcbiAgICB0cnkge1xuICAgICAgY29uc3QgeyBncm91cE5hbWUsIGdyb3VwVGl0bGUgfSA9IHJlcS5ib2R5O1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBHcm91cFNlcnZpY2UuY3JlYXRlR3JvdXAoZ3JvdXBOYW1lLCBncm91cFRpdGxlKTtcblxuICAgICAgcmV0dXJuIHJlcy5qc29uKHJlc3BvbnNlKTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBuZXh0KGUpO1xuICAgIH1cbiAgfTtcblxuICBzdGF0aWMgYXN5bmMgZWRpdEdyb3VwKHJlcSwgcmVzLCBuZXh0KSB7XG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IHsgaWQgfSA9IHJlcS5wYXJhbXM7XG4gICAgICBjb25zdCB7IGdyb3VwTmFtZSwgZ3JvdXBUaXRsZSB9ID0gcmVxLmJvZHk7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IEdyb3VwU2VydmljZS5lZGl0R3JvdXAoaWQsIGdyb3VwTmFtZSwgZ3JvdXBUaXRsZSk7XG5cbiAgICAgIHJldHVybiByZXMuanNvbihyZXNwb25zZSk7XG4gICAgfSBjYXRjaCAoZSkge1xuICAgICAgbmV4dChlKTtcbiAgICB9XG4gIH07XG5cbiAgc3RhdGljIGFzeW5jIGRlbGV0ZUdyb3VwKHJlcSwgcmVzLCBuZXh0KSB7XG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IHsgaWQgfSA9IHJlcS5wYXJhbXM7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IEdyb3VwU2VydmljZS5kZWxldGVHcm91cChpZCk7XG5cbiAgICAgIHJldHVybiByZXMuanNvbihyZXNwb25zZSk7XG4gICAgfSBjYXRjaCAoZSkge1xuICAgICAgbmV4dChlKTtcbiAgICB9XG4gIH07XG5cbn1cblxuZXhwb3J0IGRlZmF1bHQgR3JvdXBDb250cm9sbGVyOyJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/controller/groupController.js\n");
+const GroupService = __webpack_require__(/*! ../service/groupService.js */ "./src/service/groupService.js");
+
+class GroupController {
+
+  static async getGroup(req, res, next) {
+    try {
+      const groupsParamValueToFind = req.params.paramValue;
+      const groupsParamNameToFind = req.query.paramName;
+
+      console.log(groupsParamNameToFind);
+      console.log(groupsParamValueToFind);
+
+      const response = await GroupService.getGroup(groupsParamNameToFind, groupsParamValueToFind);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async getGroups(req, res, next) {
+    try {
+      const { filterObject, page, limit } = req.query;
+      const response = await GroupService.getGroups(filterObject, page, limit);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async createGroup(req, res, next) {
+    try {
+      const { groupName, groupTitle } = req.body;
+      const response = await GroupService.createGroup(groupName, groupTitle);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  static async editGroup(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { groupName, groupTitle } = req.body;
+      const response = await GroupService.editGroup(id, groupName, groupTitle);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  static async deleteGroup(req, res, next) {
+    try {
+      const { id } = req.params;
+      const response = await GroupService.deleteGroup(id);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+}
+
+module.exports = GroupController;
 
 /***/ }),
 
@@ -34,9 +104,73 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!******************************************!*\
   !*** ./src/controller/userController.js ***!
   \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _service_userService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../service/userService */ \"./src/service/userService.js\");\n\n\nclass UserController {\n\n  static async getUser(req, res, next) {\n    try {\n      const usersParamValueToFind = req.params.paramValue;\n      const usersParamNameToFind = req.query.paramName;\n\n      const response = await _service_userService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].getUser(usersParamNameToFind, usersParamValueToFind);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  };\n\n  static async getUsers(req, res, next) {\n    try {\n      const { filterObject, page, limit } = req.query;\n      const response = await _service_userService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].getUsers(filterObject, page, limit);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  };\n\n  static async createUser(req, res, next) {\n    try {\n      const { username, firstName, lastName, email } = req.body;\n      const userCreationResponse = await _service_userService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].createUser(username, firstName, lastName, email);\n\n      return res.json(userCreationResponse);\n    } catch (e) {\n      next(e);\n    }\n  };\n\n  static async editUser(req, res, next) {\n    try {\n      const { id } = req.params;\n      const { username, firstName, lastName, email } = req.body;\n      const response = await _service_userService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].editUser(id, username, firstName, lastName, email);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  }\n\n  static async deleteUser(req, res, next) {\n    try {\n      const { id } = req.params;\n      const response = await _service_userService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].deleteUser(id);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  };\n\n}\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UserController);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvY29udHJvbGxlci91c2VyQ29udHJvbGxlci5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7OztBQUFpRDs7QUFFakQ7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7O0FBRUEsNkJBQTZCLG9FQUFtQjs7QUFFaEQ7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSxjQUFjLDRCQUE0QjtBQUMxQyw2QkFBNkIscUVBQW9COztBQUVqRDtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBLGNBQWMsdUNBQXVDO0FBQ3JELHlDQUF5Qyx1RUFBc0I7O0FBRS9EO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsY0FBYyxLQUFLO0FBQ25CLGNBQWMsdUNBQXVDO0FBQ3JELDZCQUE2QixxRUFBb0I7O0FBRWpEO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0EsY0FBYyxLQUFLO0FBQ25CLDZCQUE2Qix1RUFBc0I7O0FBRW5EO0FBQ0EsTUFBTTtBQUNOO0FBQ0E7QUFDQTs7QUFFQTtBQUNBLGlFQUFlLGNBQWMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zZXJ2ZXIvLi9zcmMvY29udHJvbGxlci91c2VyQ29udHJvbGxlci5qcz8wNGE1Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBVc2VyU2VydmljZSBmcm9tIFwiLi4vc2VydmljZS91c2VyU2VydmljZVwiO1xuXG5jbGFzcyBVc2VyQ29udHJvbGxlciB7XG5cbiAgc3RhdGljIGFzeW5jIGdldFVzZXIocmVxLCByZXMsIG5leHQpIHtcbiAgICB0cnkge1xuICAgICAgY29uc3QgdXNlcnNQYXJhbVZhbHVlVG9GaW5kID0gcmVxLnBhcmFtcy5wYXJhbVZhbHVlO1xuICAgICAgY29uc3QgdXNlcnNQYXJhbU5hbWVUb0ZpbmQgPSByZXEucXVlcnkucGFyYW1OYW1lO1xuXG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IFVzZXJTZXJ2aWNlLmdldFVzZXIodXNlcnNQYXJhbU5hbWVUb0ZpbmQsIHVzZXJzUGFyYW1WYWx1ZVRvRmluZCk7XG5cbiAgICAgIHJldHVybiByZXMuanNvbihyZXNwb25zZSk7XG4gICAgfSBjYXRjaCAoZSkge1xuICAgICAgbmV4dChlKTtcbiAgICB9XG4gIH07XG5cbiAgc3RhdGljIGFzeW5jIGdldFVzZXJzKHJlcSwgcmVzLCBuZXh0KSB7XG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IHsgZmlsdGVyT2JqZWN0LCBwYWdlLCBsaW1pdCB9ID0gcmVxLnF1ZXJ5O1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBVc2VyU2VydmljZS5nZXRVc2VycyhmaWx0ZXJPYmplY3QsIHBhZ2UsIGxpbWl0KTtcblxuICAgICAgcmV0dXJuIHJlcy5qc29uKHJlc3BvbnNlKTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBuZXh0KGUpO1xuICAgIH1cbiAgfTtcblxuICBzdGF0aWMgYXN5bmMgY3JlYXRlVXNlcihyZXEsIHJlcywgbmV4dCkge1xuICAgIHRyeSB7XG4gICAgICBjb25zdCB7IHVzZXJuYW1lLCBmaXJzdE5hbWUsIGxhc3ROYW1lLCBlbWFpbCB9ID0gcmVxLmJvZHk7XG4gICAgICBjb25zdCB1c2VyQ3JlYXRpb25SZXNwb25zZSA9IGF3YWl0IFVzZXJTZXJ2aWNlLmNyZWF0ZVVzZXIodXNlcm5hbWUsIGZpcnN0TmFtZSwgbGFzdE5hbWUsIGVtYWlsKTtcblxuICAgICAgcmV0dXJuIHJlcy5qc29uKHVzZXJDcmVhdGlvblJlc3BvbnNlKTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBuZXh0KGUpO1xuICAgIH1cbiAgfTtcblxuICBzdGF0aWMgYXN5bmMgZWRpdFVzZXIocmVxLCByZXMsIG5leHQpIHtcbiAgICB0cnkge1xuICAgICAgY29uc3QgeyBpZCB9ID0gcmVxLnBhcmFtcztcbiAgICAgIGNvbnN0IHsgdXNlcm5hbWUsIGZpcnN0TmFtZSwgbGFzdE5hbWUsIGVtYWlsIH0gPSByZXEuYm9keTtcbiAgICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgVXNlclNlcnZpY2UuZWRpdFVzZXIoaWQsIHVzZXJuYW1lLCBmaXJzdE5hbWUsIGxhc3ROYW1lLCBlbWFpbCk7XG5cbiAgICAgIHJldHVybiByZXMuanNvbihyZXNwb25zZSk7XG4gICAgfSBjYXRjaCAoZSkge1xuICAgICAgbmV4dChlKTtcbiAgICB9XG4gIH1cblxuICBzdGF0aWMgYXN5bmMgZGVsZXRlVXNlcihyZXEsIHJlcywgbmV4dCkge1xuICAgIHRyeSB7XG4gICAgICBjb25zdCB7IGlkIH0gPSByZXEucGFyYW1zO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBVc2VyU2VydmljZS5kZWxldGVVc2VyKGlkKTtcblxuICAgICAgcmV0dXJuIHJlcy5qc29uKHJlc3BvbnNlKTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBuZXh0KGUpO1xuICAgIH1cbiAgfTtcblxufVxuZXhwb3J0IGRlZmF1bHQgVXNlckNvbnRyb2xsZXI7Il0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/controller/userController.js\n");
+const UserService = __webpack_require__(/*! ../service/userService */ "./src/service/userService.js");
+
+class UserController {
+
+  static async getUser(req, res, next) {
+    try {
+      const usersParamValueToFind = req.params.paramValue;
+      const usersParamNameToFind = req.query.paramName;
+
+      const response = await UserService.getUser(usersParamNameToFind, usersParamValueToFind);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  static async getUsers(req, res, next) {
+    try {
+      const { filterObject, page, limit } = req.query;
+      const response = await UserService.getUsers(filterObject, page, limit);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  static async createUser(req, res, next) {
+    try {
+      const { username, firstName, lastName, email } = req.body;
+      const userCreationResponse = await UserService.createUser(username, firstName, lastName, email);
+
+      return res.json(userCreationResponse);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  static async editUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { username, firstName, lastName, email } = req.body;
+      const response = await UserService.editUser(id, username, firstName, lastName, email);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async deleteUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const response = await UserService.deleteUser(id);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+}
+
+module.exports = UserController;
 
 /***/ }),
 
@@ -44,9 +178,36 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!***********************************************!*\
   !*** ./src/controller/userGroupController.js ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _service_userGroupService__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../service/userGroupService */ \"./src/service/userGroupService.js\");\n\n\nclass UserGroupController {\n\n  static async addUserToGroup(req, res, next) {\n    try {\n      const { userId, groupId } = req.body;\n      const response = await _service_userGroupService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].addUserToGroup(userId, groupId);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  }\n\n  static async deleteUserFromGroup(req, res, next) {\n    try {\n      const { userId, groupId } = req.query;\n      const response = await _service_userGroupService__WEBPACK_IMPORTED_MODULE_0__[\"default\"].deleteUserFromGroup(userId, groupId);\n\n      return res.json(response);\n    } catch (e) {\n      next(e);\n    }\n  }\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UserGroupController);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvY29udHJvbGxlci91c2VyR3JvdXBDb250cm9sbGVyLmpzLmpzIiwibWFwcGluZ3MiOiI7Ozs7O0FBQTJEOztBQUUzRDs7QUFFQTtBQUNBO0FBQ0EsY0FBYyxrQkFBa0I7QUFDaEMsNkJBQTZCLGdGQUErQjs7QUFFNUQ7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBOztBQUVBO0FBQ0E7QUFDQSxjQUFjLGtCQUFrQjtBQUNoQyw2QkFBNkIscUZBQW9DOztBQUVqRTtBQUNBLE1BQU07QUFDTjtBQUNBO0FBQ0E7QUFDQTs7QUFFQSxpRUFBZSxtQkFBbUIiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zZXJ2ZXIvLi9zcmMvY29udHJvbGxlci91c2VyR3JvdXBDb250cm9sbGVyLmpzP2JjNWEiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFVzZXJHcm91cFNlcnZpY2UgZnJvbSBcIi4uL3NlcnZpY2UvdXNlckdyb3VwU2VydmljZVwiO1xuXG5jbGFzcyBVc2VyR3JvdXBDb250cm9sbGVyIHtcblxuICBzdGF0aWMgYXN5bmMgYWRkVXNlclRvR3JvdXAocmVxLCByZXMsIG5leHQpIHtcbiAgICB0cnkge1xuICAgICAgY29uc3QgeyB1c2VySWQsIGdyb3VwSWQgfSA9IHJlcS5ib2R5O1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBVc2VyR3JvdXBTZXJ2aWNlLmFkZFVzZXJUb0dyb3VwKHVzZXJJZCwgZ3JvdXBJZCk7XG5cbiAgICAgIHJldHVybiByZXMuanNvbihyZXNwb25zZSk7XG4gICAgfSBjYXRjaCAoZSkge1xuICAgICAgbmV4dChlKTtcbiAgICB9XG4gIH1cblxuICBzdGF0aWMgYXN5bmMgZGVsZXRlVXNlckZyb21Hcm91cChyZXEsIHJlcywgbmV4dCkge1xuICAgIHRyeSB7XG4gICAgICBjb25zdCB7IHVzZXJJZCwgZ3JvdXBJZCB9ID0gcmVxLnF1ZXJ5O1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBVc2VyR3JvdXBTZXJ2aWNlLmRlbGV0ZVVzZXJGcm9tR3JvdXAodXNlcklkLCBncm91cElkKTtcblxuICAgICAgcmV0dXJuIHJlcy5qc29uKHJlc3BvbnNlKTtcbiAgICB9IGNhdGNoIChlKSB7XG4gICAgICBuZXh0KGUpO1xuICAgIH1cbiAgfVxufVxuXG5leHBvcnQgZGVmYXVsdCBVc2VyR3JvdXBDb250cm9sbGVyOyJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/controller/userGroupController.js\n");
+const UserGroupService = __webpack_require__(/*! ../service/userGroupService */ "./src/service/userGroupService.js");
+
+class UserGroupController {
+
+  static async addUserToGroup(req, res, next) {
+    try {
+      const { userId, groupId } = req.body;
+      const response = await UserGroupService.addUserToGroup(userId, groupId);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async deleteUserFromGroup(req, res, next) {
+    try {
+      const { userId, groupId } = req.query;
+      const response = await UserGroupService.deleteUserFromGroup(userId, groupId);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+}
+
+module.exports = UserGroupService;
 
 /***/ }),
 
@@ -54,19 +215,72 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!*************************!*\
   !*** ./src/db/index.js ***!
   \*************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"connectToTheMongoDB\": () => (/* binding */ connectToTheMongoDB)\n/* harmony export */ });\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ \"mongoose\");\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _apiError_apiError__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../apiError/apiError */ \"./src/apiError/apiError.js\");\n\n\n\nfunction connectToTheMongoDB() {\n  mongoose__WEBPACK_IMPORTED_MODULE_0___default().connect(\"mongodb://localhost:27017/admin-panel-test-task\", () => {\n    console.log(\"Connected to the mongoDB\");\n  });\n}\n\nasync function checkForTheDuplication(Model, document, fieldsToCheck) {\n\n  async function findDuplicate(document, paramName) {\n    const duplicate = await Model.findOne({\n      [paramName]: document[paramName]\n    });\n\n    if (duplicate) {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_1__[\"default\"].badRequest(`${paramName} for ${Model.collection.name} must be unique`);\n    }\n  }\n\n  for (let fieldVal of fieldsToCheck) {\n    if (!Model.schema.obj[fieldVal]) {\n      continue;\n    }\n\n    if (Array.isArray(document)) {\n\n      for (let docVal of document) {\n        await findDuplicate(docVal, fieldVal);\n      }\n\n    }\n\n    await findDuplicate(document, fieldVal);\n  }\n\n}\n\n// OVERWRITE mongoose.Model.create method\n\nconst createRef = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Model.create);\n\n(mongoose__WEBPACK_IMPORTED_MODULE_0___default().Model.create) = async function (docs, options, callback) {\n  if (options && options.checkForDuplications) {\n    await checkForTheDuplication(this, docs, options.checkForDuplications);\n  }\n\n  return createRef.apply(this, arguments);\n};\n\n// OVERWRITE mongoose.Model.updateOne method\n\nconst updateRef = (mongoose__WEBPACK_IMPORTED_MODULE_0___default().Model.updateOne);\n\n(mongoose__WEBPACK_IMPORTED_MODULE_0___default().Model.updateOne) = async function (filter, update, options, callback) {\n  if (options && options.checkForDuplications) {\n    await checkForTheDuplication(this, update, options.checkForDuplications);\n  }\n  console.log(arguments);\n  return updateRef.apply(this, arguments);\n};//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvZGIvaW5kZXguanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7OztBQUFnQztBQUNZOztBQUVyQztBQUNQLEVBQUUsdURBQWdCO0FBQ2xCO0FBQ0EsR0FBRztBQUNIOztBQUVBOztBQUVBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7O0FBRUw7QUFDQSxZQUFZLHFFQUFtQixJQUFJLFdBQVcsTUFBTSx1QkFBdUI7QUFDM0U7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7O0FBRUE7QUFDQTs7QUFFQTs7QUFFQTs7QUFFQSxrQkFBa0IsOERBQXFCOztBQUV2Qyw4REFBcUI7QUFDckI7QUFDQTtBQUNBOztBQUVBO0FBQ0E7O0FBRUE7O0FBRUEsa0JBQWtCLGlFQUF3Qjs7QUFFMUMsaUVBQXdCO0FBQ3hCO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsInNvdXJjZXMiOlsid2VicGFjazovL3NlcnZlci8uL3NyYy9kYi9pbmRleC5qcz84MTQ5Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBtb25nb29zZSBmcm9tIFwibW9uZ29vc2VcIjtcbmltcG9ydCBBcGlFcnJvciBmcm9tIFwiLi4vYXBpRXJyb3IvYXBpRXJyb3JcIjtcblxuZXhwb3J0IGZ1bmN0aW9uIGNvbm5lY3RUb1RoZU1vbmdvREIoKSB7XG4gIG1vbmdvb3NlLmNvbm5lY3QoXCJtb25nb2RiOi8vbG9jYWxob3N0OjI3MDE3L2FkbWluLXBhbmVsLXRlc3QtdGFza1wiLCAoKSA9PiB7XG4gICAgY29uc29sZS5sb2coXCJDb25uZWN0ZWQgdG8gdGhlIG1vbmdvREJcIik7XG4gIH0pO1xufVxuXG5hc3luYyBmdW5jdGlvbiBjaGVja0ZvclRoZUR1cGxpY2F0aW9uKE1vZGVsLCBkb2N1bWVudCwgZmllbGRzVG9DaGVjaykge1xuXG4gIGFzeW5jIGZ1bmN0aW9uIGZpbmREdXBsaWNhdGUoZG9jdW1lbnQsIHBhcmFtTmFtZSkge1xuICAgIGNvbnN0IGR1cGxpY2F0ZSA9IGF3YWl0IE1vZGVsLmZpbmRPbmUoe1xuICAgICAgW3BhcmFtTmFtZV06IGRvY3VtZW50W3BhcmFtTmFtZV1cbiAgICB9KTtcblxuICAgIGlmIChkdXBsaWNhdGUpIHtcbiAgICAgIHRocm93IEFwaUVycm9yLmJhZFJlcXVlc3QoYCR7cGFyYW1OYW1lfSBmb3IgJHtNb2RlbC5jb2xsZWN0aW9uLm5hbWV9IG11c3QgYmUgdW5pcXVlYCk7XG4gICAgfVxuICB9XG5cbiAgZm9yIChsZXQgZmllbGRWYWwgb2YgZmllbGRzVG9DaGVjaykge1xuICAgIGlmICghTW9kZWwuc2NoZW1hLm9ialtmaWVsZFZhbF0pIHtcbiAgICAgIGNvbnRpbnVlO1xuICAgIH1cblxuICAgIGlmIChBcnJheS5pc0FycmF5KGRvY3VtZW50KSkge1xuXG4gICAgICBmb3IgKGxldCBkb2NWYWwgb2YgZG9jdW1lbnQpIHtcbiAgICAgICAgYXdhaXQgZmluZER1cGxpY2F0ZShkb2NWYWwsIGZpZWxkVmFsKTtcbiAgICAgIH1cblxuICAgIH1cblxuICAgIGF3YWl0IGZpbmREdXBsaWNhdGUoZG9jdW1lbnQsIGZpZWxkVmFsKTtcbiAgfVxuXG59XG5cbi8vIE9WRVJXUklURSBtb25nb29zZS5Nb2RlbC5jcmVhdGUgbWV0aG9kXG5cbmNvbnN0IGNyZWF0ZVJlZiA9IG1vbmdvb3NlLk1vZGVsLmNyZWF0ZTtcblxubW9uZ29vc2UuTW9kZWwuY3JlYXRlID0gYXN5bmMgZnVuY3Rpb24gKGRvY3MsIG9wdGlvbnMsIGNhbGxiYWNrKSB7XG4gIGlmIChvcHRpb25zICYmIG9wdGlvbnMuY2hlY2tGb3JEdXBsaWNhdGlvbnMpIHtcbiAgICBhd2FpdCBjaGVja0ZvclRoZUR1cGxpY2F0aW9uKHRoaXMsIGRvY3MsIG9wdGlvbnMuY2hlY2tGb3JEdXBsaWNhdGlvbnMpO1xuICB9XG5cbiAgcmV0dXJuIGNyZWF0ZVJlZi5hcHBseSh0aGlzLCBhcmd1bWVudHMpO1xufTtcblxuLy8gT1ZFUldSSVRFIG1vbmdvb3NlLk1vZGVsLnVwZGF0ZU9uZSBtZXRob2RcblxuY29uc3QgdXBkYXRlUmVmID0gbW9uZ29vc2UuTW9kZWwudXBkYXRlT25lO1xuXG5tb25nb29zZS5Nb2RlbC51cGRhdGVPbmUgPSBhc3luYyBmdW5jdGlvbiAoZmlsdGVyLCB1cGRhdGUsIG9wdGlvbnMsIGNhbGxiYWNrKSB7XG4gIGlmIChvcHRpb25zICYmIG9wdGlvbnMuY2hlY2tGb3JEdXBsaWNhdGlvbnMpIHtcbiAgICBhd2FpdCBjaGVja0ZvclRoZUR1cGxpY2F0aW9uKHRoaXMsIHVwZGF0ZSwgb3B0aW9ucy5jaGVja0ZvckR1cGxpY2F0aW9ucyk7XG4gIH1cbiAgY29uc29sZS5sb2coYXJndW1lbnRzKTtcbiAgcmV0dXJuIHVwZGF0ZVJlZi5hcHBseSh0aGlzLCBhcmd1bWVudHMpO1xufTsiXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/db/index.js\n");
+const mongoose = __webpack_require__(/*! mongoose */ "mongoose");
+const ApiError = __webpack_require__(/*! ../apiError/apiError.js */ "./src/apiError/apiError.js")
 
-/***/ }),
+function connectToTheMongoDB() {
+  mongoose.connect("mongodb://localhost:27017/admin-panel-test-task", () => {
+    console.log("Connected to the mongoDB");
+  });
+}
 
-/***/ "./src/index.js":
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+async function checkForTheDuplication(Model, document, fieldsToCheck) {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var dotenv_config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dotenv/config */ \"dotenv/config\");\n/* harmony import */ var dotenv_config__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dotenv_config__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! express */ \"express\");\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _db__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./db */ \"./src/db/index.js\");\n/* harmony import */ var _middleware_errorMiddleware__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./middleware/errorMiddleware */ \"./src/middleware/errorMiddleware.js\");\n/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./routes */ \"./src/routes/index.js\");\n\n\n\n\n\n\nconst app = express__WEBPACK_IMPORTED_MODULE_1___default()();\napp.use(express__WEBPACK_IMPORTED_MODULE_1___default().json());\napp.use('/api', _routes__WEBPACK_IMPORTED_MODULE_4__[\"default\"]);\napp.use(_middleware_errorMiddleware__WEBPACK_IMPORTED_MODULE_3__[\"default\"]);\nconst PORT = process.env.PORT || 5000;\n\nasync function start() {\n  try {\n    (0,_db__WEBPACK_IMPORTED_MODULE_2__.connectToTheMongoDB)();\n    app.listen(PORT, () => {\n      console.log(`Server started at port ${PORT}`);\n    });\n  } catch (e) {\n    console.log(e);\n  }\n\n}\nstart();\n\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvaW5kZXguanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFBdUI7QUFDTztBQUNhO0FBQ2dCO0FBQ3pCOztBQUVsQyxZQUFZLDhDQUFPO0FBQ25CLFFBQVEsbURBQVk7QUFDcEIsZ0JBQWdCLCtDQUFVO0FBQzFCLFFBQVEsbUVBQWU7QUFDdkI7O0FBRUE7QUFDQTtBQUNBLElBQUksd0RBQW1CO0FBQ3ZCO0FBQ0EsNENBQTRDLEtBQUs7QUFDakQsS0FBSztBQUNMLElBQUk7QUFDSjtBQUNBOztBQUVBO0FBQ0EiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zZXJ2ZXIvLi9zcmMvaW5kZXguanM/YjYzNSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgJ2RvdGVudi9jb25maWcnO1xuaW1wb3J0IGV4cHJlc3MgZnJvbSAnZXhwcmVzcyc7XG5pbXBvcnQgeyBjb25uZWN0VG9UaGVNb25nb0RCIH0gZnJvbSAnLi9kYic7XG5pbXBvcnQgZXJyb3JNaWRkbGV3YXJlIGZyb20gJy4vbWlkZGxld2FyZS9lcnJvck1pZGRsZXdhcmUnO1xuaW1wb3J0IG1haW5Sb3V0ZXIgZnJvbSAnLi9yb3V0ZXMnO1xuXG5jb25zdCBhcHAgPSBleHByZXNzKCk7XG5hcHAudXNlKGV4cHJlc3MuanNvbigpKTtcbmFwcC51c2UoJy9hcGknLCBtYWluUm91dGVyKTtcbmFwcC51c2UoZXJyb3JNaWRkbGV3YXJlKTtcbmNvbnN0IFBPUlQgPSBwcm9jZXNzLmVudi5QT1JUIHx8IDUwMDA7XG5cbmFzeW5jIGZ1bmN0aW9uIHN0YXJ0KCkge1xuICB0cnkge1xuICAgIGNvbm5lY3RUb1RoZU1vbmdvREIoKTtcbiAgICBhcHAubGlzdGVuKFBPUlQsICgpID0+IHtcbiAgICAgIGNvbnNvbGUubG9nKGBTZXJ2ZXIgc3RhcnRlZCBhdCBwb3J0ICR7UE9SVH1gKTtcbiAgICB9KTtcbiAgfSBjYXRjaCAoZSkge1xuICAgIGNvbnNvbGUubG9nKGUpO1xuICB9XG5cbn1cbnN0YXJ0KCk7XG5cbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/index.js\n");
+  async function findDuplicate(document, paramName) {
+    const duplicate = await Model.findOne({
+      [paramName]: document[paramName]
+    });
+
+    if (duplicate) {
+      throw ApiError.badRequest(`${paramName} for ${Model.collection.name} must be unique`);
+    }
+  }
+
+  for (let fieldVal of fieldsToCheck) {
+    if (!Model.schema.obj[fieldVal]) {
+      continue;
+    }
+
+    if (Array.isArray(document)) {
+
+      for (let docVal of document) {
+        await findDuplicate(docVal, fieldVal);
+      }
+
+    }
+
+    await findDuplicate(document, fieldVal);
+  }
+
+}
+
+// OVERWRITE mongoose.Model.create method
+
+const createRef = mongoose.Model.create;
+
+mongoose.Model.create = async function (docs, options, callback) {
+  if (options && options.checkForDuplications) {
+    await checkForTheDuplication(this, docs, options.checkForDuplications);
+  }
+
+  return createRef.apply(this, arguments);
+};
+
+// OVERWRITE mongoose.Model.updateOne method
+
+const updateRef = mongoose.Model.updateOne;
+
+mongoose.Model.updateOne = async function (filter, update, options, callback) {
+  if (options && options.checkForDuplications) {
+    await checkForTheDuplication(this, update, options.checkForDuplications);
+  }
+  console.log(arguments);
+  return updateRef.apply(this, arguments);
+};
+
+module.exports = connectToTheMongoDB;
 
 /***/ }),
 
@@ -74,9 +288,16 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var dote
 /*!*******************************************!*\
   !*** ./src/middleware/errorMiddleware.js ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../apiError/apiError */ \"./src/apiError/apiError.js\");\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((err, req, res, next) => {\n  if (err instanceof _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"]) {\n    return res.status(err.code).json({ message: err.message });\n  }\n  return res.status(500).json({ message: err.message });\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvbWlkZGxld2FyZS9lcnJvck1pZGRsZXdhcmUuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBNEM7O0FBRTVDLGlFQUFlO0FBQ2YscUJBQXFCLDBEQUFRO0FBQzdCLHVDQUF1QyxzQkFBc0I7QUFDN0Q7QUFDQSxnQ0FBZ0Msc0JBQXNCO0FBQ3RELENBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zZXJ2ZXIvLi9zcmMvbWlkZGxld2FyZS9lcnJvck1pZGRsZXdhcmUuanM/NmJhYSJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgQXBpRXJyb3IgZnJvbSBcIi4uL2FwaUVycm9yL2FwaUVycm9yXCI7XG5cbmV4cG9ydCBkZWZhdWx0IChlcnIsIHJlcSwgcmVzLCBuZXh0KSA9PiB7XG4gIGlmIChlcnIgaW5zdGFuY2VvZiBBcGlFcnJvcikge1xuICAgIHJldHVybiByZXMuc3RhdHVzKGVyci5jb2RlKS5qc29uKHsgbWVzc2FnZTogZXJyLm1lc3NhZ2UgfSk7XG4gIH1cbiAgcmV0dXJuIHJlcy5zdGF0dXMoNTAwKS5qc29uKHsgbWVzc2FnZTogZXJyLm1lc3NhZ2UgfSk7XG59OyJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/middleware/errorMiddleware.js\n");
+const ApiError = __webpack_require__(/*! ../apiError/apiError.js */ "./src/apiError/apiError.js");
+
+module.exports = (err, req, res, next) => {
+  if (err instanceof ApiError) {
+    return res.status(err.code).json({ message: err.message });
+  }
+  return res.status(500).json({ message: err.message });
+};
 
 /***/ }),
 
@@ -84,9 +305,72 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!******************************!*\
   !*** ./src/models/models.js ***!
   \******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"GroupModel\": () => (/* binding */ GroupModel),\n/* harmony export */   \"UserModel\": () => (/* binding */ UserModel),\n/* harmony export */   \"UsersGroupsModel\": () => (/* binding */ UsersGroupsModel)\n/* harmony export */ });\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ \"mongoose\");\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);\n\n\nconst UserSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({\n  username: {\n    type: String,\n    unique: true,\n    match: [/^[a-zA-Z0-9\\.,-]{4,20}$/, \"Username does't match required pattern\"]\n  },\n\n  firstName: {\n    type: String,\n    match: [/^[a-zA-Z]+\\s?[a-zA-Z]+$/, \"First name does't match required pattern\"],\n    minlength: [2, 'First name is too short'],\n    maxlength: [20, 'First name is too long']\n  },\n\n  lastName: {\n    type: String,\n    match: [/^[a-zA-Z]+$/, \"Last name does't match required pattern\"],\n    minlength: [2, 'Last name is too short'],\n    maxlength: [20, 'Last name is too long']\n  },\n\n  email: {\n    type: String,\n    unique: true,\n    match: [/^[a-zA-Z0-9!#$%&'\\*\\+\\-\\/=?^_`{}|]{1,65}@([a-zA-Z0-9]+.){1,2}[a-zA-Z]{2,14}$/]\n  }\n});\n\n// UserSchema.indexes({ username: 1, email: 1 }, { unique: true });\n\nconst GroupSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({\n  groupName: {\n    type: String,\n    unique: true,\n    match: [/^[a-zA-Z0-9.-]{4,20}$/, \"Group's name doesn't match required pattern\"]\n  },\n\n  groupTitle: {\n    type: String,\n    match: [/^[a-zA-Z0-9.-]{6,20}$/, \"Group's title doesn't match required pattern\"]\n  },\n});\n\nconst UsersGroupsSchema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({\n  userId: {\n    type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema.Types.ObjectId,\n  },\n\n  groupId: {\n    type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema.Types.ObjectId\n  }\n});\n\nconst UserModel = (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)('User', UserSchema);\nconst GroupModel = (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)('Group', GroupSchema);\nconst UsersGroupsModel = (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)('UsersGroups', UsersGroupsSchema);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvbW9kZWxzL21vZGVscy5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7OztBQUF5Qzs7QUFFekMsdUJBQXVCLDRDQUFNO0FBQzdCO0FBQ0E7QUFDQTtBQUNBLDhCQUE4QixLQUFLO0FBQ25DLEdBQUc7O0FBRUg7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEdBQUc7O0FBRUg7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEdBQUc7O0FBRUg7QUFDQTtBQUNBO0FBQ0EsNkNBQTZDLEdBQUcsS0FBSyxpQkFBaUIsSUFBSSxTQUFTLEtBQUs7QUFDeEY7QUFDQSxDQUFDOztBQUVELHdCQUF3Qix1QkFBdUIsSUFBSSxjQUFjOztBQUVqRSx3QkFBd0IsNENBQU07QUFDOUI7QUFDQTtBQUNBO0FBQ0EsNEJBQTRCLEtBQUs7QUFDakMsR0FBRzs7QUFFSDtBQUNBO0FBQ0EsNEJBQTRCLEtBQUs7QUFDakMsR0FBRztBQUNILENBQUM7O0FBRUQsOEJBQThCLDRDQUFNO0FBQ3BDO0FBQ0EsVUFBVSwyREFBcUI7QUFDL0IsR0FBRzs7QUFFSDtBQUNBLFVBQVUsMkRBQXFCO0FBQy9CO0FBQ0EsQ0FBQzs7QUFFTSxrQkFBa0IsK0NBQUs7QUFDdkIsbUJBQW1CLCtDQUFLO0FBQ3hCLHlCQUF5QiwrQ0FBSyIsInNvdXJjZXMiOlsid2VicGFjazovL3NlcnZlci8uL3NyYy9tb2RlbHMvbW9kZWxzLmpzP2M3ODUiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgU2NoZW1hLCBtb2RlbCB9IGZyb20gJ21vbmdvb3NlJztcblxuY29uc3QgVXNlclNjaGVtYSA9IG5ldyBTY2hlbWEoe1xuICB1c2VybmFtZToge1xuICAgIHR5cGU6IFN0cmluZyxcbiAgICB1bmlxdWU6IHRydWUsXG4gICAgbWF0Y2g6IFsvXlthLXpBLVowLTlcXC4sLV17NCwyMH0kLywgXCJVc2VybmFtZSBkb2VzJ3QgbWF0Y2ggcmVxdWlyZWQgcGF0dGVyblwiXVxuICB9LFxuXG4gIGZpcnN0TmFtZToge1xuICAgIHR5cGU6IFN0cmluZyxcbiAgICBtYXRjaDogWy9eW2EtekEtWl0rXFxzP1thLXpBLVpdKyQvLCBcIkZpcnN0IG5hbWUgZG9lcyd0IG1hdGNoIHJlcXVpcmVkIHBhdHRlcm5cIl0sXG4gICAgbWlubGVuZ3RoOiBbMiwgJ0ZpcnN0IG5hbWUgaXMgdG9vIHNob3J0J10sXG4gICAgbWF4bGVuZ3RoOiBbMjAsICdGaXJzdCBuYW1lIGlzIHRvbyBsb25nJ11cbiAgfSxcblxuICBsYXN0TmFtZToge1xuICAgIHR5cGU6IFN0cmluZyxcbiAgICBtYXRjaDogWy9eW2EtekEtWl0rJC8sIFwiTGFzdCBuYW1lIGRvZXMndCBtYXRjaCByZXF1aXJlZCBwYXR0ZXJuXCJdLFxuICAgIG1pbmxlbmd0aDogWzIsICdMYXN0IG5hbWUgaXMgdG9vIHNob3J0J10sXG4gICAgbWF4bGVuZ3RoOiBbMjAsICdMYXN0IG5hbWUgaXMgdG9vIGxvbmcnXVxuICB9LFxuXG4gIGVtYWlsOiB7XG4gICAgdHlwZTogU3RyaW5nLFxuICAgIHVuaXF1ZTogdHJ1ZSxcbiAgICBtYXRjaDogWy9eW2EtekEtWjAtOSEjJCUmJ1xcKlxcK1xcLVxcLz0/Xl9ge318XXsxLDY1fUAoW2EtekEtWjAtOV0rLil7MSwyfVthLXpBLVpdezIsMTR9JC9dXG4gIH1cbn0pO1xuXG4vLyBVc2VyU2NoZW1hLmluZGV4ZXMoeyB1c2VybmFtZTogMSwgZW1haWw6IDEgfSwgeyB1bmlxdWU6IHRydWUgfSk7XG5cbmNvbnN0IEdyb3VwU2NoZW1hID0gbmV3IFNjaGVtYSh7XG4gIGdyb3VwTmFtZToge1xuICAgIHR5cGU6IFN0cmluZyxcbiAgICB1bmlxdWU6IHRydWUsXG4gICAgbWF0Y2g6IFsvXlthLXpBLVowLTkuLV17NCwyMH0kLywgXCJHcm91cCdzIG5hbWUgZG9lc24ndCBtYXRjaCByZXF1aXJlZCBwYXR0ZXJuXCJdXG4gIH0sXG5cbiAgZ3JvdXBUaXRsZToge1xuICAgIHR5cGU6IFN0cmluZyxcbiAgICBtYXRjaDogWy9eW2EtekEtWjAtOS4tXXs2LDIwfSQvLCBcIkdyb3VwJ3MgdGl0bGUgZG9lc24ndCBtYXRjaCByZXF1aXJlZCBwYXR0ZXJuXCJdXG4gIH0sXG59KTtcblxuY29uc3QgVXNlcnNHcm91cHNTY2hlbWEgPSBuZXcgU2NoZW1hKHtcbiAgdXNlcklkOiB7XG4gICAgdHlwZTogU2NoZW1hLlR5cGVzLk9iamVjdElkLFxuICB9LFxuXG4gIGdyb3VwSWQ6IHtcbiAgICB0eXBlOiBTY2hlbWEuVHlwZXMuT2JqZWN0SWRcbiAgfVxufSk7XG5cbmV4cG9ydCBjb25zdCBVc2VyTW9kZWwgPSBtb2RlbCgnVXNlcicsIFVzZXJTY2hlbWEpO1xuZXhwb3J0IGNvbnN0IEdyb3VwTW9kZWwgPSBtb2RlbCgnR3JvdXAnLCBHcm91cFNjaGVtYSk7XG5leHBvcnQgY29uc3QgVXNlcnNHcm91cHNNb2RlbCA9IG1vZGVsKCdVc2Vyc0dyb3VwcycsIFVzZXJzR3JvdXBzU2NoZW1hKTtcbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/models/models.js\n");
+const { Schema, model } = __webpack_require__(/*! mongoose */ "mongoose");
+
+const UserSchema = new Schema({
+  username: {
+    type: String,
+    unique: true,
+    match: [/^[a-zA-Z0-9\.,-]{4,20}$/, "Username does't match required pattern"]
+  },
+
+  firstName: {
+    type: String,
+    match: [/^[a-zA-Z]+\s?[a-zA-Z]+$/, "First name does't match required pattern"],
+    minlength: [2, 'First name is too short'],
+    maxlength: [20, 'First name is too long']
+  },
+
+  lastName: {
+    type: String,
+    match: [/^[a-zA-Z]+$/, "Last name does't match required pattern"],
+    minlength: [2, 'Last name is too short'],
+    maxlength: [20, 'Last name is too long']
+  },
+
+  email: {
+    type: String,
+    unique: true,
+    match: [/^[a-zA-Z0-9!#$%&'\*\+\-\/=?^_`{}|]{1,65}@([a-zA-Z0-9]+.){1,2}[a-zA-Z]{2,14}$/]
+  }
+});
+
+const GroupSchema = new Schema({
+  groupName: {
+    type: String,
+    unique: true,
+    match: [/^[a-zA-Z0-9.-]{4,20}$/, "Group's name doesn't match required pattern"]
+  },
+
+  groupTitle: {
+    type: String,
+    match: [/^[a-zA-Z0-9.-]{6,20}$/, "Group's title doesn't match required pattern"]
+  },
+});
+
+const UsersGroupsSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+  },
+
+  groupId: {
+    type: Schema.Types.ObjectId
+  }
+});
+
+const UserModel = model('User', UserSchema);
+const GroupModel = model('Group', GroupSchema);
+const UsersGroupsModel = model('UsersGroups', UsersGroupsSchema);
+
+module.exports = {
+  UserModel,
+  GroupModel,
+  UsersGroupsModel
+}
+
+
 
 /***/ }),
 
@@ -94,9 +378,20 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!***********************************!*\
   !*** ./src/routes/groupRouter.js ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ \"express\");\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _controller_groupController__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controller/groupController */ \"./src/controller/groupController.js\");\n\n\n\nconst groupRouter = (0,express__WEBPACK_IMPORTED_MODULE_0__.Router)();\n\ngroupRouter.get('/get/:paramValue', _controller_groupController__WEBPACK_IMPORTED_MODULE_1__[\"default\"].getGroup);\ngroupRouter.get('/get-many', _controller_groupController__WEBPACK_IMPORTED_MODULE_1__[\"default\"].getGroups);\ngroupRouter.post('/create', _controller_groupController__WEBPACK_IMPORTED_MODULE_1__[\"default\"].createGroup);\ngroupRouter.put('/edit/:id', _controller_groupController__WEBPACK_IMPORTED_MODULE_1__[\"default\"].editGroup);\ngroupRouter.delete('/delete/:id', _controller_groupController__WEBPACK_IMPORTED_MODULE_1__[\"default\"].deleteGroup);\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (groupRouter);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvcm91dGVzL2dyb3VwUm91dGVyLmpzLmpzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFBaUM7QUFDMkI7O0FBRTVELG9CQUFvQiwrQ0FBTTs7QUFFMUIsb0NBQW9DLDRFQUF3QjtBQUM1RCw2QkFBNkIsNkVBQXlCO0FBQ3RELDRCQUE0QiwrRUFBMkI7QUFDdkQsNkJBQTZCLDZFQUF5QjtBQUN0RCxrQ0FBa0MsK0VBQTJCOztBQUU3RCxpRUFBZSxXQUFXIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vc2VydmVyLy4vc3JjL3JvdXRlcy9ncm91cFJvdXRlci5qcz83MGViIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IFJvdXRlciB9IGZyb20gJ2V4cHJlc3MnO1xuaW1wb3J0IEdyb3VwQ29udHJvbGxlciBmcm9tICcuLi9jb250cm9sbGVyL2dyb3VwQ29udHJvbGxlcic7XG5cbmNvbnN0IGdyb3VwUm91dGVyID0gUm91dGVyKCk7XG5cbmdyb3VwUm91dGVyLmdldCgnL2dldC86cGFyYW1WYWx1ZScsIEdyb3VwQ29udHJvbGxlci5nZXRHcm91cCk7XG5ncm91cFJvdXRlci5nZXQoJy9nZXQtbWFueScsIEdyb3VwQ29udHJvbGxlci5nZXRHcm91cHMpO1xuZ3JvdXBSb3V0ZXIucG9zdCgnL2NyZWF0ZScsIEdyb3VwQ29udHJvbGxlci5jcmVhdGVHcm91cCk7XG5ncm91cFJvdXRlci5wdXQoJy9lZGl0LzppZCcsIEdyb3VwQ29udHJvbGxlci5lZGl0R3JvdXApO1xuZ3JvdXBSb3V0ZXIuZGVsZXRlKCcvZGVsZXRlLzppZCcsIEdyb3VwQ29udHJvbGxlci5kZWxldGVHcm91cCk7XG5cbmV4cG9ydCBkZWZhdWx0IGdyb3VwUm91dGVyOyJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/routes/groupRouter.js\n");
+const { Router } = __webpack_require__(/*! express */ "express");
+const GroupController = __webpack_require__(/*! ../controller/groupController.js */ "./src/controller/groupController.js")
+
+const groupRouter = new Router();
+
+groupRouter.get('/get/:paramValue', GroupController.getGroup);
+groupRouter.get('/get-many', GroupController.getGroups);
+groupRouter.post('/create', GroupController.createGroup);
+groupRouter.put('/edit/:id', GroupController.editGroup);
+groupRouter.delete('/delete/:id', GroupController.deleteGroup);
+
+module.exports = groupRouter;
 
 /***/ }),
 
@@ -104,9 +399,20 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!*****************************!*\
   !*** ./src/routes/index.js ***!
   \*****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ \"express\");\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _groupRouter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./groupRouter.js */ \"./src/routes/groupRouter.js\");\n/* harmony import */ var _userGroupRouter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./userGroupRouter.js */ \"./src/routes/userGroupRouter.js\");\n/* harmony import */ var _userRouter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./userRouter.js */ \"./src/routes/userRouter.js\");\n\n\n\n\n\nconst mainRouter = (0,express__WEBPACK_IMPORTED_MODULE_0__.Router)();\n\nmainRouter.use('/user', _userRouter_js__WEBPACK_IMPORTED_MODULE_3__[\"default\"]);\nmainRouter.use('/group', _groupRouter_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"]);\nmainRouter.use('/user-group', _userGroupRouter_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"]);\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (mainRouter);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvcm91dGVzL2luZGV4LmpzLmpzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7OztBQUFpQztBQUNVO0FBQ1E7QUFDVjs7QUFFekMsbUJBQW1CLCtDQUFNOztBQUV6Qix3QkFBd0Isc0RBQVU7QUFDbEMseUJBQXlCLHVEQUFXO0FBQ3BDLDhCQUE4QiwyREFBZTs7QUFFN0MsaUVBQWUsVUFBVSIsInNvdXJjZXMiOlsid2VicGFjazovL3NlcnZlci8uL3NyYy9yb3V0ZXMvaW5kZXguanM/ZTI2YyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBSb3V0ZXIgfSBmcm9tICdleHByZXNzJztcbmltcG9ydCBncm91cFJvdXRlciBmcm9tICcuL2dyb3VwUm91dGVyLmpzJztcbmltcG9ydCB1c2VyR3JvdXBSb3V0ZXIgZnJvbSAnLi91c2VyR3JvdXBSb3V0ZXIuanMnO1xuaW1wb3J0IHVzZXJSb3V0ZXIgZnJvbSAnLi91c2VyUm91dGVyLmpzJztcblxuY29uc3QgbWFpblJvdXRlciA9IFJvdXRlcigpO1xuXG5tYWluUm91dGVyLnVzZSgnL3VzZXInLCB1c2VyUm91dGVyKTtcbm1haW5Sb3V0ZXIudXNlKCcvZ3JvdXAnLCBncm91cFJvdXRlcik7XG5tYWluUm91dGVyLnVzZSgnL3VzZXItZ3JvdXAnLCB1c2VyR3JvdXBSb3V0ZXIpO1xuXG5leHBvcnQgZGVmYXVsdCBtYWluUm91dGVyOyJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/routes/index.js\n");
+const { Router } = __webpack_require__(/*! express */ "express");
+const groupRouter = __webpack_require__(/*! ./groupRouter.js */ "./src/routes/groupRouter.js");
+const userGroupRouter = __webpack_require__(/*! ./userGroupRouter.js */ "./src/routes/userGroupRouter.js");
+const userRouter = __webpack_require__(/*! ./userRouter.js */ "./src/routes/userRouter.js");
+
+const mainRouter = new Router();
+
+mainRouter.use('/user', userRouter);
+mainRouter.use('/group', groupRouter);
+mainRouter.use('/user-group', userGroupRouter);
+
+module.exports = mainRouter;
 
 /***/ }),
 
@@ -114,9 +420,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!***************************************!*\
   !*** ./src/routes/userGroupRouter.js ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ \"express\");\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _controller_userGroupController__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controller/userGroupController */ \"./src/controller/userGroupController.js\");\n\n\n\nconst userGroupRouter = (0,express__WEBPACK_IMPORTED_MODULE_0__.Router)();\n\nuserGroupRouter.post('/add-user', _controller_userGroupController__WEBPACK_IMPORTED_MODULE_1__[\"default\"].addUserToGroup);\nuserGroupRouter.delete('/delete-user', _controller_userGroupController__WEBPACK_IMPORTED_MODULE_1__[\"default\"].deleteUserFromGroup);\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (userGroupRouter);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvcm91dGVzL3VzZXJHcm91cFJvdXRlci5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7O0FBQWlDO0FBQ21DOztBQUVwRSx3QkFBd0IsK0NBQU07O0FBRTlCLGtDQUFrQyxzRkFBa0M7QUFDcEUsdUNBQXVDLDJGQUF1Qzs7QUFFOUUsaUVBQWUsZUFBZSIsInNvdXJjZXMiOlsid2VicGFjazovL3NlcnZlci8uL3NyYy9yb3V0ZXMvdXNlckdyb3VwUm91dGVyLmpzP2JhMWIiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgUm91dGVyIH0gZnJvbSAnZXhwcmVzcyc7XG5pbXBvcnQgVXNlckdyb3VwQ29udHJvbGxlciBmcm9tICcuLi9jb250cm9sbGVyL3VzZXJHcm91cENvbnRyb2xsZXInO1xuXG5jb25zdCB1c2VyR3JvdXBSb3V0ZXIgPSBSb3V0ZXIoKTtcblxudXNlckdyb3VwUm91dGVyLnBvc3QoJy9hZGQtdXNlcicsIFVzZXJHcm91cENvbnRyb2xsZXIuYWRkVXNlclRvR3JvdXApO1xudXNlckdyb3VwUm91dGVyLmRlbGV0ZSgnL2RlbGV0ZS11c2VyJywgVXNlckdyb3VwQ29udHJvbGxlci5kZWxldGVVc2VyRnJvbUdyb3VwKTtcblxuZXhwb3J0IGRlZmF1bHQgdXNlckdyb3VwUm91dGVyOyJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/routes/userGroupRouter.js\n");
+const { Router } = __webpack_require__(/*! express */ "express");
+const UserGroupController = __webpack_require__(/*! ../controller/userGroupController */ "./src/controller/userGroupController.js");
+
+const userGroupRouter = new Router();
+
+userGroupRouter.post('/add-user', UserGroupController.addUserToGroup);
+userGroupRouter.delete('/delete-user', UserGroupController.deleteUserFromGroup);
+
+module.exports = userGroupRouter;
 
 /***/ }),
 
@@ -124,9 +438,20 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!**********************************!*\
   !*** ./src/routes/userRouter.js ***!
   \**********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! express */ \"express\");\n/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _controller_userController_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controller/userController.js */ \"./src/controller/userController.js\");\n\n\n\nconst userRouter = (0,express__WEBPACK_IMPORTED_MODULE_0__.Router)();\n\nuserRouter.get('/get/:paramValue', _controller_userController_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"].getUser);\nuserRouter.get('/get-many', _controller_userController_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"].getUsers);\nuserRouter.post('/create', _controller_userController_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"].createUser);\nuserRouter.put('/edit/:id', _controller_userController_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"].editUser);\nuserRouter.delete('/delete/:id', _controller_userController_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"].deleteUser);\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (userRouter);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvcm91dGVzL3VzZXJSb3V0ZXIuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7OztBQUFpQztBQUM0Qjs7QUFFN0QsbUJBQW1CLCtDQUFNOztBQUV6QixtQ0FBbUMsNkVBQXNCO0FBQ3pELDRCQUE0Qiw4RUFBdUI7QUFDbkQsMkJBQTJCLGdGQUF5QjtBQUNwRCw0QkFBNEIsOEVBQXVCO0FBQ25ELGlDQUFpQyxnRkFBeUI7O0FBRTFELGlFQUFlLFVBQVUiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zZXJ2ZXIvLi9zcmMvcm91dGVzL3VzZXJSb3V0ZXIuanM/ZGVhMCJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBSb3V0ZXIgfSBmcm9tICdleHByZXNzJztcbmltcG9ydCBVc2VyQ29udHJvbGxlciBmcm9tICcuLi9jb250cm9sbGVyL3VzZXJDb250cm9sbGVyLmpzJztcblxuY29uc3QgdXNlclJvdXRlciA9IFJvdXRlcigpO1xuXG51c2VyUm91dGVyLmdldCgnL2dldC86cGFyYW1WYWx1ZScsIFVzZXJDb250cm9sbGVyLmdldFVzZXIpO1xudXNlclJvdXRlci5nZXQoJy9nZXQtbWFueScsIFVzZXJDb250cm9sbGVyLmdldFVzZXJzKTtcbnVzZXJSb3V0ZXIucG9zdCgnL2NyZWF0ZScsIFVzZXJDb250cm9sbGVyLmNyZWF0ZVVzZXIpO1xudXNlclJvdXRlci5wdXQoJy9lZGl0LzppZCcsIFVzZXJDb250cm9sbGVyLmVkaXRVc2VyKTtcbnVzZXJSb3V0ZXIuZGVsZXRlKCcvZGVsZXRlLzppZCcsIFVzZXJDb250cm9sbGVyLmRlbGV0ZVVzZXIpO1xuXG5leHBvcnQgZGVmYXVsdCB1c2VyUm91dGVyOyJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/routes/userRouter.js\n");
+const { Router } = __webpack_require__(/*! express */ "express");
+const UserController = __webpack_require__(/*! ../controller/userController.js */ "./src/controller/userController.js");
+
+const userRouter = new Router();
+
+userRouter.get('/get/:paramValue', UserController.getUser);
+userRouter.get('/get-many', UserController.getUsers);
+userRouter.post('/create', UserController.createUser);
+userRouter.put('/edit/:id', UserController.editUser);
+userRouter.delete('/delete/:id', UserController.deleteUser);
+
+module.exports = userRouter;
 
 /***/ }),
 
@@ -134,9 +459,89 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!*************************************!*\
   !*** ./src/service/groupService.js ***!
   \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../apiError/apiError */ \"./src/apiError/apiError.js\");\n/* harmony import */ var _models_models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/models */ \"./src/models/models.js\");\n/* harmony import */ var _utils_createModelSearchQuery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/createModelSearchQuery */ \"./src/utils/createModelSearchQuery.js\");\n\n\n\n\nclass GroupService {\n\n  static async getGroup(paramName, paramValue) {\n    if (_models_models__WEBPACK_IMPORTED_MODULE_1__.GroupModel.schema.obj[paramName] === undefined && paramName !== \"_id\") {\n      return null;\n    }\n\n    const group = await _models_models__WEBPACK_IMPORTED_MODULE_1__.GroupModel.findOne({\n      [paramName]: paramValue\n    });\n\n    return group;\n  }\n\n  static async getGroups(searchObj, page, limit) {\n    page = Number(page) || 1;\n    limit = Number(limit) || 5;\n\n    let searchQuery = (0,_utils_createModelSearchQuery__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(searchObj);\n    const groups = await _models_models__WEBPACK_IMPORTED_MODULE_1__.GroupModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);\n\n    return groups;\n  }\n\n  static async createGroup(groupName, groupTitle) {\n    for (let arg of arguments) {\n\n      if (!arg) {\n        throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest('Not enough data for the Group creating')\n      }\n    }\n\n    await _models_models__WEBPACK_IMPORTED_MODULE_1__.GroupModel.create([{\n      groupName,\n      groupTitle\n    }], { checkForDuplications: [\"groupName\"] });\n\n    return { message: `Group ${groupName} created successfully` };\n  };\n\n  static async editGroup(groupId, groupName, groupTitle) {\n    const groupToEdit = await _models_models__WEBPACK_IMPORTED_MODULE_1__.GroupModel.findById(groupId).catch(() => {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"Incorrect group's id\");\n    });\n\n    if (!groupToEdit) {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"Group you try to edit doesn't exists\");\n    }\n\n    await _models_models__WEBPACK_IMPORTED_MODULE_1__.GroupModel.updateOne(\n      { _id: groupId },\n      { groupName, groupTitle },\n      { checkForDuplications: [\"groupName\"] }\n    );\n\n    return { message: \"Group updated successfully\" };\n  }\n\n  static async deleteGroup(groupId) {\n    const groupToDelete = await _models_models__WEBPACK_IMPORTED_MODULE_1__.GroupModel.findById(groupId).catch(() => {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"Incorrect group's id\");\n    });\n\n    if (!groupToDelete) {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"Group you try to delete doesn't exists\");\n    }\n\n    await groupToDelete.deleteOne({ _id: groupId });\n\n    return { message: `Group deleted succesfully` };\n  }\n\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (GroupService);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvc2VydmljZS9ncm91cFNlcnZpY2UuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7OztBQUE0QztBQUNFO0FBQ3VCOztBQUVyRTs7QUFFQTtBQUNBLFFBQVEsaUVBQXFCO0FBQzdCO0FBQ0E7O0FBRUEsd0JBQXdCLDhEQUFrQjtBQUMxQztBQUNBLEtBQUs7O0FBRUw7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUEsc0JBQXNCLHlFQUFzQjtBQUM1Qyx5QkFBeUIsMkRBQWU7O0FBRXhDO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBLGNBQWMscUVBQW1CO0FBQ2pDO0FBQ0E7O0FBRUEsVUFBVSw2REFBaUI7QUFDM0I7QUFDQTtBQUNBLEtBQUssS0FBSyxxQ0FBcUM7O0FBRS9DLGFBQWEsa0JBQWtCLFdBQVc7QUFDMUM7O0FBRUE7QUFDQSw4QkFBOEIsK0RBQW1CO0FBQ2pELFlBQVkscUVBQW1CO0FBQy9CLEtBQUs7O0FBRUw7QUFDQSxZQUFZLHFFQUFtQjtBQUMvQjs7QUFFQSxVQUFVLGdFQUFvQjtBQUM5QixRQUFRLGNBQWM7QUFDdEIsUUFBUSx1QkFBdUI7QUFDL0IsUUFBUTtBQUNSOztBQUVBLGFBQWE7QUFDYjs7QUFFQTtBQUNBLGdDQUFnQywrREFBbUI7QUFDbkQsWUFBWSxxRUFBbUI7QUFDL0IsS0FBSzs7QUFFTDtBQUNBLFlBQVkscUVBQW1CO0FBQy9COztBQUVBLG9DQUFvQyxjQUFjOztBQUVsRCxhQUFhO0FBQ2I7O0FBRUE7O0FBRUEsaUVBQWUsWUFBWSIsInNvdXJjZXMiOlsid2VicGFjazovL3NlcnZlci8uL3NyYy9zZXJ2aWNlL2dyb3VwU2VydmljZS5qcz8yMTUwIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBBcGlFcnJvciBmcm9tIFwiLi4vYXBpRXJyb3IvYXBpRXJyb3JcIjtcbmltcG9ydCB7IEdyb3VwTW9kZWwgfSBmcm9tIFwiLi4vbW9kZWxzL21vZGVsc1wiO1xuaW1wb3J0IGNyZWF0ZU1vZGVsU2VhcmNoUXVlcnkgZnJvbSBcIi4uL3V0aWxzL2NyZWF0ZU1vZGVsU2VhcmNoUXVlcnlcIjtcblxuY2xhc3MgR3JvdXBTZXJ2aWNlIHtcblxuICBzdGF0aWMgYXN5bmMgZ2V0R3JvdXAocGFyYW1OYW1lLCBwYXJhbVZhbHVlKSB7XG4gICAgaWYgKEdyb3VwTW9kZWwuc2NoZW1hLm9ialtwYXJhbU5hbWVdID09PSB1bmRlZmluZWQgJiYgcGFyYW1OYW1lICE9PSBcIl9pZFwiKSB7XG4gICAgICByZXR1cm4gbnVsbDtcbiAgICB9XG5cbiAgICBjb25zdCBncm91cCA9IGF3YWl0IEdyb3VwTW9kZWwuZmluZE9uZSh7XG4gICAgICBbcGFyYW1OYW1lXTogcGFyYW1WYWx1ZVxuICAgIH0pO1xuXG4gICAgcmV0dXJuIGdyb3VwO1xuICB9XG5cbiAgc3RhdGljIGFzeW5jIGdldEdyb3VwcyhzZWFyY2hPYmosIHBhZ2UsIGxpbWl0KSB7XG4gICAgcGFnZSA9IE51bWJlcihwYWdlKSB8fCAxO1xuICAgIGxpbWl0ID0gTnVtYmVyKGxpbWl0KSB8fCA1O1xuXG4gICAgbGV0IHNlYXJjaFF1ZXJ5ID0gY3JlYXRlTW9kZWxTZWFyY2hRdWVyeShzZWFyY2hPYmopO1xuICAgIGNvbnN0IGdyb3VwcyA9IGF3YWl0IEdyb3VwTW9kZWwuZmluZChzZWFyY2hRdWVyeSkuc2tpcChsaW1pdCAqIChwYWdlIC0gMSkpLmxpbWl0KGxpbWl0KTtcblxuICAgIHJldHVybiBncm91cHM7XG4gIH1cblxuICBzdGF0aWMgYXN5bmMgY3JlYXRlR3JvdXAoZ3JvdXBOYW1lLCBncm91cFRpdGxlKSB7XG4gICAgZm9yIChsZXQgYXJnIG9mIGFyZ3VtZW50cykge1xuXG4gICAgICBpZiAoIWFyZykge1xuICAgICAgICB0aHJvdyBBcGlFcnJvci5iYWRSZXF1ZXN0KCdOb3QgZW5vdWdoIGRhdGEgZm9yIHRoZSBHcm91cCBjcmVhdGluZycpXG4gICAgICB9XG4gICAgfVxuXG4gICAgYXdhaXQgR3JvdXBNb2RlbC5jcmVhdGUoW3tcbiAgICAgIGdyb3VwTmFtZSxcbiAgICAgIGdyb3VwVGl0bGVcbiAgICB9XSwgeyBjaGVja0ZvckR1cGxpY2F0aW9uczogW1wiZ3JvdXBOYW1lXCJdIH0pO1xuXG4gICAgcmV0dXJuIHsgbWVzc2FnZTogYEdyb3VwICR7Z3JvdXBOYW1lfSBjcmVhdGVkIHN1Y2Nlc3NmdWxseWAgfTtcbiAgfTtcblxuICBzdGF0aWMgYXN5bmMgZWRpdEdyb3VwKGdyb3VwSWQsIGdyb3VwTmFtZSwgZ3JvdXBUaXRsZSkge1xuICAgIGNvbnN0IGdyb3VwVG9FZGl0ID0gYXdhaXQgR3JvdXBNb2RlbC5maW5kQnlJZChncm91cElkKS5jYXRjaCgoKSA9PiB7XG4gICAgICB0aHJvdyBBcGlFcnJvci5iYWRSZXF1ZXN0KFwiSW5jb3JyZWN0IGdyb3VwJ3MgaWRcIik7XG4gICAgfSk7XG5cbiAgICBpZiAoIWdyb3VwVG9FZGl0KSB7XG4gICAgICB0aHJvdyBBcGlFcnJvci5iYWRSZXF1ZXN0KFwiR3JvdXAgeW91IHRyeSB0byBlZGl0IGRvZXNuJ3QgZXhpc3RzXCIpO1xuICAgIH1cblxuICAgIGF3YWl0IEdyb3VwTW9kZWwudXBkYXRlT25lKFxuICAgICAgeyBfaWQ6IGdyb3VwSWQgfSxcbiAgICAgIHsgZ3JvdXBOYW1lLCBncm91cFRpdGxlIH0sXG4gICAgICB7IGNoZWNrRm9yRHVwbGljYXRpb25zOiBbXCJncm91cE5hbWVcIl0gfVxuICAgICk7XG5cbiAgICByZXR1cm4geyBtZXNzYWdlOiBcIkdyb3VwIHVwZGF0ZWQgc3VjY2Vzc2Z1bGx5XCIgfTtcbiAgfVxuXG4gIHN0YXRpYyBhc3luYyBkZWxldGVHcm91cChncm91cElkKSB7XG4gICAgY29uc3QgZ3JvdXBUb0RlbGV0ZSA9IGF3YWl0IEdyb3VwTW9kZWwuZmluZEJ5SWQoZ3JvdXBJZCkuY2F0Y2goKCkgPT4ge1xuICAgICAgdGhyb3cgQXBpRXJyb3IuYmFkUmVxdWVzdChcIkluY29ycmVjdCBncm91cCdzIGlkXCIpO1xuICAgIH0pO1xuXG4gICAgaWYgKCFncm91cFRvRGVsZXRlKSB7XG4gICAgICB0aHJvdyBBcGlFcnJvci5iYWRSZXF1ZXN0KFwiR3JvdXAgeW91IHRyeSB0byBkZWxldGUgZG9lc24ndCBleGlzdHNcIik7XG4gICAgfVxuXG4gICAgYXdhaXQgZ3JvdXBUb0RlbGV0ZS5kZWxldGVPbmUoeyBfaWQ6IGdyb3VwSWQgfSk7XG5cbiAgICByZXR1cm4geyBtZXNzYWdlOiBgR3JvdXAgZGVsZXRlZCBzdWNjZXNmdWxseWAgfTtcbiAgfVxuXG59O1xuXG5leHBvcnQgZGVmYXVsdCBHcm91cFNlcnZpY2U7Il0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/service/groupService.js\n");
+const ApiError = __webpack_require__(/*! ../apiError/apiError.js */ "./src/apiError/apiError.js");
+const { GroupModel } = __webpack_require__(/*! ../models/models.js */ "./src/models/models.js");
+const createModelSearchQuery = __webpack_require__(/*! ../utils/createModelSearchQuery.js */ "./src/utils/createModelSearchQuery.js");
+
+class GroupService {
+
+  static async getGroup(paramName, paramValue) {
+    if (GroupModel.schema.obj[paramName] === undefined && paramName !== "_id") {
+      return null;
+    }
+
+    const group = await GroupModel.findOne({
+      [paramName]: paramValue
+    });
+
+    return group;
+  }
+
+  static async getGroups(searchObj, page, limit) {
+    page = Number(page) || 1;
+    limit = Number(limit) || 5;
+
+    let searchQuery = createModelSearchQuery(searchObj);
+    const groups = await GroupModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
+
+    return groups;
+  }
+
+  static async createGroup(groupName, groupTitle) {
+    for (let arg of arguments) {
+
+      if (!arg) {
+        throw ApiError.badRequest('Not enough data for the Group creating')
+      }
+    }
+
+    const group = await GroupModel.create([{
+      groupName,
+      groupTitle
+    }], { checkForDuplications: ["groupName"] });
+
+    console.log('GROUP CREATED', group);
+
+    return { message: `Group ${groupName} created successfully` };
+  };
+
+  static async editGroup(groupId, groupName, groupTitle) {
+    const groupToEdit = await GroupModel.findById(groupId).catch(() => {
+      throw ApiError.badRequest("Incorrect group's id");
+    });
+
+    if (!groupToEdit) {
+      throw ApiError.badRequest("Group you try to edit doesn't exists");
+    }
+
+    await GroupModel.updateOne(
+      { _id: groupId },
+      { groupName, groupTitle },
+      { checkForDuplications: ["groupName"] }
+    );
+
+    return { message: "Group updated successfully" };
+  }
+
+  static async deleteGroup(groupId) {
+    const groupToDelete = await GroupModel.findById(groupId).catch(() => {
+      throw ApiError.badRequest("Incorrect group's id");
+    });
+
+    if (!groupToDelete) {
+      throw ApiError.badRequest("Group you try to delete doesn't exists");
+    }
+
+    await groupToDelete.deleteOne({ _id: groupId });
+
+    return { message: `Group deleted succesfully` };
+  }
+
+};
+
+module.exports = GroupService;
 
 /***/ }),
 
@@ -144,9 +549,79 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!*****************************************!*\
   !*** ./src/service/userGroupService.js ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../apiError/apiError */ \"./src/apiError/apiError.js\");\n/* harmony import */ var _models_models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/models */ \"./src/models/models.js\");\n\n\n\nasync function checkUserAndGroup(userId, groupId, userErrorMessage, groupErrorMessage) {\n  const user = await _models_models__WEBPACK_IMPORTED_MODULE_1__.UserModel.findById(userId).catch(() => {\n    throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"Incorrect user's id\");\n  });\n\n  if (!user) {\n    throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(userErrorMessage);\n  }\n\n  const group = await _models_models__WEBPACK_IMPORTED_MODULE_1__.GroupModel.findById(groupId).catch(() => {\n    throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"Incorrect group's id\");\n  });\n\n  if (!group) {\n    throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(groupErrorMessage);\n  }\n\n  return { user, group };\n}\n\nclass UserGroupService {\n  static async addUserToGroup(userId, groupId) {\n    const userAndGroup = await checkUserAndGroup(\n      userId,\n      groupId,\n      \"User you want add to the group, doesn't exists\",\n      \"Group in what you want to add the User, doesn't exists\")\n\n    const userGroupConnection = await _models_models__WEBPACK_IMPORTED_MODULE_1__.UsersGroupsModel.findOne({\n      userId: userAndGroup.user._id,\n      groupId: userAndGroup.group._id\n    });\n\n    if (userGroupConnection) {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"User is already in the group\");\n    }\n\n    await _models_models__WEBPACK_IMPORTED_MODULE_1__.UsersGroupsModel.create({\n      userId: userAndGroup.user._id,\n      groupId: userAndGroup.group._id\n    });\n\n    return { message: `User ${userAndGroup.user.username} successfully added to the ${userAndGroup.group.groupName} group` };\n  }\n\n  static async deleteUserFromGroup(userId, groupId) {\n    const userAndGroup = await checkUserAndGroup(userId,\n      groupId,\n      \"User you want to delete from the group, doesn't exists\",\n      \"Group in what you want to delete the User, doesn't exists\",\n    );\n\n    const userGroupConnection = await _models_models__WEBPACK_IMPORTED_MODULE_1__.UsersGroupsModel.findOne({\n      userId: userAndGroup.user._id,\n      groupId: userAndGroup.group._id\n    });\n\n    if (!userGroupConnection) {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(`Connection between ${userAndGroup.user.username}(User) and ${userAndGroup.group.groupName}(Group) doesn't exists`);\n    }\n\n    userGroupConnection.deleteOne({ _id: userAndGroup.user.id });\n\n    return { message: `User ${userAndGroup.user.username} successfully deleted from the group ${userAndGroup.group.groupName}` };\n  }\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UserGroupService);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvc2VydmljZS91c2VyR3JvdXBTZXJ2aWNlLmpzLmpzIiwibWFwcGluZ3MiOiI7Ozs7OztBQUE0QztBQUMrQjs7QUFFM0U7QUFDQSxxQkFBcUIsOERBQWtCO0FBQ3ZDLFVBQVUscUVBQW1CO0FBQzdCLEdBQUc7O0FBRUg7QUFDQSxVQUFVLHFFQUFtQjtBQUM3Qjs7QUFFQSxzQkFBc0IsK0RBQW1CO0FBQ3pDLFVBQVUscUVBQW1CO0FBQzdCLEdBQUc7O0FBRUg7QUFDQSxVQUFVLHFFQUFtQjtBQUM3Qjs7QUFFQSxXQUFXO0FBQ1g7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUEsc0NBQXNDLG9FQUF3QjtBQUM5RDtBQUNBO0FBQ0EsS0FBSzs7QUFFTDtBQUNBLFlBQVkscUVBQW1CO0FBQy9COztBQUVBLFVBQVUsbUVBQXVCO0FBQ2pDO0FBQ0E7QUFDQSxLQUFLOztBQUVMLGFBQWEsaUJBQWlCLDRCQUE0Qiw0QkFBNEIsOEJBQThCO0FBQ3BIOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFQSxzQ0FBc0Msb0VBQXdCO0FBQzlEO0FBQ0E7QUFDQSxLQUFLOztBQUVMO0FBQ0EsWUFBWSxxRUFBbUIsdUJBQXVCLDJCQUEyQixhQUFhLDZCQUE2QjtBQUMzSDs7QUFFQSxvQ0FBb0MsMkJBQTJCOztBQUUvRCxhQUFhLGlCQUFpQiw0QkFBNEIsc0NBQXNDLDZCQUE2QjtBQUM3SDtBQUNBOztBQUVBLGlFQUFlLGdCQUFnQiIsInNvdXJjZXMiOlsid2VicGFjazovL3NlcnZlci8uL3NyYy9zZXJ2aWNlL3VzZXJHcm91cFNlcnZpY2UuanM/MWY0NyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgQXBpRXJyb3IgZnJvbSBcIi4uL2FwaUVycm9yL2FwaUVycm9yXCI7XG5pbXBvcnQgeyBHcm91cE1vZGVsLCBVc2VyTW9kZWwsIFVzZXJzR3JvdXBzTW9kZWwgfSBmcm9tIFwiLi4vbW9kZWxzL21vZGVsc1wiO1xuXG5hc3luYyBmdW5jdGlvbiBjaGVja1VzZXJBbmRHcm91cCh1c2VySWQsIGdyb3VwSWQsIHVzZXJFcnJvck1lc3NhZ2UsIGdyb3VwRXJyb3JNZXNzYWdlKSB7XG4gIGNvbnN0IHVzZXIgPSBhd2FpdCBVc2VyTW9kZWwuZmluZEJ5SWQodXNlcklkKS5jYXRjaCgoKSA9PiB7XG4gICAgdGhyb3cgQXBpRXJyb3IuYmFkUmVxdWVzdChcIkluY29ycmVjdCB1c2VyJ3MgaWRcIik7XG4gIH0pO1xuXG4gIGlmICghdXNlcikge1xuICAgIHRocm93IEFwaUVycm9yLmJhZFJlcXVlc3QodXNlckVycm9yTWVzc2FnZSk7XG4gIH1cblxuICBjb25zdCBncm91cCA9IGF3YWl0IEdyb3VwTW9kZWwuZmluZEJ5SWQoZ3JvdXBJZCkuY2F0Y2goKCkgPT4ge1xuICAgIHRocm93IEFwaUVycm9yLmJhZFJlcXVlc3QoXCJJbmNvcnJlY3QgZ3JvdXAncyBpZFwiKTtcbiAgfSk7XG5cbiAgaWYgKCFncm91cCkge1xuICAgIHRocm93IEFwaUVycm9yLmJhZFJlcXVlc3QoZ3JvdXBFcnJvck1lc3NhZ2UpO1xuICB9XG5cbiAgcmV0dXJuIHsgdXNlciwgZ3JvdXAgfTtcbn1cblxuY2xhc3MgVXNlckdyb3VwU2VydmljZSB7XG4gIHN0YXRpYyBhc3luYyBhZGRVc2VyVG9Hcm91cCh1c2VySWQsIGdyb3VwSWQpIHtcbiAgICBjb25zdCB1c2VyQW5kR3JvdXAgPSBhd2FpdCBjaGVja1VzZXJBbmRHcm91cChcbiAgICAgIHVzZXJJZCxcbiAgICAgIGdyb3VwSWQsXG4gICAgICBcIlVzZXIgeW91IHdhbnQgYWRkIHRvIHRoZSBncm91cCwgZG9lc24ndCBleGlzdHNcIixcbiAgICAgIFwiR3JvdXAgaW4gd2hhdCB5b3Ugd2FudCB0byBhZGQgdGhlIFVzZXIsIGRvZXNuJ3QgZXhpc3RzXCIpXG5cbiAgICBjb25zdCB1c2VyR3JvdXBDb25uZWN0aW9uID0gYXdhaXQgVXNlcnNHcm91cHNNb2RlbC5maW5kT25lKHtcbiAgICAgIHVzZXJJZDogdXNlckFuZEdyb3VwLnVzZXIuX2lkLFxuICAgICAgZ3JvdXBJZDogdXNlckFuZEdyb3VwLmdyb3VwLl9pZFxuICAgIH0pO1xuXG4gICAgaWYgKHVzZXJHcm91cENvbm5lY3Rpb24pIHtcbiAgICAgIHRocm93IEFwaUVycm9yLmJhZFJlcXVlc3QoXCJVc2VyIGlzIGFscmVhZHkgaW4gdGhlIGdyb3VwXCIpO1xuICAgIH1cblxuICAgIGF3YWl0IFVzZXJzR3JvdXBzTW9kZWwuY3JlYXRlKHtcbiAgICAgIHVzZXJJZDogdXNlckFuZEdyb3VwLnVzZXIuX2lkLFxuICAgICAgZ3JvdXBJZDogdXNlckFuZEdyb3VwLmdyb3VwLl9pZFxuICAgIH0pO1xuXG4gICAgcmV0dXJuIHsgbWVzc2FnZTogYFVzZXIgJHt1c2VyQW5kR3JvdXAudXNlci51c2VybmFtZX0gc3VjY2Vzc2Z1bGx5IGFkZGVkIHRvIHRoZSAke3VzZXJBbmRHcm91cC5ncm91cC5ncm91cE5hbWV9IGdyb3VwYCB9O1xuICB9XG5cbiAgc3RhdGljIGFzeW5jIGRlbGV0ZVVzZXJGcm9tR3JvdXAodXNlcklkLCBncm91cElkKSB7XG4gICAgY29uc3QgdXNlckFuZEdyb3VwID0gYXdhaXQgY2hlY2tVc2VyQW5kR3JvdXAodXNlcklkLFxuICAgICAgZ3JvdXBJZCxcbiAgICAgIFwiVXNlciB5b3Ugd2FudCB0byBkZWxldGUgZnJvbSB0aGUgZ3JvdXAsIGRvZXNuJ3QgZXhpc3RzXCIsXG4gICAgICBcIkdyb3VwIGluIHdoYXQgeW91IHdhbnQgdG8gZGVsZXRlIHRoZSBVc2VyLCBkb2Vzbid0IGV4aXN0c1wiLFxuICAgICk7XG5cbiAgICBjb25zdCB1c2VyR3JvdXBDb25uZWN0aW9uID0gYXdhaXQgVXNlcnNHcm91cHNNb2RlbC5maW5kT25lKHtcbiAgICAgIHVzZXJJZDogdXNlckFuZEdyb3VwLnVzZXIuX2lkLFxuICAgICAgZ3JvdXBJZDogdXNlckFuZEdyb3VwLmdyb3VwLl9pZFxuICAgIH0pO1xuXG4gICAgaWYgKCF1c2VyR3JvdXBDb25uZWN0aW9uKSB7XG4gICAgICB0aHJvdyBBcGlFcnJvci5iYWRSZXF1ZXN0KGBDb25uZWN0aW9uIGJldHdlZW4gJHt1c2VyQW5kR3JvdXAudXNlci51c2VybmFtZX0oVXNlcikgYW5kICR7dXNlckFuZEdyb3VwLmdyb3VwLmdyb3VwTmFtZX0oR3JvdXApIGRvZXNuJ3QgZXhpc3RzYCk7XG4gICAgfVxuXG4gICAgdXNlckdyb3VwQ29ubmVjdGlvbi5kZWxldGVPbmUoeyBfaWQ6IHVzZXJBbmRHcm91cC51c2VyLmlkIH0pO1xuXG4gICAgcmV0dXJuIHsgbWVzc2FnZTogYFVzZXIgJHt1c2VyQW5kR3JvdXAudXNlci51c2VybmFtZX0gc3VjY2Vzc2Z1bGx5IGRlbGV0ZWQgZnJvbSB0aGUgZ3JvdXAgJHt1c2VyQW5kR3JvdXAuZ3JvdXAuZ3JvdXBOYW1lfWAgfTtcbiAgfVxufTtcblxuZXhwb3J0IGRlZmF1bHQgVXNlckdyb3VwU2VydmljZTsiXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/service/userGroupService.js\n");
+const ApiError = __webpack_require__(/*! ../apiError/apiError.js */ "./src/apiError/apiError.js");
+const { GroupModel, UserModel, UsersGroupsModel } = __webpack_require__(/*! ../models/models.js */ "./src/models/models.js");
+
+async function checkUserAndGroup(userId, groupId, userErrorMessage, groupErrorMessage) {
+  const user = await UserModel.findById(userId).catch(() => {
+    throw ApiError.badRequest("Incorrect user's id");
+  });
+
+  if (!user) {
+    throw ApiError.badRequest(userErrorMessage);
+  }
+
+  const group = await GroupModel.findById(groupId).catch(() => {
+    throw ApiError.badRequest("Incorrect group's id");
+  });
+
+  if (!group) {
+    throw ApiError.badRequest(groupErrorMessage);
+  }
+
+  return { user, group };
+}
+
+class UserGroupService {
+  static async addUserToGroup(userId, groupId) {
+    const userAndGroup = await checkUserAndGroup(
+      userId,
+      groupId,
+      "User you want add to the group, doesn't exists",
+      "Group in what you want to add the User, doesn't exists")
+
+    const userGroupConnection = await UsersGroupsModel.findOne({
+      userId: userAndGroup.user._id,
+      groupId: userAndGroup.group._id
+    });
+
+    if (userGroupConnection) {
+      throw ApiError.badRequest("User is already in the group");
+    }
+
+    await UsersGroupsModel.create({
+      userId: userAndGroup.user._id,
+      groupId: userAndGroup.group._id
+    });
+
+    return { message: `User ${userAndGroup.user.username} successfully added to the ${userAndGroup.group.groupName} group` };
+  }
+
+  static async deleteUserFromGroup(userId, groupId) {
+    const userAndGroup = await checkUserAndGroup(userId,
+      groupId,
+      "User you want to delete from the group, doesn't exists",
+      "Group in what you want to delete the User, doesn't exists",
+    );
+
+    const userGroupConnection = await UsersGroupsModel.findOne({
+      userId: userAndGroup.user._id,
+      groupId: userAndGroup.group._id
+    });
+
+    if (!userGroupConnection) {
+      throw ApiError.badRequest(`Connection between ${userAndGroup.user.username}(User) and ${userAndGroup.group.groupName}(Group) doesn't exists`);
+    }
+
+    userGroupConnection.deleteOne({ _id: userAndGroup.user.id });
+
+    return { message: `User ${userAndGroup.user.username} successfully deleted from the group ${userAndGroup.group.groupName}` };
+  }
+};
+
+module.exports = UserGroupService;
 
 /***/ }),
 
@@ -154,9 +629,92 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!************************************!*\
   !*** ./src/service/userService.js ***!
   \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../apiError/apiError */ \"./src/apiError/apiError.js\");\n/* harmony import */ var _models_models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/models */ \"./src/models/models.js\");\n/* harmony import */ var _utils_createModelSearchQuery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/createModelSearchQuery */ \"./src/utils/createModelSearchQuery.js\");\n\n\n\n\nclass UserService {\n\n  static async getUser(paramName, paramValue) {\n    if (_models_models__WEBPACK_IMPORTED_MODULE_1__.UserModel.schema.obj[paramName] === undefined && paramName !== \"_id\") {\n      return null;\n    }\n\n    const user = await _models_models__WEBPACK_IMPORTED_MODULE_1__.UserModel.findOne({\n      [paramName]: paramValue\n    });\n\n    return user;\n  };\n\n  static async getUsers(filterObj, page, limit) {\n    page = Number(page) || 1;\n    limit = Number(limit) || 5;\n\n    const searchQuery = (0,_utils_createModelSearchQuery__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(filterObj);\n    const users = await _models_models__WEBPACK_IMPORTED_MODULE_1__.UserModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);\n\n    return users;\n  }\n\n  static async createUser(username, firstName, lastName, email) {\n    for (let argValue of arguments) {\n      if (!argValue) {\n        throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"Not enough data for the user creating\");\n      }\n    }\n\n    await _models_models__WEBPACK_IMPORTED_MODULE_1__.UserModel.create([{\n      username,\n      firstName,\n      lastName,\n      email\n    }], { checkForDuplications: [\"username\", \"email\", \"what\"] });\n\n    return { message: \"User created successfully\" };\n  };\n\n  static async editUser(userId, username, firstName, lastName, email) {\n    const userToEdit = await _models_models__WEBPACK_IMPORTED_MODULE_1__.UserModel.findById(userId).catch(() => {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"Incorrect user's id\");\n    });\n\n    if (!userToEdit) {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"User you try to edit doesn't exists\");\n    }\n\n    await _models_models__WEBPACK_IMPORTED_MODULE_1__.UserModel.updateOne(\n      { _id: userId },\n      {\n        username,\n        firstName,\n        lastName,\n        email\n      },\n      { checkForDuplications: [\"username\", \"email\"] }\n    );\n\n    return { message: \"User updated successfully\" };\n  }\n\n  static async deleteUser(userId) {\n    const userToDelete = await _models_models__WEBPACK_IMPORTED_MODULE_1__.UserModel.findById(userId).catch(() => {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"Incorrect user's id\");\n    });\n\n    if (!userToDelete) {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest(\"User you try to delete doesn't exists\");\n    }\n    userToDelete.deleteOne({ _id: userId });\n\n    return { message: \"User deleted successfully\" };\n  }\n\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UserService);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvc2VydmljZS91c2VyU2VydmljZS5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7O0FBQTRDO0FBQ0M7QUFDd0I7O0FBRXJFOztBQUVBO0FBQ0EsUUFBUSxnRUFBb0I7QUFDNUI7QUFDQTs7QUFFQSx1QkFBdUIsNkRBQWlCO0FBQ3hDO0FBQ0EsS0FBSzs7QUFFTDtBQUNBOztBQUVBO0FBQ0E7QUFDQTs7QUFFQSx3QkFBd0IseUVBQXNCO0FBQzlDLHdCQUF3QiwwREFBYzs7QUFFdEM7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQSxjQUFjLHFFQUFtQjtBQUNqQztBQUNBOztBQUVBLFVBQVUsNERBQWdCO0FBQzFCO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsS0FBSyxLQUFLLHFEQUFxRDs7QUFFL0QsYUFBYTtBQUNiOztBQUVBO0FBQ0EsNkJBQTZCLDhEQUFrQjtBQUMvQyxZQUFZLHFFQUFtQjtBQUMvQixLQUFLOztBQUVMO0FBQ0EsWUFBWSxxRUFBbUI7QUFDL0I7O0FBRUEsVUFBVSwrREFBbUI7QUFDN0IsUUFBUSxhQUFhO0FBQ3JCO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxPQUFPO0FBQ1AsUUFBUTtBQUNSOztBQUVBLGFBQWE7QUFDYjs7QUFFQTtBQUNBLCtCQUErQiw4REFBa0I7QUFDakQsWUFBWSxxRUFBbUI7QUFDL0IsS0FBSzs7QUFFTDtBQUNBLFlBQVkscUVBQW1CO0FBQy9CO0FBQ0EsNkJBQTZCLGFBQWE7O0FBRTFDLGFBQWE7QUFDYjs7QUFFQTtBQUNBLGlFQUFlLFdBQVciLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zZXJ2ZXIvLi9zcmMvc2VydmljZS91c2VyU2VydmljZS5qcz9kY2QzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBBcGlFcnJvciBmcm9tIFwiLi4vYXBpRXJyb3IvYXBpRXJyb3JcIjtcbmltcG9ydCB7IFVzZXJNb2RlbCB9IGZyb20gXCIuLi9tb2RlbHMvbW9kZWxzXCI7XG5pbXBvcnQgY3JlYXRlTW9kZWxTZWFyY2hRdWVyeSBmcm9tIFwiLi4vdXRpbHMvY3JlYXRlTW9kZWxTZWFyY2hRdWVyeVwiO1xuXG5jbGFzcyBVc2VyU2VydmljZSB7XG5cbiAgc3RhdGljIGFzeW5jIGdldFVzZXIocGFyYW1OYW1lLCBwYXJhbVZhbHVlKSB7XG4gICAgaWYgKFVzZXJNb2RlbC5zY2hlbWEub2JqW3BhcmFtTmFtZV0gPT09IHVuZGVmaW5lZCAmJiBwYXJhbU5hbWUgIT09IFwiX2lkXCIpIHtcbiAgICAgIHJldHVybiBudWxsO1xuICAgIH1cblxuICAgIGNvbnN0IHVzZXIgPSBhd2FpdCBVc2VyTW9kZWwuZmluZE9uZSh7XG4gICAgICBbcGFyYW1OYW1lXTogcGFyYW1WYWx1ZVxuICAgIH0pO1xuXG4gICAgcmV0dXJuIHVzZXI7XG4gIH07XG5cbiAgc3RhdGljIGFzeW5jIGdldFVzZXJzKGZpbHRlck9iaiwgcGFnZSwgbGltaXQpIHtcbiAgICBwYWdlID0gTnVtYmVyKHBhZ2UpIHx8IDE7XG4gICAgbGltaXQgPSBOdW1iZXIobGltaXQpIHx8IDU7XG5cbiAgICBjb25zdCBzZWFyY2hRdWVyeSA9IGNyZWF0ZU1vZGVsU2VhcmNoUXVlcnkoZmlsdGVyT2JqKTtcbiAgICBjb25zdCB1c2VycyA9IGF3YWl0IFVzZXJNb2RlbC5maW5kKHNlYXJjaFF1ZXJ5KS5za2lwKGxpbWl0ICogKHBhZ2UgLSAxKSkubGltaXQobGltaXQpO1xuXG4gICAgcmV0dXJuIHVzZXJzO1xuICB9XG5cbiAgc3RhdGljIGFzeW5jIGNyZWF0ZVVzZXIodXNlcm5hbWUsIGZpcnN0TmFtZSwgbGFzdE5hbWUsIGVtYWlsKSB7XG4gICAgZm9yIChsZXQgYXJnVmFsdWUgb2YgYXJndW1lbnRzKSB7XG4gICAgICBpZiAoIWFyZ1ZhbHVlKSB7XG4gICAgICAgIHRocm93IEFwaUVycm9yLmJhZFJlcXVlc3QoXCJOb3QgZW5vdWdoIGRhdGEgZm9yIHRoZSB1c2VyIGNyZWF0aW5nXCIpO1xuICAgICAgfVxuICAgIH1cblxuICAgIGF3YWl0IFVzZXJNb2RlbC5jcmVhdGUoW3tcbiAgICAgIHVzZXJuYW1lLFxuICAgICAgZmlyc3ROYW1lLFxuICAgICAgbGFzdE5hbWUsXG4gICAgICBlbWFpbFxuICAgIH1dLCB7IGNoZWNrRm9yRHVwbGljYXRpb25zOiBbXCJ1c2VybmFtZVwiLCBcImVtYWlsXCIsIFwid2hhdFwiXSB9KTtcblxuICAgIHJldHVybiB7IG1lc3NhZ2U6IFwiVXNlciBjcmVhdGVkIHN1Y2Nlc3NmdWxseVwiIH07XG4gIH07XG5cbiAgc3RhdGljIGFzeW5jIGVkaXRVc2VyKHVzZXJJZCwgdXNlcm5hbWUsIGZpcnN0TmFtZSwgbGFzdE5hbWUsIGVtYWlsKSB7XG4gICAgY29uc3QgdXNlclRvRWRpdCA9IGF3YWl0IFVzZXJNb2RlbC5maW5kQnlJZCh1c2VySWQpLmNhdGNoKCgpID0+IHtcbiAgICAgIHRocm93IEFwaUVycm9yLmJhZFJlcXVlc3QoXCJJbmNvcnJlY3QgdXNlcidzIGlkXCIpO1xuICAgIH0pO1xuXG4gICAgaWYgKCF1c2VyVG9FZGl0KSB7XG4gICAgICB0aHJvdyBBcGlFcnJvci5iYWRSZXF1ZXN0KFwiVXNlciB5b3UgdHJ5IHRvIGVkaXQgZG9lc24ndCBleGlzdHNcIik7XG4gICAgfVxuXG4gICAgYXdhaXQgVXNlck1vZGVsLnVwZGF0ZU9uZShcbiAgICAgIHsgX2lkOiB1c2VySWQgfSxcbiAgICAgIHtcbiAgICAgICAgdXNlcm5hbWUsXG4gICAgICAgIGZpcnN0TmFtZSxcbiAgICAgICAgbGFzdE5hbWUsXG4gICAgICAgIGVtYWlsXG4gICAgICB9LFxuICAgICAgeyBjaGVja0ZvckR1cGxpY2F0aW9uczogW1widXNlcm5hbWVcIiwgXCJlbWFpbFwiXSB9XG4gICAgKTtcblxuICAgIHJldHVybiB7IG1lc3NhZ2U6IFwiVXNlciB1cGRhdGVkIHN1Y2Nlc3NmdWxseVwiIH07XG4gIH1cblxuICBzdGF0aWMgYXN5bmMgZGVsZXRlVXNlcih1c2VySWQpIHtcbiAgICBjb25zdCB1c2VyVG9EZWxldGUgPSBhd2FpdCBVc2VyTW9kZWwuZmluZEJ5SWQodXNlcklkKS5jYXRjaCgoKSA9PiB7XG4gICAgICB0aHJvdyBBcGlFcnJvci5iYWRSZXF1ZXN0KFwiSW5jb3JyZWN0IHVzZXIncyBpZFwiKTtcbiAgICB9KTtcblxuICAgIGlmICghdXNlclRvRGVsZXRlKSB7XG4gICAgICB0aHJvdyBBcGlFcnJvci5iYWRSZXF1ZXN0KFwiVXNlciB5b3UgdHJ5IHRvIGRlbGV0ZSBkb2Vzbid0IGV4aXN0c1wiKTtcbiAgICB9XG4gICAgdXNlclRvRGVsZXRlLmRlbGV0ZU9uZSh7IF9pZDogdXNlcklkIH0pO1xuXG4gICAgcmV0dXJuIHsgbWVzc2FnZTogXCJVc2VyIGRlbGV0ZWQgc3VjY2Vzc2Z1bGx5XCIgfTtcbiAgfVxuXG59O1xuZXhwb3J0IGRlZmF1bHQgVXNlclNlcnZpY2U7Il0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/service/userService.js\n");
+const ApiError = __webpack_require__(/*! ../apiError/apiError.js */ "./src/apiError/apiError.js");
+const { UserModel } = __webpack_require__(/*! ../models/models.js */ "./src/models/models.js");
+const createModelSearchQuery = __webpack_require__(/*! ../utils/createModelSearchQuery.js */ "./src/utils/createModelSearchQuery.js");
+
+class UserService {
+
+  static async getUser(paramName, paramValue) {
+    if (UserModel.schema.obj[paramName] === undefined && paramName !== "_id") {
+      return null;
+    }
+
+    const user = await UserModel.findOne({
+      [paramName]: paramValue
+    });
+
+    return user;
+  };
+
+  static async getUsers(filterObj, page, limit) {
+    page = Number(page) || 1;
+    limit = Number(limit) || 5;
+
+    const searchQuery = createModelSearchQuery(filterObj);
+    const users = await UserModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
+
+    return users;
+  }
+
+  static async createUser(username, firstName, lastName, email) {
+    for (let argValue of arguments) {
+      if (!argValue) {
+        throw ApiError.badRequest("Not enough data for the user creating");
+      }
+    }
+
+    await UserModel.create([{
+      username,
+      firstName,
+      lastName,
+      email
+    }], { checkForDuplications: ["username", "email", "what"] });
+
+    return { message: "User created successfully" };
+  };
+
+  static async editUser(userId, username, firstName, lastName, email) {
+    const userToEdit = await UserModel.findById(userId).catch(() => {
+      throw ApiError.badRequest("Incorrect user's id");
+    });
+
+    if (!userToEdit) {
+      throw ApiError.badRequest("User you try to edit doesn't exists");
+    }
+
+    await UserModel.updateOne(
+      { _id: userId },
+      {
+        username,
+        firstName,
+        lastName,
+        email
+      },
+      { checkForDuplications: ["username", "email"] }
+    );
+
+    return { message: "User updated successfully" };
+  }
+
+  static async deleteUser(userId) {
+    const userToDelete = await UserModel.findById(userId).catch(() => {
+      throw ApiError.badRequest("Incorrect user's id");
+    });
+
+    if (!userToDelete) {
+      throw ApiError.badRequest("User you try to delete doesn't exists");
+    }
+    userToDelete.deleteOne({ _id: userId });
+
+    return { message: "User deleted successfully" };
+  }
+
+};
+
+module.exports = UserService;
 
 /***/ }),
 
@@ -164,19 +722,69 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /*!*********************************************!*\
   !*** ./src/utils/createModelSearchQuery.js ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../apiError/apiError */ \"./src/apiError/apiError.js\");\n\n\nfunction createModelSearchQuery(obj) {\n  if (!obj) {\n    return {};\n  }\n\n  if (obj) {\n    try {\n      obj = JSON.parse(obj);\n    } catch (e) {\n      throw _apiError_apiError__WEBPACK_IMPORTED_MODULE_0__[\"default\"].badRequest('Incorrect searcObj query param');\n    }\n  }\n\n  const finalObject = {};\n\n  function fillFinalObject(obj, paramName = '') {\n    for (let objKey in obj) {\n\n      if (typeof obj[objKey] === 'object') {\n        paramName = paramName.length ? `${paramName}.${objKey}` : objKey;\n\n        return fillFinalObject(obj[objKey], paramName);\n      }\n\n      const finalObjectParamName = paramName.length ? `${paramName}.${objKey}` : objKey;\n      const numberRange = obj[objKey].split('|');\n\n      if (numberRange.length !== 2) {\n        finalObject[finalObjectParamName] = { $regex: obj[objKey] };\n      } else {\n\n        if (Number(numberRange[0])) {\n          finalObject[finalObjectParamName] = { ...finalObject[finalObjectParamName], $gte: numberRange[0] };\n        }\n\n        if (Number(numberRange[1])) {\n          finalObject[finalObjectParamName] = { ...finalObject[finalObjectParamName], $lte: numberRange[1] };\n        }\n      }\n    }\n  }\n\n  fillFinalObject(obj);\n\n  return finalObject;\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createModelSearchQuery);//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvdXRpbHMvY3JlYXRlTW9kZWxTZWFyY2hRdWVyeS5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7OztBQUE0Qzs7QUFFNUM7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0EsTUFBTTtBQUNOLFlBQVkscUVBQW1CO0FBQy9CO0FBQ0E7O0FBRUE7O0FBRUE7QUFDQTs7QUFFQTtBQUNBLDBDQUEwQyxVQUFVLEdBQUcsT0FBTzs7QUFFOUQ7QUFDQTs7QUFFQSx5REFBeUQsVUFBVSxHQUFHLE9BQU87QUFDN0U7O0FBRUE7QUFDQSw4Q0FBOEM7QUFDOUMsUUFBUTs7QUFFUjtBQUNBLGdEQUFnRDtBQUNoRDs7QUFFQTtBQUNBLGdEQUFnRDtBQUNoRDtBQUNBO0FBQ0E7QUFDQTs7QUFFQTs7QUFFQTtBQUNBOztBQUVBLGlFQUFlLHNCQUFzQiIsInNvdXJjZXMiOlsid2VicGFjazovL3NlcnZlci8uL3NyYy91dGlscy9jcmVhdGVNb2RlbFNlYXJjaFF1ZXJ5LmpzPzAxMDciXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IEFwaUVycm9yIGZyb20gXCIuLi9hcGlFcnJvci9hcGlFcnJvclwiO1xuXG5mdW5jdGlvbiBjcmVhdGVNb2RlbFNlYXJjaFF1ZXJ5KG9iaikge1xuICBpZiAoIW9iaikge1xuICAgIHJldHVybiB7fTtcbiAgfVxuXG4gIGlmIChvYmopIHtcbiAgICB0cnkge1xuICAgICAgb2JqID0gSlNPTi5wYXJzZShvYmopO1xuICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgIHRocm93IEFwaUVycm9yLmJhZFJlcXVlc3QoJ0luY29ycmVjdCBzZWFyY09iaiBxdWVyeSBwYXJhbScpO1xuICAgIH1cbiAgfVxuXG4gIGNvbnN0IGZpbmFsT2JqZWN0ID0ge307XG5cbiAgZnVuY3Rpb24gZmlsbEZpbmFsT2JqZWN0KG9iaiwgcGFyYW1OYW1lID0gJycpIHtcbiAgICBmb3IgKGxldCBvYmpLZXkgaW4gb2JqKSB7XG5cbiAgICAgIGlmICh0eXBlb2Ygb2JqW29iaktleV0gPT09ICdvYmplY3QnKSB7XG4gICAgICAgIHBhcmFtTmFtZSA9IHBhcmFtTmFtZS5sZW5ndGggPyBgJHtwYXJhbU5hbWV9LiR7b2JqS2V5fWAgOiBvYmpLZXk7XG5cbiAgICAgICAgcmV0dXJuIGZpbGxGaW5hbE9iamVjdChvYmpbb2JqS2V5XSwgcGFyYW1OYW1lKTtcbiAgICAgIH1cblxuICAgICAgY29uc3QgZmluYWxPYmplY3RQYXJhbU5hbWUgPSBwYXJhbU5hbWUubGVuZ3RoID8gYCR7cGFyYW1OYW1lfS4ke29iaktleX1gIDogb2JqS2V5O1xuICAgICAgY29uc3QgbnVtYmVyUmFuZ2UgPSBvYmpbb2JqS2V5XS5zcGxpdCgnfCcpO1xuXG4gICAgICBpZiAobnVtYmVyUmFuZ2UubGVuZ3RoICE9PSAyKSB7XG4gICAgICAgIGZpbmFsT2JqZWN0W2ZpbmFsT2JqZWN0UGFyYW1OYW1lXSA9IHsgJHJlZ2V4OiBvYmpbb2JqS2V5XSB9O1xuICAgICAgfSBlbHNlIHtcblxuICAgICAgICBpZiAoTnVtYmVyKG51bWJlclJhbmdlWzBdKSkge1xuICAgICAgICAgIGZpbmFsT2JqZWN0W2ZpbmFsT2JqZWN0UGFyYW1OYW1lXSA9IHsgLi4uZmluYWxPYmplY3RbZmluYWxPYmplY3RQYXJhbU5hbWVdLCAkZ3RlOiBudW1iZXJSYW5nZVswXSB9O1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKE51bWJlcihudW1iZXJSYW5nZVsxXSkpIHtcbiAgICAgICAgICBmaW5hbE9iamVjdFtmaW5hbE9iamVjdFBhcmFtTmFtZV0gPSB7IC4uLmZpbmFsT2JqZWN0W2ZpbmFsT2JqZWN0UGFyYW1OYW1lXSwgJGx0ZTogbnVtYmVyUmFuZ2VbMV0gfTtcbiAgICAgICAgfVxuICAgICAgfVxuICAgIH1cbiAgfVxuXG4gIGZpbGxGaW5hbE9iamVjdChvYmopO1xuXG4gIHJldHVybiBmaW5hbE9iamVjdDtcbn1cblxuZXhwb3J0IGRlZmF1bHQgY3JlYXRlTW9kZWxTZWFyY2hRdWVyeTsiXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/utils/createModelSearchQuery.js\n");
+const ApiError = __webpack_require__(/*! ../apiError/apiError.js */ "./src/apiError/apiError.js");
+
+function createModelSearchQuery(obj) {
+  if (!obj) {
+    return {};
+  }
+
+  if (obj) {
+    try {
+      obj = JSON.parse(obj);
+    } catch (e) {
+      throw ApiError.badRequest('Incorrect searcObj query param');
+    }
+  }
+
+  const finalObject = {};
+
+  function fillFinalObject(obj, paramName = '') {
+    for (let objKey in obj) {
+
+      if (typeof obj[objKey] === 'object') {
+        paramName = paramName.length ? `${paramName}.${objKey}` : objKey;
+
+        return fillFinalObject(obj[objKey], paramName);
+      }
+
+      const finalObjectParamName = paramName.length ? `${paramName}.${objKey}` : objKey;
+      const numberRange = obj[objKey].split('|');
+
+      if (numberRange.length !== 2) {
+        finalObject[finalObjectParamName] = { $regex: obj[objKey] };
+      } else {
+
+        if (Number(numberRange[0])) {
+          finalObject[finalObjectParamName] = { ...finalObject[finalObjectParamName], $gte: numberRange[0] };
+        }
+
+        if (Number(numberRange[1])) {
+          finalObject[finalObjectParamName] = { ...finalObject[finalObjectParamName], $lte: numberRange[1] };
+        }
+      }
+    }
+  }
+
+  fillFinalObject(obj);
+
+  return finalObject;
+}
+
+module.exports = createModelSearchQuery
 
 /***/ }),
 
-/***/ "dotenv/config":
-/*!********************************!*\
-  !*** external "dotenv/config" ***!
-  \********************************/
+/***/ "dotenv":
+/*!*************************!*\
+  !*** external "dotenv" ***!
+  \*************************/
 /***/ ((module) => {
 
-module.exports = require("dotenv/config");
+"use strict";
+module.exports = require("dotenv");
 
 /***/ }),
 
@@ -186,6 +794,7 @@ module.exports = require("dotenv/config");
   \**************************/
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("express");
 
 /***/ }),
@@ -196,6 +805,7 @@ module.exports = require("express");
   \***************************/
 /***/ ((module) => {
 
+"use strict";
 module.exports = require("mongoose");
 
 /***/ })
@@ -227,52 +837,40 @@ module.exports = require("mongoose");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module can't be inlined because the eval-source-map devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+(__webpack_require__(/*! dotenv */ "dotenv").config)();
+const express = __webpack_require__(/*! express */ "express");
+const connectToTheMongoDB = __webpack_require__(/*! ./db */ "./src/db/index.js");
+const errorMiddleware = __webpack_require__(/*! ./middleware/errorMiddleware */ "./src/middleware/errorMiddleware.js");
+const mainRouter = __webpack_require__(/*! ./routes */ "./src/routes/index.js");
+
+const app = express();
+app.use(express.json());
+app.use('/api', mainRouter);
+app.use(errorMiddleware);
+const PORT = process.env.PORT || 5000;
+
+async function start() {
+  try {
+    connectToTheMongoDB();
+    app.listen(PORT, () => {
+      console.log(`Server started at port ${PORT}`);
+    });
+  } catch (e) {
+    console.log(e);
+  }
+
+}
+start();
+
+
+})();
+
 /******/ })()
 ;
+//# sourceMappingURL=main.js.map

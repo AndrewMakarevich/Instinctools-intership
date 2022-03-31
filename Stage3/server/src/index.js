@@ -1,8 +1,8 @@
-import 'dotenv/config';
-import express from 'express';
-import { connectToTheMongoDB } from './db';
-import errorMiddleware from './middleware/errorMiddleware';
-import mainRouter from './routes';
+require('dotenv').config();
+const express = require('express');
+const connectToTheMongoDB = require('./db');
+const errorMiddleware = require('./middleware/errorMiddleware');
+const mainRouter = require('./routes');
 
 const app = express();
 app.use(express.json());

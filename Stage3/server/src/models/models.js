@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose';
+const { Schema, model } = require('mongoose');
 
 const UserSchema = new Schema({
   username: {
@@ -28,8 +28,6 @@ const UserSchema = new Schema({
   }
 });
 
-// UserSchema.indexes({ username: 1, email: 1 }, { unique: true });
-
 const GroupSchema = new Schema({
   groupName: {
     type: String,
@@ -53,6 +51,13 @@ const UsersGroupsSchema = new Schema({
   }
 });
 
-export const UserModel = model('User', UserSchema);
-export const GroupModel = model('Group', GroupSchema);
-export const UsersGroupsModel = model('UsersGroups', UsersGroupsSchema);
+const UserModel = model('User', UserSchema);
+const GroupModel = model('Group', GroupSchema);
+const UsersGroupsModel = model('UsersGroups', UsersGroupsSchema);
+
+module.exports = {
+  UserModel,
+  GroupModel,
+  UsersGroupsModel
+}
+

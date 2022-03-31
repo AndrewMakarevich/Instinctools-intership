@@ -1,5 +1,5 @@
-import ApiError from "../apiError/apiError";
-import { GroupModel, UserModel, UsersGroupsModel } from "../models/models";
+const ApiError = require("../apiError/apiError.js");
+const { GroupModel, UserModel, UsersGroupsModel } = require("../models/models.js");
 
 async function checkUserAndGroup(userId, groupId, userErrorMessage, groupErrorMessage) {
   const user = await UserModel.findById(userId).catch(() => {
@@ -68,4 +68,4 @@ class UserGroupService {
   }
 };
 
-export default UserGroupService;
+module.exports = UserGroupService;

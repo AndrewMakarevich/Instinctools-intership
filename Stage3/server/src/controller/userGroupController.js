@@ -1,4 +1,4 @@
-import UserGroupService from "../service/userGroupService";
+const UserGroupService = require("../service/userGroupService");
 
 class UserGroupController {
 
@@ -25,4 +25,4 @@ class UserGroupController {
   }
 }
 
-export default UserGroupController;
+module.exports = UserGroupService;

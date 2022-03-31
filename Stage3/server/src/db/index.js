@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import ApiError from "../apiError/apiError";
+const mongoose = require("mongoose");
+const ApiError = require("../apiError/apiError.js")
 
-export function connectToTheMongoDB() {
+function connectToTheMongoDB() {
   mongoose.connect("mongodb://localhost:27017/admin-panel-test-task", () => {
     console.log("Connected to the mongoDB");
   });
@@ -60,3 +60,5 @@ mongoose.Model.updateOne = async function (filter, update, options, callback) {
   console.log(arguments);
   return updateRef.apply(this, arguments);
 };
+
+module.exports = connectToTheMongoDB;

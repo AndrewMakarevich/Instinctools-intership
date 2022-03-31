@@ -1,6 +1,6 @@
-import ApiError from "../apiError/apiError";
-import { UserModel } from "../models/models";
-import createModelSearchQuery from "../utils/createModelSearchQuery";
+const ApiError = require("../apiError/apiError.js");
+const { UserModel } = require("../models/models.js");
+const createModelSearchQuery = require("../utils/createModelSearchQuery.js");
 
 class UserService {
 
@@ -80,4 +80,5 @@ class UserService {
   }
 
 };
-export default UserService;
+
+module.exports = UserService;

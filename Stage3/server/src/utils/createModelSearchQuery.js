@@ -1,4 +1,4 @@
-import ApiError from "../apiError/apiError";
+const ApiError = require("../apiError/apiError.js");
 
 function createModelSearchQuery(obj) {
   if (!obj) {
@@ -47,4 +47,4 @@ function createModelSearchQuery(obj) {
   return finalObject;
 }
 
-export default createModelSearchQuery;
+module.exports = createModelSearchQuery
