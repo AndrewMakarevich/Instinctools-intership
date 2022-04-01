@@ -60,7 +60,7 @@ class UserService {
         lastName,
         email
       },
-      { checkForDuplications: ["username", "email"] }
+      { checkForDuplications: ["username", "email"], runValidators: true }
     );
 
     return { message: "User updated successfully" };

@@ -39,9 +39,7 @@ class GroupService {
       groupTitle
     }], { checkForDuplications: ["groupName"] });
 
-    console.log('GROUP CREATED', group);
-
-    return { message: `Group ${groupName} created successfully` };
+    return { message: `Group ${groupName} created successfully`, group };
   };
 
   static async editGroup(groupId, groupName, groupTitle) {
@@ -56,7 +54,7 @@ class GroupService {
     await GroupModel.updateOne(
       { _id: groupId },
       { groupName, groupTitle },
-      { checkForDuplications: ["groupName"] }
+      { checkForDuplications: ["groupName"], runValidators: true }
     );
 
     return { message: "Group updated successfully" };
@@ -71,9 +69,9 @@ class GroupService {
       throw ApiError.badRequest("Group you try to delete doesn't exists");
     }
 
-    await groupToDelete.deleteOne({ _id: groupId });
+    const deletedGroup = await groupToDelete.deleteOne({ _id: groupId });
 
-    return { message: `Group deleted succesfully` };
+    return { message: `Group deleted succesfully`, group: deletedGroup };
   }
 
 };

@@ -24,6 +24,7 @@ async function GetMongoMemoryServer() {
   }
 
   return {
+    server,
     connect,
     disconnect,
     clearDataBase

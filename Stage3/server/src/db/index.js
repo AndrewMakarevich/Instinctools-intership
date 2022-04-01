@@ -57,7 +57,7 @@ mongoose.Model.updateOne = async function (filter, update, options, callback) {
   if (options && options.checkForDuplications) {
     await checkForTheDuplication(this, update, options.checkForDuplications);
   }
-  console.log(arguments);
+
   return updateRef.apply(this, arguments);
 };
 
