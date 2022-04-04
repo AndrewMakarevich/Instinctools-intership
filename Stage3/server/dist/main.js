@@ -226,6 +226,8 @@ function connectToTheMongoDB() {
   });
 }
 
+expandMongooseMethods();
+
 async function checkForTheDuplication(Model, document, fieldsToCheck) {
 
   async function findDuplicate(document, paramName) {
@@ -256,31 +258,35 @@ async function checkForTheDuplication(Model, document, fieldsToCheck) {
 
 }
 
-// OVERWRITE mongoose.Model.create method
+function expandMongooseMethods() {
 
-const createRef = mongoose.Model.create;
+  // OVERWRITE mongoose.Model.create method
 
-mongoose.Model.create = async function (docs, options, callback) {
-  if (options && options.checkForDuplications) {
-    await checkForTheDuplication(this, docs, options.checkForDuplications);
-  }
+  const createRef = mongoose.Model.create;
 
-  return createRef.apply(this, arguments);
-};
+  mongoose.Model.create = async function (docs, options, callback) {
+    if (options && options.checkForDuplications) {
+      await checkForTheDuplication(this, docs, options.checkForDuplications);
+    }
 
-// OVERWRITE mongoose.Model.updateOne method
+    return createRef.apply(this, arguments);
+  };
 
-const updateRef = mongoose.Model.updateOne;
+  // OVERWRITE mongoose.Model.updateOne method
 
-mongoose.Model.updateOne = async function (filter, update, options, callback) {
-  if (options && options.checkForDuplications) {
-    await checkForTheDuplication(this, update, options.checkForDuplications);
-  }
+  const updateRef = mongoose.Model.updateOne;
 
-  return updateRef.apply(this, arguments);
-};
+  mongoose.Model.updateOne = async function (filter, update, options, callback) {
+    if (options && options.checkForDuplications) {
+      await checkForTheDuplication(this, update, options.checkForDuplications);
+    }
 
-module.exports = connectToTheMongoDB;
+    return updateRef.apply(this, arguments);
+  };
+}
+
+
+module.exports = { connectToTheMongoDB, expandMongooseMethods };
 
 /***/ }),
 
@@ -595,7 +601,7 @@ class UserGroupService {
     });
 
     return { message: `User ${userAndGroup.user.username} successfully added to the ${userAndGroup.group.groupName} group` };
-  }
+  };
 
   static async deleteUserFromGroup(userId, groupId) {
     const userAndGroup = await checkUserAndGroup(userId,
@@ -616,7 +622,7 @@ class UserGroupService {
     userGroupConnection.deleteOne({ _id: userAndGroup.user.id });
 
     return { message: `User ${userAndGroup.user.username} successfully deleted from the group ${userAndGroup.group.groupName}` };
-  }
+  };
 };
 
 module.exports = UserGroupService;
@@ -664,14 +670,14 @@ class UserService {
       }
     }
 
-    await UserModel.create([{
+    const user = await UserModel.create([{
       username,
       firstName,
       lastName,
       email
     }], { checkForDuplications: ["username", "email", "what"] });
 
-    return { message: "User created successfully" };
+    return { message: "User created successfully", user };
   };
 
   static async editUser(userId, username, firstName, lastName, email) {
@@ -705,9 +711,9 @@ class UserService {
     if (!userToDelete) {
       throw ApiError.badRequest("User you try to delete doesn't exists");
     }
-    userToDelete.deleteOne({ _id: userId });
+    const user = await userToDelete.deleteOne({ _id: userId });
 
-    return { message: "User deleted successfully" };
+    return { message: "User deleted successfully", user };
   }
 
 };
@@ -733,7 +739,7 @@ function createModelSearchQuery(obj) {
     try {
       obj = JSON.parse(obj);
     } catch (e) {
-      throw ApiError.badRequest('Incorrect searcObj query param');
+      throw ApiError.badRequest(e);
     }
   }
 
@@ -843,7 +849,7 @@ var __webpack_exports__ = {};
   \**********************/
 (__webpack_require__(/*! dotenv */ "dotenv").config)();
 const express = __webpack_require__(/*! express */ "express");
-const connectToTheMongoDB = __webpack_require__(/*! ./db */ "./src/db/index.js");
+const { connectToTheMongoDB } = __webpack_require__(/*! ./db */ "./src/db/index.js");
 const errorMiddleware = __webpack_require__(/*! ./middleware/errorMiddleware */ "./src/middleware/errorMiddleware.js");
 const mainRouter = __webpack_require__(/*! ./routes */ "./src/routes/index.js");
 

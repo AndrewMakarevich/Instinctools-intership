@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const connectToTheMongoDB = require('./db');
+const { connectToTheMongoDB } = require('./db');
 const errorMiddleware = require('./middleware/errorMiddleware');
 const mainRouter = require('./routes');
 

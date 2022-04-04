@@ -1,7 +1,18 @@
 const GetMongoMemoryServer = require("../db/testDb");
 const GroupService = require("./groupService");
-const ApiError = require("../apiError/apiError");
-const { default: mongoose } = require("mongoose");
+const { expandMongooseMethods } = require('../db/index');
+
+const correctGroupObj = {
+  groupName: "Fourth-group",
+  groupTitle: "Test-group"
+};
+
+const incorrectGroupObj = {
+  groupName: "aa",
+  groupTitle: "a"
+};
+
+expandMongooseMethods();
 
 jest.setTimeout(30000);
 
@@ -13,7 +24,7 @@ beforeAll(async () => {
 });
 
 afterEach(async () => {
-  await server.clearDataBase();
+  await server.cleanDataBase();
 });
 
 afterAll(async () => {
@@ -23,8 +34,7 @@ afterAll(async () => {
 describe("Group service: group creating", () => {
 
   test("Correct group creating", async () => {
-    const groupName = "Fourth-group";
-    const groupTitle = "Test-group";
+    const { groupName, groupTitle } = correctGroupObj;
     const response = await GroupService.createGroup(groupName, groupTitle);
     const createdGroup = await GroupService.getGroup('_id', response.group[0]._id);
 
@@ -34,26 +44,23 @@ describe("Group service: group creating", () => {
   });
 
   test("Trying to create a group with incorrect params", async () => {
-    const groupName = "aa";
-    const groupTitle = "a";
+    const { groupName, groupTitle } = incorrectGroupObj;
 
     await expect(GroupService.createGroup(groupName, groupTitle))
       .rejects.toThrow("Group validation failed: groupName: Group's name doesn't match required pattern, groupTitle: Group's title doesn't match required pattern");
   });
 
   test("Trying to create a group with ununique group-name", async () => {
-    const groupName = "Fourth-group";
-    const groupTitle = "Test-group";
+    const { groupName, groupTitle } = correctGroupObj;
 
     await GroupService.createGroup(groupName, groupTitle);
-    await expect(GroupService.createGroup(groupName, groupTitle)).rejects.toThrow();
+    await expect(GroupService.createGroup(groupName, groupTitle)).rejects.toThrow("groupName for groups must be unique");
   });
 });
 
-describe("Group service: group finding", () => {
+describe("Group service: group searching", () => {
   test("Trying to find an existing record of the group", async () => {
-    const groupName = "Fourth-group";
-    const groupTitle = "Test-group";
+    const { groupName, groupTitle } = correctGroupObj;
 
     await GroupService.createGroup(groupName, groupTitle);
     const foundGroup = await GroupService.getGroup('groupName', groupName);
@@ -71,8 +78,7 @@ describe("Group service: group finding", () => {
 
 describe("Group service: group deleting", () => {
   test("Trying to delete an existing group", async () => {
-    const groupName = "Fourth-group";
-    const groupTitle = "Test-group";
+    const { groupName, groupTitle } = correctGroupObj;
 
     const createdGroup = await GroupService.createGroup(groupName, groupTitle);
     const deletedGroup = await GroupService.deleteGroup(createdGroup.group[0]._id);
@@ -91,9 +97,8 @@ describe("Group service: group deleting", () => {
 });
 
 describe("Group service: group editing", () => {
-  test("Trying to edit an existing group", async () => {
-    const groupName = "Fourth-group";
-    const groupTitle = "Test-group";
+  test("Trying to edit an existing group with correct params", async () => {
+    const { groupName, groupTitle } = correctGroupObj;
     const { group } = await GroupService.createGroup(groupName, groupTitle);
 
     await GroupService.editGroup(group[0]._id, "Fifth-group", "Test-group-edit");
@@ -104,13 +109,13 @@ describe("Group service: group editing", () => {
   });
 
   test("Trying to edit an existing group by setting ununique group-name", async () => {
-    const groupName = "Fourth-group";
-    const groupTitle = "Test-group";
+    const { groupName, groupTitle } = correctGroupObj;
     const { group } = await GroupService.createGroup(groupName, groupTitle);
+
     await GroupService.createGroup("Fifth-group", "Test-group");
 
     await expect(GroupService.editGroup(group[0]._id, "Fifth-group"))
-      .rejects.toThrow("E11000 duplicate key error collection: test.groups index: groupName_1 dup key: { groupName: \"Fifth-group\" }");
+      .rejects.toThrow("groupName for groups must be unique");
   });
 
   test("Trying to edit an unexisting group using incorrect id", async () => {

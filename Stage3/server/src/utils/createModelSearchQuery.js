@@ -9,7 +9,7 @@ function createModelSearchQuery(obj) {
     try {
       obj = JSON.parse(obj);
     } catch (e) {
-      throw ApiError.badRequest('Incorrect searcObj query param');
+      throw ApiError.badRequest(e);
     }
   }
 

@@ -44,7 +44,7 @@ class UserGroupService {
     });
 
     return { message: `User ${userAndGroup.user.username} successfully added to the ${userAndGroup.group.groupName} group` };
-  }
+  };
 
   static async deleteUserFromGroup(userId, groupId) {
     const userAndGroup = await checkUserAndGroup(userId,
@@ -65,7 +65,7 @@ class UserGroupService {
     userGroupConnection.deleteOne({ _id: userAndGroup.user.id });
 
     return { message: `User ${userAndGroup.user.username} successfully deleted from the group ${userAndGroup.group.groupName}` };
-  }
+  };
 };
 
 module.exports = UserGroupService;

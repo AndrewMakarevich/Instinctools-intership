@@ -33,14 +33,14 @@ class UserService {
       }
     }
 
-    await UserModel.create([{
+    const user = await UserModel.create([{
       username,
       firstName,
       lastName,
       email
     }], { checkForDuplications: ["username", "email", "what"] });
 
-    return { message: "User created successfully" };
+    return { message: "User created successfully", user };
   };
 
   static async editUser(userId, username, firstName, lastName, email) {
@@ -74,9 +74,9 @@ class UserService {
     if (!userToDelete) {
       throw ApiError.badRequest("User you try to delete doesn't exists");
     }
-    userToDelete.deleteOne({ _id: userId });
+    const user = await userToDelete.deleteOne({ _id: userId });
 
-    return { message: "User deleted successfully" };
+    return { message: "User deleted successfully", user };
   }
 
 };

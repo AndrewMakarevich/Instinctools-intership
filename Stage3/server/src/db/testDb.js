@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
+
 async function GetMongoMemoryServer() {
   const server = await MongoMemoryServer.create();
 
@@ -16,7 +17,7 @@ async function GetMongoMemoryServer() {
     await server.stop();
   }
 
-  async function clearDataBase() {
+  async function cleanDataBase() {
     const collections = await mongoose.connection.collections;
     for (let collectionKey in collections) {
       await collections[collectionKey].deleteMany();
@@ -27,7 +28,7 @@ async function GetMongoMemoryServer() {
     server,
     connect,
     disconnect,
-    clearDataBase
+    cleanDataBase
   }
 }
 

@@ -7,6 +7,8 @@ function connectToTheMongoDB() {
   });
 }
 
+expandMongooseMethods();
+
 async function checkForTheDuplication(Model, document, fieldsToCheck) {
 
   async function findDuplicate(document, paramName) {
@@ -37,28 +39,32 @@ async function checkForTheDuplication(Model, document, fieldsToCheck) {
 
 }
 
-// OVERWRITE mongoose.Model.create method
+function expandMongooseMethods() {
 
-const createRef = mongoose.Model.create;
+  // OVERWRITE mongoose.Model.create method
 
-mongoose.Model.create = async function (docs, options, callback) {
-  if (options && options.checkForDuplications) {
-    await checkForTheDuplication(this, docs, options.checkForDuplications);
-  }
+  const createRef = mongoose.Model.create;
 
-  return createRef.apply(this, arguments);
-};
+  mongoose.Model.create = async function (docs, options, callback) {
+    if (options && options.checkForDuplications) {
+      await checkForTheDuplication(this, docs, options.checkForDuplications);
+    }
 
-// OVERWRITE mongoose.Model.updateOne method
+    return createRef.apply(this, arguments);
+  };
 
-const updateRef = mongoose.Model.updateOne;
+  // OVERWRITE mongoose.Model.updateOne method
 
-mongoose.Model.updateOne = async function (filter, update, options, callback) {
-  if (options && options.checkForDuplications) {
-    await checkForTheDuplication(this, update, options.checkForDuplications);
-  }
+  const updateRef = mongoose.Model.updateOne;
 
-  return updateRef.apply(this, arguments);
-};
+  mongoose.Model.updateOne = async function (filter, update, options, callback) {
+    if (options && options.checkForDuplications) {
+      await checkForTheDuplication(this, update, options.checkForDuplications);
+    }
 
-module.exports = connectToTheMongoDB;
+    return updateRef.apply(this, arguments);
+  };
+}
+
+
+module.exports = { connectToTheMongoDB, expandMongooseMethods };
