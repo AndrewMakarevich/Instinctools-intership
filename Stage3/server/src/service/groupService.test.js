@@ -1,16 +1,7 @@
 const GetMongoMemoryServer = require("../db/testDb");
-const GroupService = require("./groupService");
 const { expandMongooseMethods } = require('../db/index');
-
-const correctGroupObj = {
-  groupName: "Fourth-group",
-  groupTitle: "Test-group"
-};
-
-const incorrectGroupObj = {
-  groupName: "aa",
-  groupTitle: "a"
-};
+const GroupService = require("./groupService");
+const { correctGroupObj, alterCorrectGroupObj, incorrectGroupObj } = require("./consts.mock");
 
 expandMongooseMethods();
 
@@ -31,42 +22,60 @@ afterAll(async () => {
   await server.disconnect();
 });
 
+async function createCorrectTestGroup() {
+  const { groupName, groupTitle } = correctGroupObj;
+  const testGroup = await GroupService.createGroup(groupName, groupTitle);
+
+  return {
+    group: testGroup.group[0],
+    message: testGroup.message
+  };
+};
+
+async function createAlterCorrectTestGroup() {
+  const { groupName, groupTitle } = alterCorrectGroupObj;
+  const testGroup = await GroupService.createGroup(groupName, groupTitle);
+
+  return {
+    group: testGroup.group[0],
+    message: testGroup.message
+  };
+};
+
+async function createIncorrectTestGroup() {
+  const { groupName, groupTitle } = incorrectGroupObj;
+  await GroupService.createGroup(groupName, groupTitle)
+}
+
 describe("Group service: group creating", () => {
 
   test("Correct group creating", async () => {
-    const { groupName, groupTitle } = correctGroupObj;
-    const response = await GroupService.createGroup(groupName, groupTitle);
-    const createdGroup = await GroupService.getGroup('_id', response.group[0]._id);
+    const { message, group } = await createCorrectTestGroup()
+    const createdGroup = await GroupService.getGroup('_id', group._id);
 
-    expect(response.message).toBe(`Group ${groupName} created successfully`);
-    expect(createdGroup.groupName).toBe(`${groupName}`);
-    expect(createdGroup.groupTitle).toBe(`${groupTitle}`);
+    expect(message).toBe(`Group ${group.groupName} created successfully`);
+    expect(createdGroup.groupName).toBe(`${group.groupName}`);
+    expect(createdGroup.groupTitle).toBe(`${group.groupTitle}`);
   });
 
   test("Trying to create a group with incorrect params", async () => {
-    const { groupName, groupTitle } = incorrectGroupObj;
-
-    await expect(GroupService.createGroup(groupName, groupTitle))
+    await expect(createIncorrectTestGroup())
       .rejects.toThrow("Group validation failed: groupName: Group's name doesn't match required pattern, groupTitle: Group's title doesn't match required pattern");
   });
 
   test("Trying to create a group with ununique group-name", async () => {
-    const { groupName, groupTitle } = correctGroupObj;
-
-    await GroupService.createGroup(groupName, groupTitle);
-    await expect(GroupService.createGroup(groupName, groupTitle)).rejects.toThrow("groupName for groups must be unique");
+    await createCorrectTestGroup();
+    await expect(createCorrectTestGroup()).rejects.toThrow("groupName for groups must be unique");
   });
 });
 
 describe("Group service: group searching", () => {
   test("Trying to find an existing record of the group", async () => {
-    const { groupName, groupTitle } = correctGroupObj;
+    const { group } = await createCorrectTestGroup()
+    const foundGroup = await GroupService.getGroup('groupName', group.groupName);
 
-    await GroupService.createGroup(groupName, groupTitle);
-    const foundGroup = await GroupService.getGroup('groupName', groupName);
-
-    expect(foundGroup.groupName).toBe(groupName);
-    expect(foundGroup.groupTitle).toBe(groupTitle);
+    expect(foundGroup.groupName).toBe(group.groupName);
+    expect(foundGroup.groupTitle).toBe(group.groupTitle);
   });
 
   test("Trying to find an unexisting record of the group", async () => {
@@ -78,13 +87,11 @@ describe("Group service: group searching", () => {
 
 describe("Group service: group deleting", () => {
   test("Trying to delete an existing group", async () => {
-    const { groupName, groupTitle } = correctGroupObj;
-
-    const createdGroup = await GroupService.createGroup(groupName, groupTitle);
-    const deletedGroup = await GroupService.deleteGroup(createdGroup.group[0]._id);
+    const { group } = await createCorrectTestGroup()
+    const deletedGroup = await GroupService.deleteGroup(group._id);
 
     expect(deletedGroup.message).toBe("Group deleted succesfully");
-    expect(deletedGroup.group.groupName).toBe(groupName);
+    expect(deletedGroup.group.groupName).toBe(group.groupName);
   });
 
   test("Trying to delete an unexisting group using incorrect id", async () => {
@@ -98,23 +105,21 @@ describe("Group service: group deleting", () => {
 
 describe("Group service: group editing", () => {
   test("Trying to edit an existing group with correct params", async () => {
-    const { groupName, groupTitle } = correctGroupObj;
-    const { group } = await GroupService.createGroup(groupName, groupTitle);
+    const { group } = await createCorrectTestGroup();
 
-    await GroupService.editGroup(group[0]._id, "Fifth-group", "Test-group-edit");
-    const editedGroup = await GroupService.getGroup('_id', group[0]._id);
+    await GroupService.editGroup(group._id, alterCorrectGroupObj.groupName, alterCorrectGroupObj.groupTitle);
+    const editedGroup = await GroupService.getGroup('_id', group._id);
 
-    expect(editedGroup.groupName).toBe("Fifth-group");
-    expect(editedGroup.groupTitle).toBe("Test-group-edit");
+    expect(editedGroup.groupName).toBe(alterCorrectGroupObj.groupName);
+    expect(editedGroup.groupTitle).toBe(alterCorrectGroupObj.groupTitle);
   });
 
   test("Trying to edit an existing group by setting ununique group-name", async () => {
-    const { groupName, groupTitle } = correctGroupObj;
-    const { group } = await GroupService.createGroup(groupName, groupTitle);
+    const { group } = await createCorrectTestGroup();
 
-    await GroupService.createGroup("Fifth-group", "Test-group");
+    await createAlterCorrectTestGroup();
 
-    await expect(GroupService.editGroup(group[0]._id, "Fifth-group"))
+    await expect(GroupService.editGroup(group._id, alterCorrectGroupObj.groupName))
       .rejects.toThrow("groupName for groups must be unique");
   });
 

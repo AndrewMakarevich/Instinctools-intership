@@ -22,6 +22,12 @@ async function checkUserAndGroup(userId, groupId, userErrorMessage, groupErrorMe
 }
 
 class UserGroupService {
+  static async getUserGroupConnection(userId, groupId) {
+    const userGroupRecord = await UsersGroupsModel.find({ userId, groupId });
+
+    return userGroupRecord;
+  };
+
   static async addUserToGroup(userId, groupId) {
     const userAndGroup = await checkUserAndGroup(
       userId,
