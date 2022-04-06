@@ -41,6 +41,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "mongoose": "^6.2.8"
   }
 }

@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import publicRoutes from "./routes";
 
 const AppRouter = () => {

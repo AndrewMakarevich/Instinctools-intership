@@ -1,14 +1,13 @@
 import publicRoutes from "../router/routes";
-import { Link } from "react-router-dom";
 import navStyles from "./navBar.module.css";
+import MyLink from "../../UI/myLink/myLink";
 
 const NavBar = () => {
   return (
-    <nav>
-      NavBar
-      <ul>
+    <nav className={navStyles["nav-bar"]}>
+      <ul className={navStyles["links-list"]}>
         {publicRoutes && publicRoutes.map(({ id, name, path }) =>
-          <li key={id}><Link to={path}>{name}</Link></li>
+          <li className={navStyles["links-item"]} key={id}><MyLink className={navStyles["link"]} to={path}>{name}</MyLink></li>
         )}
       </ul>
     </nav>

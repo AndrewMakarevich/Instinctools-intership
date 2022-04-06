@@ -579,6 +579,12 @@ async function checkUserAndGroup(userId, groupId, userErrorMessage, groupErrorMe
 }
 
 class UserGroupService {
+  static async getUserGroupConnection(userId, groupId) {
+    const userGroupRecord = await UsersGroupsModel.find({ userId, groupId });
+
+    return userGroupRecord;
+  };
+
   static async addUserToGroup(userId, groupId) {
     const userAndGroup = await checkUserAndGroup(
       userId,
@@ -781,6 +787,17 @@ module.exports = createModelSearchQuery
 
 /***/ }),
 
+/***/ "cors":
+/*!***********************!*\
+  !*** external "cors" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("cors");
+
+/***/ }),
+
 /***/ "dotenv":
 /*!*************************!*\
   !*** external "dotenv" ***!
@@ -849,11 +866,15 @@ var __webpack_exports__ = {};
   \**********************/
 (__webpack_require__(/*! dotenv */ "dotenv").config)();
 const express = __webpack_require__(/*! express */ "express");
+const cors = __webpack_require__(/*! cors */ "cors");
 const { connectToTheMongoDB } = __webpack_require__(/*! ./db */ "./src/db/index.js");
 const errorMiddleware = __webpack_require__(/*! ./middleware/errorMiddleware */ "./src/middleware/errorMiddleware.js");
 const mainRouter = __webpack_require__(/*! ./routes */ "./src/routes/index.js");
 
 const app = express();
+app.use(cors({
+  origin: process.env.FRONT_APP_LINK
+}));
 app.use(express.json());
 app.use('/api', mainRouter);
 app.use(errorMiddleware);
