@@ -1,10 +1,10 @@
 import UserService from "../../../service/userService";
 import userActions from "./actions";
 
-const getUsers = () => {
+const getUsers = (queryParams) => {
   return async (dispatch) => {
     try {
-      const { data } = await UserService.getUsers();
+      const { data } = await UserService.getUsers(queryParams);
       dispatch({ type: userActions.getUsers, payload: data });
     } catch (e) {
       alert(e.response.data.message);

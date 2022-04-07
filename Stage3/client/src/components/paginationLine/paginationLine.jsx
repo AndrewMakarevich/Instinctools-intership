@@ -3,8 +3,6 @@ import lineStyles from "./paginationLine.module.css";
 
 const PaginationLine = ({ count, page, limit, setPage }) => {
 
-
-
   function createPagesArr(count, limit) {
     const pagesArr = [];
     const pagesAmount = Math.ceil(count / limit);
@@ -52,10 +50,21 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
   }, [page])
 
   return (
-    <div>
+    <div className={lineStyles["pagination-line"]}>
+      <button className={lineStyles["pagination-btn"]}
+        onClick={() => {
+          if (page > 1) {
+            setPage(page - 1);
+            return;
+          }
+
+          setPage(pages[pages.length - 1]);
+        }}>
+        {"<"}
+      </button>
       {
         paginationLineState.map(pageNumber =>
-          <button
+          <button className={`${lineStyles["pagination-btn"]} ${pageNumber === page ? lineStyles["active"] : ""}`}
             onClick={
               () => {
                 if (Number(pageNumber)) {
@@ -65,6 +74,18 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
             }>{pageNumber}</button>
         )
       }
+      <button className={lineStyles["pagination-btn"]}
+        onClick={
+          () => {
+            if (page < pages.length) {
+              setPage(page + 1);
+              return;
+            }
+            setPage(pages[0]);
+          }
+        }>
+        {">"}
+      </button>
     </div>
   )
 };

@@ -1,8 +1,8 @@
 import $host from "../http";
 
 class UserService {
-  static async getUsers() {
-    const response = await $host.get(`/user/get-many`);
+  static async getUsers(queryParams) {
+    const response = await $host.get(`/user/get-many`, { params: queryParams });
     return response;
   };
 }
