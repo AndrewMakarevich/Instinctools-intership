@@ -21,9 +21,10 @@ class UserService {
     limit = Number(limit) || 5;
 
     const searchQuery = createModelSearchQuery(filterObj);
-    const users = await UserModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
+    const usersCount = await UserModel.count(searchQuery);
+    const usersRows = await UserModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
 
-    return users;
+    return { count: usersCount, rows: usersRows };
   }
 
   static async createUser(username, firstName, lastName, email) {

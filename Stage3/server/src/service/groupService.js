@@ -21,9 +21,10 @@ class GroupService {
     limit = Number(limit) || 5;
 
     let searchQuery = createModelSearchQuery(searchObj);
-    const groups = await GroupModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
+    const groupsCount = await GroupModel.count(searchQuery);
+    const groupsRows = await GroupModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
 
-    return groups;
+    return { count: groupsCount, rows: groupsRows };
   }
 
   static async createGroup(groupName, groupTitle) {

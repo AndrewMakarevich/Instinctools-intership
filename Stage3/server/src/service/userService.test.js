@@ -106,8 +106,8 @@ describe("User service: user searching", () => {
 
     // Processing result array, to change query result objects to their id's
     // userListResult = userListResult.map(result => String(result._id));
-    // expect(userListResult).toMatchObject([String(users.secondUser.user[0]._id)]);
-    expect(userListResult).toMatchObject([alterCorrectUserObj]);
+    // expect(userListResult).toEqual([String(users.secondUser.user[0]._id)]);
+    expect(userListResult.rows).toMatchObject([alterCorrectUserObj]);
   });
 
   test("Checking filtering in method getUsers", async () => {
@@ -117,7 +117,7 @@ describe("User service: user searching", () => {
     let userListResult = await UserService.getUsers('{"email":"andrew"}', undefined, undefined);
 
     // Processing result array, to change query result objects to their id's
-    userListResult = userListResult.map(result => String(result._id));
+    userListResult = userListResult.rows.map(result => String(result._id));
 
     expect(userListResult).toEqual([String(thirdUser._id)]);
   });

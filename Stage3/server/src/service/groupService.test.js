@@ -83,6 +83,26 @@ describe("Group service: group searching", () => {
 
     expect(foundGroup).toBe(null);
   });
+
+  test("Checking pagination in methid getGroups", async () => {
+    await createCorrectTestGroup();
+    const secTestGroup = await createAlterCorrectTestGroup();
+    let foundGroup = await GroupService.getGroups(undefined, 2, 1);
+
+    foundGroup = foundGroup.rows.map(group => String(group._id));
+
+    expect(foundGroup).toEqual([String(secTestGroup.group._id)]);
+  });
+
+  test("Checking filteringin methid getGroups", async () => {
+    await createCorrectTestGroup();
+    const secTestGroup = await createAlterCorrectTestGroup();
+    let foundGroup = await GroupService.getGroups('{"groupTitle":"-alter"}');
+
+    foundGroup = foundGroup.rows.map(group => String(group._id));
+
+    expect(foundGroup).toEqual([String(secTestGroup.group._id)]);
+  });
 });
 
 describe("Group service: group deleting", () => {

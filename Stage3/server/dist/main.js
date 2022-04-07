@@ -490,9 +490,10 @@ class GroupService {
     limit = Number(limit) || 5;
 
     let searchQuery = createModelSearchQuery(searchObj);
-    const groups = await GroupModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
+    const groupsCount = await GroupModel.count(searchQuery);
+    const groupsRows = await GroupModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
 
-    return groups;
+    return { count: groupsCount, rows: groupsRows };
   }
 
   static async createGroup(groupName, groupTitle) {
@@ -664,9 +665,10 @@ class UserService {
     limit = Number(limit) || 5;
 
     const searchQuery = createModelSearchQuery(filterObj);
-    const users = await UserModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
+    const usersCount = await UserModel.count(searchQuery);
+    const usersRows = await UserModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
 
-    return users;
+    return { count: usersCount, rows: usersRows };
   }
 
   static async createUser(username, firstName, lastName, email) {
