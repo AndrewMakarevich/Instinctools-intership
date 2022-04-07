@@ -13,7 +13,7 @@ const GroupList = () => {
     filterObject: {}
   })
   const dispatch = useDispatch();
-  const groupReducer = useSelector(state => state.groupReducer.groups);
+  const groupReducer = useSelector(state => state.groupReducer);
 
   useEffect(() => {
     dispatch(getGroups());
@@ -23,7 +23,7 @@ const GroupList = () => {
     <article>
       <ul className={listStyles["group-list"]}>
         {
-          groupReducer.length && groupReducer.map(group =>
+          groupReducer.groups.length && groupReducer.groups.map(group =>
             <GroupItem key={group._id} group={group} />
           )
         }

@@ -29,7 +29,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
       } else if (page >= pages.length - 1) {
         paginationLineState.push(pages[0]);
         paginationLineState.push("...");
-        paginationLineState = [...paginationLineState, pages.slice(-5)];
+        paginationLineState = [...paginationLineState, ...pages.slice(-5)];
       } else {
         paginationLineState.push(pages[0]);
         paginationLineState.push("...");

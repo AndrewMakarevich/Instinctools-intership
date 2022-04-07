@@ -6,7 +6,7 @@ import listStyles from "./userList.module.css";
 
 const UserList = () => {
   const dispatch = useDispatch();
-  const users = useSelector(state => state.userReducer.users);
+  const userReducer = useSelector(state => state.userReducer);
 
   useEffect(() => {
     dispatch(getUsers());
@@ -16,7 +16,7 @@ const UserList = () => {
     <article>
       <ul className={listStyles["user-list"]}>
         {
-          users.length && users.map(user =>
+          userReducer.users.length && userReducer.users.map(user =>
             <UserItem key={user._id} user={user} />
           )
         }
