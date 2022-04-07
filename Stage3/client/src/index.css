@@ -12,6 +12,11 @@ h4 {
   padding: 0;
 }
 
+ul,
+ol {
+  list-style: none;
+}
+
 body {
   height: 100vh;
   min-height: 100vh;

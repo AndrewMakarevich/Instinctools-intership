@@ -2,16 +2,23 @@ import GroupPage from "../../pages/groupPage/groupPage";
 import GroupsPage from "../../pages/groupsPage/groupsPage";
 import UserPage from "../../pages/userPage/userPage";
 import UsersPage from "../../pages/usersPage/usersPage";
+import { Outlet } from "react-router-dom";
 
 const publicRoutes = [
   {
     id: 0,
     name: "Users",
     path: "/users",
-    Element: UsersPage,
+    Element: Outlet,
     subRoutes: [
       {
         id: 0,
+        name: "Users",
+        path: "",
+        Element: UsersPage
+      },
+      {
+        id: 1,
         name: "User",
         path: ":username",
         Element: UserPage
@@ -22,10 +29,16 @@ const publicRoutes = [
     id: 1,
     name: "Groups",
     path: "/groups",
-    Element: GroupsPage,
+    Element: Outlet,
     subRoutes: [
       {
         id: 0,
+        name: "Groups",
+        path: "",
+        Element: GroupsPage
+      },
+      {
+        id: 1,
         name: "Group",
         path: ":groupname",
         Element: GroupPage

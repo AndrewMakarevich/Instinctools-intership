@@ -1,11 +1,10 @@
-import { Link, Outlet } from "react-router-dom";
+import UserList from "../../components/users/userList/userList";
 
 const UsersPage = () => {
   return (
     <article>
       Users page
-      <Link to="Andrew">Andrew</Link>
-      <Outlet />
+      <UserList />
     </article>
   )
 };

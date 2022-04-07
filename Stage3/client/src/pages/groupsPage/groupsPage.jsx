@@ -5,9 +5,7 @@ const GroupsPage = () => {
   return (
     <article>
       Groups page
-      <Link to="Super-dooper">Super-dooper group</Link>
       <GroupList />
-      <Outlet />
     </article>
   )
 };

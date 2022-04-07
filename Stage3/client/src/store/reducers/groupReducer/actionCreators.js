@@ -3,8 +3,12 @@ import groupActions from "./actions";
 
 const getGroups = () => {
   return async (dispatch) => {
-    const { data } = await GroupService.getGroups();
-    return dispatch({ type: groupActions.getGroups, payload: data })
+    try {
+      const { data } = await GroupService.getGroups();
+      return dispatch({ type: groupActions.getGroups, payload: data });
+    } catch (e) {
+      alert(e.response.data.message);
+    }
   }
 }
 
