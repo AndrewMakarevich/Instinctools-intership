@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useDelayFetching from '../../../hooks/useDelayFetching';
 import getUsers from '../../../store/reducers/userReducer/actionCreators';

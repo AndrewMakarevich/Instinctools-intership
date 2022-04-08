@@ -9,11 +9,14 @@ const MyLink = (props) => {
     <Link className={`${linkStyles.link} ${propClass}`} {...restProps}>{props.children}</Link>
   );
 };
+
 MyLink.propTypes = {
-  props: PropTypes.objectOf(PropTypes.object()),
+  className: PropTypes.string,
+  children: PropTypes.any,
 };
 
 MyLink.defaultProps = {
-  props: {},
+  className: '',
+  children: '',
 };
 export default MyLink;

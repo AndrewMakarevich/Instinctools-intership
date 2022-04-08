@@ -14,7 +14,7 @@ const UserSearchPanel = ({
           const newQueryParamsObj = {
             ...queryParams,
             filterObject:
-            { ...queryParams.filterObject, [param]: e.target.value },
+              { ...queryParams.filterObject, [param]: e.target.value },
           };
           setQueryParams(newQueryParamsObj);
           delayedFetchUsers(newQueryParamsObj);
@@ -26,15 +26,15 @@ const UserSearchPanel = ({
 );
 
 UserSearchPanel.propTypes = {
-  paramsMap: PropTypes.arrayOf(PropTypes.array()),
-  queryParams: PropTypes.objectOf(PropTypes.object()),
+  paramsMap: PropTypes.array,
+  queryParams: PropTypes.object,
   setQueryParams: PropTypes.func,
   delayedFetchUsers: PropTypes.func,
 };
 UserSearchPanel.defaultProps = {
   paramsMap: [],
   queryParams: {},
-  setQueryParams: () => {},
-  delayedFetchUsers: () => {},
+  setQueryParams: () => { },
+  delayedFetchUsers: () => { },
 };
 export default UserSearchPanel;

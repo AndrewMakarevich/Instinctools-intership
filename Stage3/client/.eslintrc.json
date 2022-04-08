@@ -18,14 +18,13 @@
         "react"
     ],
     "rules": {
-        "react/function-component-definition": [
-            1,
-            {
-                "namedComponents": "arrow-function"
-            }
-        ],
-        "react/react-in-jsx-scope": "off",
+        "react/function-component-definition": 0,
+        "react/react-in-jsx-scope": 0,
         "no-underscore-dangle": 0,
-        "default-param-last": 0
+        "default-param-last": 0,
+        "react/jsx-props-no-spreading": 0,
+        "react/destructuring-assignment": 0,
+        "react/forbid-prop-types": 0,
+        "react/jsx-filename-extension": 0
     }
 }
