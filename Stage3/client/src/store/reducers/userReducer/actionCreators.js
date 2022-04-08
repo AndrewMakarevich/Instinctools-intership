@@ -1,15 +1,13 @@
-import UserService from "../../../service/userService";
-import userActions from "./actions";
+import UserService from '../../../service/userService';
+import userActions from './actions';
 
-const getUsers = (queryParams) => {
-  return async (dispatch) => {
-    try {
-      const { data } = await UserService.getUsers(queryParams);
-      dispatch({ type: userActions.getUsers, payload: data });
-    } catch (e) {
-      alert(e.response.data.message);
-    }
-  };
+const getUsers = (queryParams) => async (dispatch) => {
+  try {
+    const { data } = await UserService.getUsers(queryParams);
+    dispatch({ type: userActions.getUsers, payload: data });
+  } catch (e) {
+    alert(e.response.data.message);
+  }
 };
 
-export { getUsers };
+export default getUsers;

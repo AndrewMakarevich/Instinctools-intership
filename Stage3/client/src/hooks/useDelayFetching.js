@@ -1,27 +1,23 @@
-import { useRef, useState } from "react"
+import { useCallback, useRef, useState } from 'react';
 
 const useDelayFetching = (callback, delay) => {
   const [isLoading, setIsLoading] = useState(false);
-  let timeout;
-  const timeoutRef = useRef(timeout);
+  const timeoutRef = useRef();
 
-  const executeCallback = async () => {
+  const executeCallback = useCallback((argumentObj) => {
     try {
       clearTimeout(timeoutRef.current);
-      timeoutRef.current = setTimeout(
-        async () => {
-          setIsLoading(true);
-          await callback();
-          setIsLoading(false);
-        }, delay);
+      timeoutRef.current = setTimeout(async () => {
+        setIsLoading(true);
+        await callback(argumentObj);
+        setIsLoading(false);
+      }, delay);
     } catch (e) {
       alert(e);
-    } finally {
-      setIsLoading(false);
     }
-  }
+  }, [callback, delay]);
 
   return [executeCallback, isLoading];
-}
+};
 
 export default useDelayFetching;

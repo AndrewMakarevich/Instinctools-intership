@@ -1,4 +1,4 @@
-import userActions from "./actions";
+import userActions from './actions';
 
 const defaultState = {
   users: [],

@@ -1,42 +1,42 @@
-import { useEffect, useMemo } from "react";
-import lineStyles from "./paginationLine.module.css";
+import { useMemo } from 'react';
+import PropTypes from 'prop-types';
+import lineStyles from './paginationLine.module.css';
 
-const PaginationLine = ({ count, page, limit, setPage }) => {
-
-  function createPagesArr(count, limit) {
+const PaginationLine = ({
+  count, page, limit, setPage,
+}) => {
+  function createPagesArr(countVal, limitVal) {
     const pagesArr = [];
-    const pagesAmount = Math.ceil(count / limit);
+    const pagesAmount = Math.ceil(countVal / limitVal);
 
-    for (let i = 1; i <= pagesAmount; i++) {
+    for (let i = 1; i <= pagesAmount; i += i) {
       pagesArr.push(i);
     }
 
     return pagesArr;
-  };
+  }
 
-  function createCurrentPagLineState(page, pages) {
+  function createCurrentPagLineState(currPage, pages) {
     let paginationLineState = [];
 
     if (pages.length <= 6) {
       paginationLineState = pages;
+    } else if (currPage <= 4) {
+      paginationLineState = pages.slice(0, 5);
+      paginationLineState.push('...');
+      paginationLineState.push(pages[pages.length - 1]);
+    } else if (currPage >= pages[pages.length - 4]) {
+      paginationLineState.push(pages[0]);
+      paginationLineState.push('...');
+      paginationLineState = [...paginationLineState, ...pages.slice(-5)];
     } else {
-      if (page <= 4) {
-        paginationLineState = pages.slice(0, 5);
-        paginationLineState.push("...");
-        paginationLineState.push(pages[pages.length - 1]);
-      } else if (page >= pages.length - 1) {
-        paginationLineState.push(pages[0]);
-        paginationLineState.push("...");
-        paginationLineState = [...paginationLineState, ...pages.slice(-5)];
-      } else {
-        paginationLineState.push(pages[0]);
-        paginationLineState.push("...");
-        paginationLineState.push(pages[page - 2]);
-        paginationLineState.push(pages[page - 1]);
-        paginationLineState.push(pages[page]);
-        paginationLineState.push("...");
-        paginationLineState.push(pages[pages.length - 1]);
-      }
+      paginationLineState.push(pages[0]);
+      paginationLineState.push('...');
+      paginationLineState.push(pages[currPage - 2]);
+      paginationLineState.push(pages[currPage - 1]);
+      paginationLineState.push(pages[currPage]);
+      paginationLineState.push('...');
+      paginationLineState.push(pages[pages.length - 1]);
     }
 
     return paginationLineState;
@@ -45,13 +45,12 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
   const pages = useMemo(() => createPagesArr(count, limit), [count, limit]);
   const paginationLineState = useMemo(() => createCurrentPagLineState(page, pages), [page, pages]);
 
-  useEffect(() => {
-    console.log(page);
-  }, [page])
-
   return (
-    <div className={lineStyles["pagination-line"]}>
-      <button className={lineStyles["pagination-btn"]}
+    <div className={lineStyles['pagination-line']}>
+
+      <button
+        type="button"
+        className={lineStyles['pagination-btn']}
         onClick={() => {
           if (page > 1) {
             setPage(page - 1);
@@ -59,22 +58,30 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
           }
 
           setPage(pages[pages.length - 1]);
-        }}>
-        {"<"}
+        }}
+      >
+        {'<'}
       </button>
       {
-        paginationLineState.map(pageNumber =>
-          <button className={`${lineStyles["pagination-btn"]} ${pageNumber === page ? lineStyles["active"] : ""}`}
+        paginationLineState.map((pageNumber) => (
+          <button
+            type="button"
+            className={`${lineStyles['pagination-btn']} ${pageNumber === page ? lineStyles.active : ''}`}
             onClick={
               () => {
                 if (Number(pageNumber)) {
                   setPage(pageNumber);
                 }
               }
-            }>{pageNumber}</button>
-        )
+            }
+          >
+            {pageNumber}
+          </button>
+        ))
       }
-      <button className={lineStyles["pagination-btn"]}
+      <button
+        type="button"
+        className={lineStyles['pagination-btn']}
         onClick={
           () => {
             if (page < pages.length) {
@@ -83,11 +90,25 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
             }
             setPage(pages[0]);
           }
-        }>
-        {">"}
+        }
+      >
+        {'>'}
       </button>
     </div>
-  )
+  );
+};
+PaginationLine.propTypes = {
+  count: PropTypes.number,
+  page: PropTypes.number,
+  limit: PropTypes.number,
+  setPage: PropTypes.func,
+};
+
+PaginationLine.defaultProps = {
+  count: 1,
+  page: 1,
+  limit: 1,
+  setPage: () => { },
 };
 
 export default PaginationLine;

@@ -1,5 +1,6 @@
 .pagination-line {
   display: flex;
+  justify-content: center;
   column-gap: 3px;
 }
 
