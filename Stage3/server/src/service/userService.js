@@ -1,48 +1,54 @@
-const ApiError = require("../apiError/apiError.js");
-const { UserModel } = require("../models/models.js");
-const createModelSearchQuery = require("../utils/createModelSearchQuery.js");
+const ApiError = require('../apiError/apiError');
+const { UserModel } = require('../models/models');
+const createModelSearchQuery = require('../utils/createModelSearchQuery');
 
 class UserService {
-
   static async getUser(paramName, paramValue) {
-    if (UserModel.schema.obj[paramName] === undefined && paramName !== "_id") {
+    if (UserModel.schema.obj[paramName] === undefined && paramName !== '_id') {
       return null;
     }
 
     const user = await UserModel.findOne({
-      [paramName]: paramValue
+      [paramName]: paramValue,
     });
 
     return user;
-  };
+  }
 
-  static async getUsers(filterObj, page, limit) {
-    page = Number(page) || 1;
-    limit = Number(limit) || 5;
+  static async getUsers(filterObj, pageNum, limitNum) {
+    const page = Number(pageNum) || 1;
+    const limit = Number(limitNum) || 5;
 
     const searchQuery = createModelSearchQuery(filterObj);
     const usersCount = await UserModel.count(searchQuery);
-    const usersRows = await UserModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
+    const usersRows = await UserModel.find(searchQuery)
+      .skip(limit * (page - 1))
+      .limit(limit);
 
     return { count: usersCount, rows: usersRows };
   }
 
   static async createUser(username, firstName, lastName, email) {
-    for (let argValue of arguments) {
+    for (const argValue of arguments) {
       if (!argValue) {
-        throw ApiError.badRequest("Not enough data for the user creating");
+        throw ApiError.badRequest('Not enough data for the user creating');
       }
     }
 
-    const user = await UserModel.create([{
-      username,
-      firstName,
-      lastName,
-      email
-    }], { checkForDuplications: ["username", "email", "what"] });
+    const user = await UserModel.create(
+      [
+        {
+          username,
+          firstName,
+          lastName,
+          email,
+        },
+      ],
+      { checkForDuplications: ['username', 'email', 'what'] }
+    );
 
-    return { message: "User created successfully", user };
-  };
+    return { message: 'User created successfully', user };
+  }
 
   static async editUser(userId, username, firstName, lastName, email) {
     const userToEdit = await UserModel.findById(userId).catch(() => {
@@ -59,12 +65,12 @@ class UserService {
         username,
         firstName,
         lastName,
-        email
+        email,
       },
-      { checkForDuplications: ["username", "email"], runValidators: true }
+      { checkForDuplications: ['username', 'email'], runValidators: true }
     );
 
-    return { message: "User updated successfully" };
+    return { message: 'User updated successfully' };
   }
 
   static async deleteUser(userId) {
@@ -77,9 +83,8 @@ class UserService {
     }
     const user = await userToDelete.deleteOne({ _id: userId });
 
-    return { message: "User deleted successfully", user };
+    return { message: 'User deleted successfully', user };
   }
-
-};
+}
 
 module.exports = UserService;

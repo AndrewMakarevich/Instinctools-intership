@@ -1,7 +1,6 @@
-const UserGroupService = require("../service/userGroupService");
+const UserGroupService = require('../service/userGroupService');
 
 class UserGroupController {
-
   static async addUserToGroup(req, res, next) {
     try {
       const { userId, groupId } = req.body;
@@ -9,20 +8,23 @@ class UserGroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 
   static async deleteUserFromGroup(req, res, next) {
     try {
       const { userId, groupId } = req.query;
-      const response = await UserGroupService.deleteUserFromGroup(userId, groupId);
+      const response = await UserGroupService.deleteUserFromGroup(
+        userId,
+        groupId
+      );
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 }
 
-module.exports = UserGroupService;
+module.exports = UserGroupController;

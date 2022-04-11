@@ -16,7 +16,8 @@ const UserList = () => {
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state.userReducer);
 
-  const fetchUsers = useCallback(async (queryParamsObj) => {
+  const fetchUsers = useCallback(
+    async (queryParamsObj) => {
     await dispatch(getUsers(queryParamsObj));
   }, [dispatch]);
 

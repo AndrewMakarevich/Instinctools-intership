@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 
-
 async function GetMongoMemoryServer() {
   const server = await MongoMemoryServer.create();
 
   async function connect() {
-    const mongoUrl = server.getUri()
+    const mongoUrl = server.getUri();
     await mongoose.connect(mongoUrl);
   }
 
@@ -19,8 +18,10 @@ async function GetMongoMemoryServer() {
 
   async function cleanDataBase() {
     const collections = await mongoose.connection.collections;
-    for (let collectionKey in collections) {
-      await collections[collectionKey].deleteMany();
+    for (const collectionKey in collections) {
+      if (Object.prototype.hasOwnProperty.call(collections, collectionKey)) {
+        await collections[collectionKey].deleteMany();
+      }
     }
   }
 
@@ -28,10 +29,8 @@ async function GetMongoMemoryServer() {
     server,
     connect,
     disconnect,
-    cleanDataBase
-  }
+    cleanDataBase,
+  };
 }
 
-
-
-module.exports = GetMongoMemoryServer
+module.exports = GetMongoMemoryServer;

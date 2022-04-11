@@ -1,7 +1,7 @@
 const { Router } = require('express');
-const groupRouter = require('./groupRouter.js');
-const userGroupRouter = require('./userGroupRouter.js');
-const userRouter = require('./userRouter.js');
+const groupRouter = require('./groupRouter');
+const userGroupRouter = require('./userGroupRouter');
+const userRouter = require('./userRouter');
 
 const mainRouter = new Router();
 

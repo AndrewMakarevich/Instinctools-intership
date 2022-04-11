@@ -1,46 +1,41 @@
-const mongoose = require("mongoose");
-const ApiError = require("../apiError/apiError.js")
+const mongoose = require('mongoose');
+const ApiError = require('../apiError/apiError');
 
 function connectToTheMongoDB() {
-  mongoose.connect("mongodb://localhost:27017/admin-panel-test-task", () => {
-    console.log("Connected to the mongoDB");
+  mongoose.connect('mongodb://localhost:27017/admin-panel-test-task', () => {
+    console.log('Connected to the mongoDB');
   });
 }
 
-expandMongooseMethods();
-
 async function checkForTheDuplication(Model, document, fieldsToCheck) {
-
-  async function findDuplicate(document, paramName) {
+  async function findDuplicate(documentObj, paramName) {
     const duplicate = await Model.findOne({
-      [paramName]: document[paramName]
+      [paramName]: documentObj[paramName],
     });
 
     if (duplicate) {
-      throw ApiError.badRequest(`${paramName} for ${Model.collection.name} must be unique`);
+      throw ApiError.badRequest(
+        `${paramName} for ${Model.collection.name} must be unique`
+      );
     }
   }
 
-  for (let fieldVal of fieldsToCheck) {
+  for (const fieldVal of fieldsToCheck) {
     if (!Model.schema.obj[fieldVal]) {
       continue;
     }
 
     if (Array.isArray(document)) {
-
-      for (let docVal of document) {
+      for (const docVal of document) {
         await findDuplicate(docVal, fieldVal);
       }
-
     }
 
     await findDuplicate(document, fieldVal);
   }
-
 }
 
 function expandMongooseMethods() {
-
   // OVERWRITE mongoose.Model.create method
 
   const createRef = mongoose.Model.create;
@@ -57,7 +52,12 @@ function expandMongooseMethods() {
 
   const updateRef = mongoose.Model.updateOne;
 
-  mongoose.Model.updateOne = async function (filter, update, options, callback) {
+  mongoose.Model.updateOne = async function (
+    filter,
+    update,
+    options,
+    callback
+  ) {
     if (options && options.checkForDuplications) {
       await checkForTheDuplication(this, update, options.checkForDuplications);
     }
@@ -66,5 +66,6 @@ function expandMongooseMethods() {
   };
 }
 
+expandMongooseMethods();
 
 module.exports = { connectToTheMongoDB, expandMongooseMethods };

@@ -1,47 +1,52 @@
-const ApiError = require("../apiError/apiError.js");
-const { GroupModel } = require("../models/models.js");
-const createModelSearchQuery = require("../utils/createModelSearchQuery.js");
+const ApiError = require('../apiError/apiError');
+const { GroupModel } = require('../models/models');
+const createModelSearchQuery = require('../utils/createModelSearchQuery');
 
 class GroupService {
-
   static async getGroup(paramName, paramValue) {
-    if (GroupModel.schema.obj[paramName] === undefined && paramName !== "_id") {
+    if (GroupModel.schema.obj[paramName] === undefined && paramName !== '_id') {
       return null;
     }
 
     const group = await GroupModel.findOne({
-      [paramName]: paramValue
+      [paramName]: paramValue,
     });
 
     return group;
   }
 
-  static async getGroups(searchObj, page, limit) {
-    page = Number(page) || 1;
-    limit = Number(limit) || 5;
+  static async getGroups(searchObj, pageNum, limitNum) {
+    const page = Number(pageNum) || 1;
+    const limit = Number(limitNum) || 5;
 
-    let searchQuery = createModelSearchQuery(searchObj);
+    const searchQuery = createModelSearchQuery(searchObj);
     const groupsCount = await GroupModel.count(searchQuery);
-    const groupsRows = await GroupModel.find(searchQuery).skip(limit * (page - 1)).limit(limit);
+    const groupsRows = await GroupModel.find(searchQuery)
+      .skip(limit * (page - 1))
+      .limit(limit);
 
     return { count: groupsCount, rows: groupsRows };
   }
 
   static async createGroup(groupName, groupTitle) {
-    for (let arg of arguments) {
-
+    for (const arg of arguments) {
       if (!arg) {
-        throw ApiError.badRequest('Not enough data for the Group creating')
+        throw ApiError.badRequest('Not enough data for the Group creating');
       }
     }
 
-    const group = await GroupModel.create([{
-      groupName,
-      groupTitle
-    }], { checkForDuplications: ["groupName"] });
+    const group = await GroupModel.create(
+      [
+        {
+          groupName,
+          groupTitle,
+        },
+      ],
+      { checkForDuplications: ['groupName'] }
+    );
 
     return { message: `Group ${groupName} created successfully`, group };
-  };
+  }
 
   static async editGroup(groupId, groupName, groupTitle) {
     const groupToEdit = await GroupModel.findById(groupId).catch(() => {
@@ -55,10 +60,10 @@ class GroupService {
     await GroupModel.updateOne(
       { _id: groupId },
       { groupName, groupTitle },
-      { checkForDuplications: ["groupName"], runValidators: true }
+      { checkForDuplications: ['groupName'], runValidators: true }
     );
 
-    return { message: "Group updated successfully" };
+    return { message: 'Group updated successfully' };
   }
 
   static async deleteGroup(groupId) {
@@ -74,7 +79,6 @@ class GroupService {
 
     return { message: `Group deleted succesfully`, group: deletedGroup };
   }
-
-};
+}
 
 module.exports = GroupService;

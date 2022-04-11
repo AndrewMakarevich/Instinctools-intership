@@ -1,13 +1,14 @@
-const ApiError = require("../apiError/apiError.js");
+const ApiError = require('../apiError/apiError');
 
 function createModelSearchQuery(obj) {
   if (!obj) {
     return {};
   }
 
+  let parsedObj;
   if (obj) {
     try {
-      obj = JSON.parse(obj);
+      parsedObj = JSON.parse(obj);
     } catch (e) {
       throw ApiError.badRequest(e);
     }
@@ -15,36 +16,48 @@ function createModelSearchQuery(obj) {
 
   const finalObject = {};
 
-  function fillFinalObject(obj, paramName = '') {
-    for (let objKey in obj) {
-
-      if (typeof obj[objKey] === 'object') {
-        paramName = paramName.length ? `${paramName}.${objKey}` : objKey;
-
-        return fillFinalObject(obj[objKey], paramName);
+  function fillFinalObject(mockObj, paramName = '') {
+    for (const objKey in mockObj) {
+      if (!Object.prototype.hasOwnProperty.call(mockObj, objKey)) {
+        continue;
       }
 
-      const finalObjectParamName = paramName.length ? `${paramName}.${objKey}` : objKey;
-      const numberRange = obj[objKey].split('|');
+      if (typeof mockObj[objKey] === 'object') {
+        const newParamName = paramName.length
+          ? `${paramName}.${objKey}`
+          : objKey;
+
+        return fillFinalObject(mockObj[objKey], newParamName);
+      }
+
+      const finalObjectParamName = paramName.length
+        ? `${paramName}.${objKey}`
+        : objKey;
+      const numberRange = mockObj[objKey].split('|');
 
       if (numberRange.length !== 2) {
-        finalObject[finalObjectParamName] = { $regex: obj[objKey] };
+        finalObject[finalObjectParamName] = { $regex: mockObj[objKey] };
       } else {
-
         if (Number(numberRange[0])) {
-          finalObject[finalObjectParamName] = { ...finalObject[finalObjectParamName], $gte: numberRange[0] };
+          finalObject[finalObjectParamName] = {
+            ...finalObject[finalObjectParamName],
+            $gte: numberRange[0],
+          };
         }
 
         if (Number(numberRange[1])) {
-          finalObject[finalObjectParamName] = { ...finalObject[finalObjectParamName], $lte: numberRange[1] };
+          finalObject[finalObjectParamName] = {
+            ...finalObject[finalObjectParamName],
+            $lte: numberRange[1],
+          };
         }
       }
     }
   }
 
-  fillFinalObject(obj);
+  fillFinalObject(parsedObj);
 
   return finalObject;
 }
 
-module.exports = createModelSearchQuery
+module.exports = createModelSearchQuery;

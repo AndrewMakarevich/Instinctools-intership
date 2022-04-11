@@ -3,7 +3,10 @@ import SearchInput from '../../../../UI/searchInput/searchInput';
 // import panelStyles from './userSearchPanel.module.css';
 
 const UserSearchPanel = ({
-  paramsMap, queryParams, setQueryParams, delayedFetchUsers,
+  paramsMap,
+  queryParams,
+  setQueryParams,
+  delayedFetchUsers,
 }) => (
   <section>
     {paramsMap.map((param) => (
@@ -13,8 +16,10 @@ const UserSearchPanel = ({
         onChange={(e) => {
           const newQueryParamsObj = {
             ...queryParams,
-            filterObject:
-              { ...queryParams.filterObject, [param]: e.target.value },
+            filterObject: {
+              ...queryParams.filterObject,
+              [param]: e.target.value,
+            },
           };
           setQueryParams(newQueryParamsObj);
           delayedFetchUsers(newQueryParamsObj);
@@ -34,7 +39,7 @@ UserSearchPanel.propTypes = {
 UserSearchPanel.defaultProps = {
   paramsMap: [],
   queryParams: {},
-  setQueryParams: () => { },
-  delayedFetchUsers: () => { },
+  setQueryParams: () => {},
+  delayedFetchUsers: () => {},
 };
 export default UserSearchPanel;

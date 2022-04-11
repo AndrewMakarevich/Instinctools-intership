@@ -1,7 +1,6 @@
-const GroupService = require("../service/groupService.js");
+const GroupService = require('../service/groupService');
 
 class GroupController {
-
   static async getGroup(req, res, next) {
     try {
       const groupsParamValueToFind = req.params.paramValue;
@@ -10,11 +9,14 @@ class GroupController {
       console.log(groupsParamNameToFind);
       console.log(groupsParamValueToFind);
 
-      const response = await GroupService.getGroup(groupsParamNameToFind, groupsParamValueToFind);
+      const response = await GroupService.getGroup(
+        groupsParamNameToFind,
+        groupsParamValueToFind
+      );
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 
@@ -25,7 +27,7 @@ class GroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 
@@ -36,9 +38,9 @@ class GroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
-  };
+  }
 
   static async editGroup(req, res, next) {
     try {
@@ -48,9 +50,9 @@ class GroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
-  };
+  }
 
   static async deleteGroup(req, res, next) {
     try {
@@ -59,10 +61,9 @@ class GroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
-  };
-
+  }
 }
 
 module.exports = GroupController;
