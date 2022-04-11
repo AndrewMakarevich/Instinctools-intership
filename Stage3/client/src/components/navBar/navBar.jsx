@@ -5,7 +5,14 @@ import MyLink from '../../UI/myLink/myLink';
 const NavBar = () => (
   <nav className={navStyles['nav-bar']}>
     <ul className={navStyles['links-list']}>
-      {publicRoutes && publicRoutes.map(({ id, name, path }) => <li className={navStyles['links-item']} key={id}><MyLink className={navStyles.link} to={path}>{name}</MyLink></li>)}
+      {publicRoutes &&
+        publicRoutes.map(({ id, name, path }) => (
+          <li className={navStyles['links-item']} key={id}>
+            <MyLink className={navStyles.link} to={path}>
+              {name}
+            </MyLink>
+          </li>
+        ))}
     </ul>
   </nav>
 );

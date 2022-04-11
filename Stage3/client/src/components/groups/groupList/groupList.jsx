@@ -14,9 +14,10 @@ const GroupList = () => {
   });
   const dispatch = useDispatch();
   const groupReducer = useSelector((state) => state.groupReducer);
-  const [fetchUsers, usersAreLoading] = useDelayFetching(() => (
-    dispatch(getGroups(queryParams))
-  ), 200);
+  const [fetchUsers, usersAreLoading] = useDelayFetching(
+    () => dispatch(getGroups(queryParams)),
+    200
+  );
 
   useEffect(() => {
     fetchUsers();
@@ -24,17 +25,23 @@ const GroupList = () => {
 
   return (
     <article className={listStyles['group-list-wrapper']}>
-      <ul className={`${listStyles['group-list']} ${usersAreLoading ? listStyles.loading : ''}`}>
-        {
-          groupReducer.groups.length
-          && groupReducer.groups.map((group) => <GroupItem key={group._id} group={group} />)
-        }
+      <ul
+        className={`${listStyles['group-list']} ${
+          usersAreLoading ? listStyles.loading : ''
+        }`}
+      >
+        {groupReducer.groups.length &&
+          groupReducer.groups.map((group) => (
+            <GroupItem key={group._id} group={group} />
+          ))}
       </ul>
       <PaginationLine
         count={groupReducer.count}
         page={queryParams.page}
         limit={queryParams.limit}
-        setPage={(page) => { setQueryParams({ ...queryParams, page }); }}
+        setPage={(page) => {
+          setQueryParams({ ...queryParams, page });
+        }}
       />
     </article>
   );

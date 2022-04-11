@@ -6,7 +6,9 @@ const MyLink = (props) => {
   const { className: propClass, ...restProps } = props;
 
   return (
-    <Link className={`${linkStyles.link} ${propClass}`} {...restProps}>{props.children}</Link>
+    <Link className={`${linkStyles.link} ${propClass}`} {...restProps}>
+      {props.children}
+    </Link>
   );
 };
 

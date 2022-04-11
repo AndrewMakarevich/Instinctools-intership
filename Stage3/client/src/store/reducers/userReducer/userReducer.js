@@ -8,7 +8,11 @@ const defaultState = {
 const userReducer = (state = defaultState, action) => {
   switch (action.type) {
     case userActions.getUsers:
-      return { ...state, users: action.payload.rows, count: action.payload.count };
+      return {
+        ...state,
+        users: action.payload.rows,
+        count: action.payload.count,
+      };
     default:
       return state;
   }

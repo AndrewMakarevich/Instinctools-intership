@@ -6,11 +6,7 @@ const UserPage = () => {
 
   return (
     <article>
-      <p>
-        {username}
-        {' '}
-        user page
-      </p>
+      <p>{username} user page</p>
     </article>
   );
 };

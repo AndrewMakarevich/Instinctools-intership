@@ -2,9 +2,7 @@ import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import lineStyles from './paginationLine.module.css';
 
-const PaginationLine = ({
-  count, page, limit, setPage,
-}) => {
+const PaginationLine = ({ count, page, limit, setPage }) => {
   function createPagesArr(countVal, limitVal) {
     const pagesArr = [];
     const pagesAmount = Math.ceil(countVal / limitVal);
@@ -43,13 +41,15 @@ const PaginationLine = ({
   }
 
   const pages = useMemo(() => createPagesArr(count, limit), [count, limit]);
-  const paginationLineState = useMemo(() => createCurrentPagLineState(page, pages), [page, pages]);
+  const paginationLineState = useMemo(
+    () => createCurrentPagLineState(page, pages),
+    [page, pages]
+  );
 
   return (
     <div className={lineStyles['pagination-line']}>
-
       <button
-        type="button"
+        type='button'
         className={lineStyles['pagination-btn']}
         onClick={() => {
           if (page > 1) {
@@ -62,35 +62,31 @@ const PaginationLine = ({
       >
         {'<'}
       </button>
-      {
-        paginationLineState.map((pageNumber) => (
-          <button
-            type="button"
-            className={`${lineStyles['pagination-btn']} ${pageNumber === page ? lineStyles.active : ''}`}
-            onClick={
-              () => {
-                if (Number(pageNumber)) {
-                  setPage(pageNumber);
-                }
-              }
+      {paginationLineState.map((pageNumber) => (
+        <button
+          type='button'
+          className={`${lineStyles['pagination-btn']} ${
+            pageNumber === page ? lineStyles.active : ''
+          }`}
+          onClick={() => {
+            if (Number(pageNumber)) {
+              setPage(pageNumber);
             }
-          >
-            {pageNumber}
-          </button>
-        ))
-      }
+          }}
+        >
+          {pageNumber}
+        </button>
+      ))}
       <button
-        type="button"
+        type='button'
         className={lineStyles['pagination-btn']}
-        onClick={
-          () => {
-            if (page < pages.length) {
-              setPage(page + 1);
-              return;
-            }
-            setPage(pages[0]);
+        onClick={() => {
+          if (page < pages.length) {
+            setPage(page + 1);
+            return;
           }
-        }
+          setPage(pages[0]);
+        }}
       >
         {'>'}
       </button>
@@ -108,7 +104,7 @@ PaginationLine.defaultProps = {
   count: 1,
   page: 1,
   limit: 1,
-  setPage: () => { },
+  setPage: () => {},
 };
 
 export default PaginationLine;

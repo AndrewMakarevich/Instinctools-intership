@@ -28,9 +28,10 @@ const BreadCrumb = () => {
     <article className={crumbStyles['crumb-wrapper']}>
       {paths.map(({ id, name, path }) => (
         <div key={id} className={crumbStyles['crumb-link__item']}>
-          <MyLink className={crumbStyles['crumb-link']} to={path}>{name}</MyLink>
+          <MyLink className={crumbStyles['crumb-link']} to={path}>
+            {name}
+          </MyLink>
         </div>
-
       ))}
     </article>
   );

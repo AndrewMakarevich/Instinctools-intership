@@ -8,7 +8,11 @@ const defaultState = {
 const groupReducer = (state = defaultState, action) => {
   switch (action.type) {
     case groupActions.getGroups:
-      return { ...state, groups: action.payload.rows, count: action.payload.count };
+      return {
+        ...state,
+        groups: action.payload.rows,
+        count: action.payload.count,
+      };
     default:
       return state;
   }

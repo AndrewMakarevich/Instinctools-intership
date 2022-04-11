@@ -12,9 +12,7 @@ const UserItem = ({ user }) => (
     <hr />
     <p>
       Full name:
-      {user.firstName}
-      {' '}
-      {user.lastName}
+      {user.firstName} {user.lastName}
     </p>
   </li>
 );

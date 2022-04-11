@@ -5,11 +5,7 @@ const GroupPage = () => {
   const { groupname } = useParams();
   return (
     <article>
-      <p>
-        {groupname}
-        {' '}
-        group page
-      </p>
+      <p>{groupname} group page</p>
     </article>
   );
 };

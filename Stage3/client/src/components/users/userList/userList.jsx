@@ -18,8 +18,10 @@ const UserList = () => {
 
   const fetchUsers = useCallback(
     async (queryParamsObj) => {
-    await dispatch(getUsers(queryParamsObj));
-  }, [dispatch]);
+      await dispatch(getUsers(queryParamsObj));
+    },
+    [dispatch]
+  );
 
   const [delayedFetchUsers, usersLoading] = useDelayFetching(fetchUsers, 200);
 
@@ -29,17 +31,20 @@ const UserList = () => {
 
   return (
     <article className={listStyles['user-list-wrapper']}>
-
       <UserSearchPanel
         paramsMap={['username', 'firstName', 'lastName', 'email']}
         queryParams={queryParams}
         setQueryParams={setQueryParams}
         delayedFetchUsers={delayedFetchUsers}
       />
-      <ul className={`${listStyles['user-list']} ${usersLoading ? listStyles.loading : 'lol'}`}>
-        {
-          userReducer.users.map((user) => <UserItem key={user._id} user={user} />)
-        }
+      <ul
+        className={`${listStyles['user-list']} ${
+          usersLoading ? listStyles.loading : 'lol'
+        }`}
+      >
+        {userReducer.users.map((user) => (
+          <UserItem key={user._id} user={user} />
+        ))}
       </ul>
       <PaginationLine
         count={userReducer.count}
