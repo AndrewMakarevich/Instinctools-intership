@@ -19,6 +19,7 @@ const UserList = () => {
 
   const fetchUsers = useCallback(async (queryParamsObj) => {
     await dispatch(getUsers(queryParamsObj));
+    setQueryParams({ ...queryParams, page: 1 });
   });
 
   const [delayedFetchUsers, usersLoading] = useDelayFetching(fetchUsers, 400);
