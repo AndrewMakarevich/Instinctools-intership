@@ -21,8 +21,10 @@ const UserSearchPanel = ({
               [param]: e.target.value,
             },
           };
-          setQueryParams(newQueryParamsObj);
-          delayedFetchUsers(newQueryParamsObj);
+          delayedFetchUsers(
+            () => setQueryParams(newQueryParamsObj),
+            newQueryParamsObj
+          );
         }}
         value={queryParams[param]}
       />

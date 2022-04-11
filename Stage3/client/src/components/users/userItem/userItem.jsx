@@ -14,6 +14,10 @@ const UserItem = ({ user }) => (
       Full name:
       {user.firstName} {user.lastName}
     </p>
+    <p>
+      Email:
+      {user.email}
+    </p>
   </li>
 );
 

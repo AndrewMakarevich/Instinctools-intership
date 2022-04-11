@@ -3,6 +3,7 @@ import userActions from './actions';
 
 const getUsers = (queryParams) => async (dispatch) => {
   try {
+    console.log(queryParams);
     const { data } = await UserService.getUsers(queryParams);
     dispatch({ type: userActions.getUsers, payload: data });
   } catch (e) {

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import lineStyles from './paginationLine.module.css';
 
@@ -7,7 +7,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
     const pagesArr = [];
     const pagesAmount = Math.ceil(countVal / limitVal);
 
-    for (let i = 1; i <= pagesAmount; i += i) {
+    for (let i = 1; i <= pagesAmount; i += 1) {
       pagesArr.push(i);
     }
 

@@ -5,12 +5,17 @@ const useDelayFetching = (callback, delay) => {
   const timeoutRef = useRef();
 
   const executeCallback = useCallback(
-    (argumentObj) => {
+    (addCallback, ...addArguments) => {
       try {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(async () => {
           setIsLoading(true);
-          await callback(argumentObj);
+
+          if (addCallback && addCallback instanceof Function) {
+            addCallback();
+          }
+
+          await callback(...addArguments);
           setIsLoading(false);
         }, delay);
       } catch (e) {

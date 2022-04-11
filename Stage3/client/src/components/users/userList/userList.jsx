@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useDelayFetching from '../../../hooks/useDelayFetching';
 import getUsers from '../../../store/reducers/userReducer/actionCreators';
+import AddButton from '../../../UI/addButton/addButton';
 import PaginationLine from '../../paginationLine/paginationLine';
 import UserItem from '../userItem/userItem';
 import listStyles from './userList.module.css';
@@ -16,14 +17,11 @@ const UserList = () => {
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state.userReducer);
 
-  const fetchUsers = useCallback(
-    async (queryParamsObj) => {
-      await dispatch(getUsers(queryParamsObj));
-    },
-    [dispatch]
-  );
+  const fetchUsers = useCallback(async (queryParamsObj) => {
+    await dispatch(getUsers(queryParamsObj));
+  });
 
-  const [delayedFetchUsers, usersLoading] = useDelayFetching(fetchUsers, 200);
+  const [delayedFetchUsers, usersLoading] = useDelayFetching(fetchUsers, 400);
 
   useEffect(() => {
     fetchUsers(queryParams);
@@ -37,6 +35,7 @@ const UserList = () => {
         setQueryParams={setQueryParams}
         delayedFetchUsers={delayedFetchUsers}
       />
+      <AddButton />
       <ul
         className={`${listStyles['user-list']} ${
           usersLoading ? listStyles.loading : 'lol'
@@ -53,7 +52,7 @@ const UserList = () => {
         setPage={(page) => {
           const newQueryParamsObj = { ...queryParams, page };
           setQueryParams(newQueryParamsObj);
-          delayedFetchUsers(newQueryParamsObj);
+          delayedFetchUsers(undefined, newQueryParamsObj);
         }}
         delayedFetchUsers={delayedFetchUsers}
       />
