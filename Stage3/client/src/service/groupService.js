@@ -7,6 +7,14 @@ class GroupService {
     });
     return response;
   }
+
+  static async getGroup(groupName) {
+    const response = await $host.get(`/group/get/${groupName}`, {
+      params: { paramName: 'groupName' },
+    });
+
+    return response;
+  }
 }
 
 export default GroupService;

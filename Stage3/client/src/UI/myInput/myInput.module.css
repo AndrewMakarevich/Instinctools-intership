@@ -1,0 +1,42 @@
+.my-input {
+  border-radius: 15px;
+  border: none;
+  background-color: transparent;
+  padding: 5px 7px;
+
+  -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+
+  transition: background-color 0.2s, color 0.3s;
+
+  font-size: 1rem;
+}
+
+.my-input:focus {
+  outline: none;
+  background-color: var(--medium-dark);
+  color: var(--extra-light);
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.label span {
+  position: absolute;
+  left: 5px;
+  bottom: 0;
+  transform: translateY(-25%);
+  align-self: center;
+  color: var(--extra-dark);
+  pointer-events: none;
+  transition: 0.2s;
+}
+
+.label input:focus ~ span,
+.label input:not(:placeholder-shown) ~ span {
+  bottom: 100%;
+}

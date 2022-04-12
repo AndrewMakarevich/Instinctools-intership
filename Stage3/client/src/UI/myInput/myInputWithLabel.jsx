@@ -1,0 +1,19 @@
+import MyInput from './myInput';
+import inputStyles from './myInput.module.css';
+
+const MyInputWithLabel = ({
+  labelClassName,
+  labelText,
+  spanClassName,
+  className,
+  ...restProps
+}) => {
+  return (
+    <label className={`${inputStyles['label']} ${labelClassName || ''}`}>
+      <MyInput className={className} {...restProps} />
+      <span className={spanClassName}>{labelText}</span>
+    </label>
+  );
+};
+
+export default MyInputWithLabel;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useDelayFetching from '../../../hooks/useDelayFetching';
-import getUsers from '../../../store/reducers/userReducer/actionCreators';
+import { getUsersThunk } from '../../../store/reducers/userReducer/actionCreators';
 import AddButton from '../../../UI/addButton/addButton';
 import PaginationLine from '../../paginationLine/paginationLine';
 import UserItem from '../userItem/userItem';
@@ -10,7 +10,12 @@ import UserSearchPanel from './userSearchPanel/userSearchPanel';
 
 const UserList = () => {
   const [queryParams, setQueryParams] = useState({
-    filterObject: {},
+    filterObject: {
+      username: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+    },
     page: 1,
     limit: 1,
   });
@@ -18,15 +23,18 @@ const UserList = () => {
   const userReducer = useSelector((state) => state.userReducer);
 
   const fetchUsers = useCallback(async (queryParamsObj) => {
-    await dispatch(getUsers(queryParamsObj));
-    setQueryParams({ ...queryParams, page: 1 });
-  });
+    await dispatch(getUsersThunk(queryParamsObj));
+  }, []);
 
   const [delayedFetchUsers, usersLoading] = useDelayFetching(fetchUsers, 400);
 
   useEffect(() => {
     fetchUsers(queryParams);
   }, []);
+
+  useEffect(() => {
+    console.log(queryParams);
+  }, [queryParams]);
 
   return (
     <article className={listStyles['user-list-wrapper']}>

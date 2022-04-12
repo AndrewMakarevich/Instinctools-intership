@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import { v4 } from 'uuid';
 import PropTypes from 'prop-types';
 import lineStyles from './paginationLine.module.css';
 
@@ -37,6 +38,10 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
       paginationLineState.push(pages[pages.length - 1]);
     }
 
+    paginationLineState = paginationLineState.map((lineItem) => {
+      return { id: v4(), pageNumber: lineItem };
+    });
+
     return paginationLineState;
   }
 
@@ -62,8 +67,9 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
       >
         {'<'}
       </button>
-      {paginationLineState.map((pageNumber) => (
+      {paginationLineState.map(({ id, pageNumber }) => (
         <button
+          key={id}
           type='button'
           className={`${lineStyles['pagination-btn']} ${
             pageNumber === page ? lineStyles.active : ''

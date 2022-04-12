@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 
 const useDelayFetching = (callback, delay) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const timeoutRef = useRef();
 
   const executeCallback = useCallback(
@@ -12,14 +13,15 @@ const useDelayFetching = (callback, delay) => {
           setIsLoading(true);
 
           if (addCallback && addCallback instanceof Function) {
-            addCallback();
+            await addCallback();
           }
 
           await callback(...addArguments);
           setIsLoading(false);
         }, delay);
       } catch (e) {
-        alert(e);
+        setIsLoading(false);
+        setError(e);
       }
     },
     [callback, delay]

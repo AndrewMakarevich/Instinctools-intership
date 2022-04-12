@@ -16,7 +16,7 @@
   "rules": {
     "prettier/prettier": 2,
     "react/function-component-definition": 0,
-    "react/react-in-jsx-scope": 0,
+    "react/react-in-jsx-scope": 2,
     "no-underscore-dangle": 0,
     "default-param-last": 0,
     "react/jsx-props-no-spreading": 0,

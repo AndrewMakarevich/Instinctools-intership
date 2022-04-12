@@ -1,6 +1,9 @@
-.search-panel {
+.form {
+}
+
+.form-inputs__wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 5px 10px;
+  gap: 25px 10px;
 }

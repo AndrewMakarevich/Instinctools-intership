@@ -2,12 +2,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import linkStyles from './myLink.module.css';
 
-const MyLink = (props) => {
-  const { className: propClass, ...restProps } = props;
-
+const MyLink = ({ className: propClass, children, ...restProps }) => {
   return (
     <Link className={`${linkStyles.link} ${propClass}`} {...restProps}>
-      {props.children}
+      {children}
     </Link>
   );
 };

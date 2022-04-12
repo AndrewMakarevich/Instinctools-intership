@@ -1,14 +1,13 @@
-import PropTypes from 'prop-types';
 import SearchInput from '../../../../UI/searchInput/searchInput';
-import panelStyles from './userSearchPanel.module.css';
+import panelStyles from './groupSearchPanel.module.css';
 
-const UserSearchPanel = ({
+const GroupSearchPanel = ({
   paramsMap,
   queryParams,
   setQueryParams,
-  delayedFetchUsers,
+  delayFetchGroups,
 }) => {
-  function getUsersListWithCurrentQueryParams(param, value) {
+  function getGroupsListWithCurrentQueryParams(param, value) {
     const newQueryParamsObj = {
       ...queryParams,
       filterObject: {
@@ -17,7 +16,7 @@ const UserSearchPanel = ({
       },
       page: 1,
     };
-    delayedFetchUsers(undefined, newQueryParamsObj);
+    delayFetchGroups(undefined, newQueryParamsObj);
     setQueryParams(newQueryParamsObj);
   }
 
@@ -29,7 +28,7 @@ const UserSearchPanel = ({
           placeholder={`Search by ${param}`}
           value={queryParams.filterObject[param]}
           onChange={(e) => {
-            getUsersListWithCurrentQueryParams(param, e.target.value);
+            getGroupsListWithCurrentQueryParams(param, e.target.value);
           }}
         />
       ))}
@@ -38,14 +37,12 @@ const UserSearchPanel = ({
           const newQueryParamsObj = {
             ...queryParams,
             filterObject: {
-              username: '',
-              firstName: '',
-              lastName: '',
-              email: '',
+              groupName: '',
+              groupTitle: '',
             },
           };
           setQueryParams(newQueryParamsObj);
-          delayedFetchUsers(undefined, newQueryParamsObj);
+          delayFetchGroups(undefined, newQueryParamsObj);
         }}
       >
         Clear search inputs
@@ -53,16 +50,5 @@ const UserSearchPanel = ({
     </section>
   );
 };
-UserSearchPanel.propTypes = {
-  paramsMap: PropTypes.array,
-  queryParams: PropTypes.object,
-  setQueryParams: PropTypes.func,
-  delayedFetchUsers: PropTypes.func,
-};
-UserSearchPanel.defaultProps = {
-  paramsMap: [],
-  queryParams: {},
-  setQueryParams: () => {},
-  delayedFetchUsers: () => {},
-};
-export default UserSearchPanel;
+
+export default GroupSearchPanel;

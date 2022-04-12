@@ -1,14 +1,17 @@
 import UserService from '../../../service/userService';
 import userActions from './actions';
 
-const getUsers = (queryParams) => async (dispatch) => {
+export const getUsersThunk = (queryParams) => async (dispatch) => {
   try {
-    console.log(queryParams);
     const { data } = await UserService.getUsers(queryParams);
+
     dispatch({ type: userActions.getUsers, payload: data });
   } catch (e) {
     alert(e.response.data.message);
   }
 };
 
-export default getUsers;
+export const getUserThunk = (username) => async (dispatch) => {
+  const response = await UserService.getUser(username);
+  dispatch({ type: userActions.getUser, payload: response.data });
+};
