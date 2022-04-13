@@ -29,6 +29,19 @@ const GroupList = () => {
     fetchGroups(undefined, newQueryParamsObj);
   }, []);
 
+  function getGroupsListWithCurrentQueryParams(param, value) {
+    const newQueryParamsObj = {
+      ...queryParams,
+      filterObject: {
+        ...queryParams.filterObject,
+        [param]: value,
+      },
+      page: 1,
+    };
+    delayFetchGroups(undefined, newQueryParamsObj);
+    setQueryParams(newQueryParamsObj);
+  }
+
   useEffect(() => {
     getGroups(queryParams);
   }, []);
@@ -39,7 +52,7 @@ const GroupList = () => {
         paramsMap={['groupName', 'groupTitle']}
         queryParams={queryParams}
         setQueryParams={setQueryParams}
-        delayFetchGroups={fetchGroups}
+        delayFetchGroups={getGroupsListWithCurrentQueryParams}
       />
       <ul
         className={`${listStyles['group-list']} ${

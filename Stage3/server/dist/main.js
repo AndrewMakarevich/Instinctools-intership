@@ -199,10 +199,16 @@ module.exports = UserController;
 const UserGroupService = __webpack_require__(/*! ../service/userGroupService */ "./src/service/userGroupService.js");
 
 class UserGroupController {
-  static async getuserGroups(req, res, next) {
+  static async getUserGroups(req, res, next) {
     try {
       const { userId } = req.params;
-      const response = await UserGroupService.getUsersGroups(userId);
+      const { filterObject, page, limit } = req.query;
+      const response = await UserGroupService.getUsersGroups(
+        userId,
+        filterObject,
+        page,
+        limit
+      );
 
       return res.json(response);
     } catch (e) {
@@ -483,7 +489,7 @@ const UserGroupController = __webpack_require__(/*! ../controller/userGroupContr
 
 const userGroupRouter = new Router();
 
-userGroupRouter.get('/get-groups/:userId', UserGroupController.getuserGroups);
+userGroupRouter.get('/get-groups/:userId', UserGroupController.getUserGroups);
 userGroupRouter.post('/add-user', UserGroupController.addUserToGroup);
 userGroupRouter.delete('/delete-user', UserGroupController.deleteUserFromGroup);
 
@@ -616,6 +622,7 @@ module.exports = GroupService;
 
 const ApiError = __webpack_require__(/*! ../apiError/apiError */ "./src/apiError/apiError.js");
 const { GroupModel, UserModel, UsersGroupsModel } = __webpack_require__(/*! ../models/models */ "./src/models/models.js");
+const createModelSearchQuery = __webpack_require__(/*! ../utils/createModelSearchQuery */ "./src/utils/createModelSearchQuery.js");
 
 async function checkUserAndGroup(
   userId,
@@ -649,7 +656,7 @@ class UserGroupService {
     return userGroupRecord;
   }
 
-  static async getUsersGroups(userId) {
+  static async getUsersGroups(userId, filterObject, page, limit) {
     const user = await UserModel.findOne({ id: userId });
 
     if (!user) {
@@ -660,6 +667,9 @@ class UserGroupService {
       userId,
     });
 
+    const parsedFilterObj = createModelSearchQuery(filterObject);
+    const skipValue = (page - 1) * limit;
+
     //convert an array of user-group connections to the array of groups ids, wich have connection with the user
     userGroupsConnections = userGroupsConnections.map((connection) => {
       connection = String(connection.groupId);
@@ -668,9 +678,17 @@ class UserGroupService {
 
     const userGroups = await GroupModel.find({
       _id: { $in: [...userGroupsConnections] },
+      ...parsedFilterObj,
+    })
+      .skip(skipValue || 0)
+      .limit(limit || 5);
+
+    const userGroupsCount = await GroupModel.count({
+      _id: { $in: [...userGroupsConnections] },
+      ...parsedFilterObj,
     });
 
-    return userGroups;
+    return { count: userGroupsCount, rows: userGroups };
   }
 
   static async addUserToGroup(userId, groupId) {

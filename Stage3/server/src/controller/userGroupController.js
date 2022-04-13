@@ -1,10 +1,16 @@
 const UserGroupService = require('../service/userGroupService');
 
 class UserGroupController {
-  static async getuserGroups(req, res, next) {
+  static async getUserGroups(req, res, next) {
     try {
       const { userId } = req.params;
-      const response = await UserGroupService.getUsersGroups(userId);
+      const { filterObject, page, limit } = req.query;
+      const response = await UserGroupService.getUsersGroups(
+        userId,
+        filterObject,
+        page,
+        limit
+      );
 
       return res.json(response);
     } catch (e) {

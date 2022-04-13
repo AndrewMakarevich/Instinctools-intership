@@ -7,19 +7,6 @@ const GroupSearchPanel = ({
   setQueryParams,
   delayFetchGroups,
 }) => {
-  function getGroupsListWithCurrentQueryParams(param, value) {
-    const newQueryParamsObj = {
-      ...queryParams,
-      filterObject: {
-        ...queryParams.filterObject,
-        [param]: value,
-      },
-      page: 1,
-    };
-    delayFetchGroups(undefined, newQueryParamsObj);
-    setQueryParams(newQueryParamsObj);
-  }
-
   return (
     <section className={panelStyles['search-panel']}>
       {paramsMap.map((param) => (
@@ -28,7 +15,14 @@ const GroupSearchPanel = ({
           placeholder={`Search by ${param}`}
           value={queryParams.filterObject[param]}
           onChange={(e) => {
-            getGroupsListWithCurrentQueryParams(param, e.target.value);
+            const newQueryParamObj = {
+              ...queryParams,
+              filterObject: {
+                ...queryParams.filterObject,
+                [param]: e.target.value,
+              },
+            };
+            delayFetchGroups(newQueryParamObj);
           }}
         />
       ))}
@@ -41,8 +35,7 @@ const GroupSearchPanel = ({
               groupTitle: '',
             },
           };
-          setQueryParams(newQueryParamsObj);
-          delayFetchGroups(undefined, newQueryParamsObj);
+          delayFetchGroups(newQueryParamsObj);
         }}
       >
         Clear search inputs

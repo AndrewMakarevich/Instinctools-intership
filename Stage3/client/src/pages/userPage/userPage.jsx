@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import EditUserForm from '../../components/users/forms/editUserForm/editUserForm';
+import UserGroupList from '../../components/users/lists/userGroupsList/userGroupList';
 import useFetching from '../../hooks/useFetching';
 import { getUserThunk } from '../../store/reducers/userReducer/actionCreators';
 // import pageStyles from './userPage.module.css';
@@ -46,6 +47,8 @@ const UserPage = () => {
         <>
           <p>{username} user page</p>
           <EditUserForm userObj={userReducer.user} />
+          <UserGroupList userId={userReducer.user._id} />
+          <select></select>
         </>
       ) : (
         "Can't find user with such username"

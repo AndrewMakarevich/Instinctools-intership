@@ -1,5 +1,6 @@
 const ApiError = require('../apiError/apiError');
 const { GroupModel, UserModel, UsersGroupsModel } = require('../models/models');
+const createModelSearchQuery = require('../utils/createModelSearchQuery');
 
 async function checkUserAndGroup(
   userId,
@@ -33,7 +34,7 @@ class UserGroupService {
     return userGroupRecord;
   }
 
-  static async getUsersGroups(userId) {
+  static async getUsersGroups(userId, filterObject, page, limit) {
     const user = await UserModel.findOne({ id: userId });
 
     if (!user) {
@@ -44,6 +45,9 @@ class UserGroupService {
       userId,
     });
 
+    const parsedFilterObj = createModelSearchQuery(filterObject);
+    const skipValue = (page - 1) * limit;
+
     //convert an array of user-group connections to the array of groups ids, wich have connection with the user
     userGroupsConnections = userGroupsConnections.map((connection) => {
       connection = String(connection.groupId);
@@ -52,9 +56,17 @@ class UserGroupService {
 
     const userGroups = await GroupModel.find({
       _id: { $in: [...userGroupsConnections] },
+      ...parsedFilterObj,
+    })
+      .skip(skipValue || 0)
+      .limit(limit || 5);
+
+    const userGroupsCount = await GroupModel.count({
+      _id: { $in: [...userGroupsConnections] },
+      ...parsedFilterObj,
     });
 
-    return userGroups;
+    return { count: userGroupsCount, rows: userGroups };
   }
 
   static async addUserToGroup(userId, groupId) {
