@@ -21,6 +21,7 @@ const GroupSearchPanel = ({
                 ...queryParams.filterObject,
                 [param]: e.target.value,
               },
+              page: 1,
             };
             delayFetchGroups(newQueryParamObj);
           }}

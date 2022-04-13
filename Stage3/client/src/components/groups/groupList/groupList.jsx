@@ -23,24 +23,10 @@ const GroupList = () => {
   }, []);
   const [fetchGroups, usersAreLoading] = useDelayFetching(getGroups, 200);
 
-  const changeGroupListPage = useCallback((page) => {
-    const newQueryParamsObj = { ...queryParams, page };
-    setQueryParams(newQueryParamsObj);
-    fetchGroups(undefined, newQueryParamsObj);
-  }, []);
-
-  function getGroupsListWithCurrentQueryParams(param, value) {
-    const newQueryParamsObj = {
-      ...queryParams,
-      filterObject: {
-        ...queryParams.filterObject,
-        [param]: value,
-      },
-      page: 1,
-    };
-    delayFetchGroups(undefined, newQueryParamsObj);
-    setQueryParams(newQueryParamsObj);
-  }
+  const getUserGroupsWithCurrentQueryParams = (newQueryParamObj) => {
+    setQueryParams(newQueryParamObj);
+    fetchGroups(undefined, newQueryParamObj);
+  };
 
   useEffect(() => {
     getGroups(queryParams);
@@ -52,7 +38,7 @@ const GroupList = () => {
         paramsMap={['groupName', 'groupTitle']}
         queryParams={queryParams}
         setQueryParams={setQueryParams}
-        delayFetchGroups={getGroupsListWithCurrentQueryParams}
+        delayFetchGroups={getUserGroupsWithCurrentQueryParams}
       />
       <ul
         className={`${listStyles['group-list']} ${
@@ -68,7 +54,8 @@ const GroupList = () => {
         page={queryParams.page}
         limit={queryParams.limit}
         setPage={(page) => {
-          changeGroupListPage(page);
+          const newQueryParamsObj = { ...queryParams, page };
+          getUserGroupsWithCurrentQueryParams(newQueryParamsObj);
         }}
       />
     </article>
