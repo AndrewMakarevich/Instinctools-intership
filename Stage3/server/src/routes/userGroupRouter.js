@@ -3,6 +3,7 @@ const UserGroupController = require('../controller/userGroupController');
 
 const userGroupRouter = new Router();
 
+userGroupRouter.get('/get-groups/:userId', UserGroupController.getuserGroups);
 userGroupRouter.post('/add-user', UserGroupController.addUserToGroup);
 userGroupRouter.delete('/delete-user', UserGroupController.deleteUserFromGroup);
 

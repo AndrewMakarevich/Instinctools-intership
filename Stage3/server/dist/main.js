@@ -199,6 +199,17 @@ module.exports = UserController;
 const UserGroupService = __webpack_require__(/*! ../service/userGroupService */ "./src/service/userGroupService.js");
 
 class UserGroupController {
+  static async getuserGroups(req, res, next) {
+    try {
+      const { userId } = req.params;
+      const response = await UserGroupService.getUsersGroups(userId);
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   static async addUserToGroup(req, res, next) {
     try {
       const { userId, groupId } = req.body;
@@ -395,10 +406,12 @@ const GroupSchema = new Schema({
 const UsersGroupsSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
+    ref: 'User',
   },
 
   groupId: {
     type: Schema.Types.ObjectId,
+    ref: 'Group',
   },
 });
 
@@ -470,6 +483,7 @@ const UserGroupController = __webpack_require__(/*! ../controller/userGroupContr
 
 const userGroupRouter = new Router();
 
+userGroupRouter.get('/get-groups/:userId', UserGroupController.getuserGroups);
 userGroupRouter.post('/add-user', UserGroupController.addUserToGroup);
 userGroupRouter.delete('/delete-user', UserGroupController.deleteUserFromGroup);
 
@@ -633,6 +647,30 @@ class UserGroupService {
     const userGroupRecord = await UsersGroupsModel.find({ userId, groupId });
 
     return userGroupRecord;
+  }
+
+  static async getUsersGroups(userId) {
+    const user = await UserModel.findOne({ id: userId });
+
+    if (!user) {
+      throw ApiError.badRequest("User with such id doesn't edit");
+    }
+
+    let userGroupsConnections = await UsersGroupsModel.find({
+      userId,
+    });
+
+    //convert an array of user-group connections to the array of groups ids, wich have connection with the user
+    userGroupsConnections = userGroupsConnections.map((connection) => {
+      connection = String(connection.groupId);
+      return connection;
+    });
+
+    const userGroups = await GroupModel.find({
+      _id: { $in: [...userGroupsConnections] },
+    });
+
+    return userGroups;
   }
 
   static async addUserToGroup(userId, groupId) {

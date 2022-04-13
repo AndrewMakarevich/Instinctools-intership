@@ -58,10 +58,12 @@ const GroupSchema = new Schema({
 const UsersGroupsSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
+    ref: 'User',
   },
 
   groupId: {
     type: Schema.Types.ObjectId,
+    ref: 'Group',
   },
 });
 

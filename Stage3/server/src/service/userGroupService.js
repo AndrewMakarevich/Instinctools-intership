@@ -33,6 +33,30 @@ class UserGroupService {
     return userGroupRecord;
   }
 
+  static async getUsersGroups(userId) {
+    const user = await UserModel.findOne({ id: userId });
+
+    if (!user) {
+      throw ApiError.badRequest("User with such id doesn't edit");
+    }
+
+    let userGroupsConnections = await UsersGroupsModel.find({
+      userId,
+    });
+
+    //convert an array of user-group connections to the array of groups ids, wich have connection with the user
+    userGroupsConnections = userGroupsConnections.map((connection) => {
+      connection = String(connection.groupId);
+      return connection;
+    });
+
+    const userGroups = await GroupModel.find({
+      _id: { $in: [...userGroupsConnections] },
+    });
+
+    return userGroups;
+  }
+
   static async addUserToGroup(userId, groupId) {
     const userAndGroup = await checkUserAndGroup(
       userId,
