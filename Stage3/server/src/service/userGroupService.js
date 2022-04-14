@@ -35,7 +35,7 @@ class UserGroupService {
   }
 
   static async getUsersGroups(userId, filterObject, page, limit) {
-    const user = await UserModel.findOne({ id: userId });
+    const user = await UserModel.findById(userId);
 
     if (!user) {
       throw ApiError.badRequest("User with such id doesn't edit");
@@ -50,8 +50,7 @@ class UserGroupService {
 
     //convert an array of user-group connections to the array of groups ids, wich have connection with the user
     userGroupsConnections = userGroupsConnections.map((connection) => {
-      connection = String(connection.groupId);
-      return connection;
+      return String(connection.groupId);
     });
 
     const userGroups = await GroupModel.find({
@@ -67,6 +66,43 @@ class UserGroupService {
     });
 
     return { count: userGroupsCount, rows: userGroups };
+  }
+
+  static async getGroupUsers(groupId, filterObject, page, limit) {
+    const group = await GroupModel.findById(groupId);
+
+    if (!group) {
+      throw ApiError.badRequest("Group with such id doesn't exists");
+    }
+
+    let userGroupConnections = await UsersGroupsModel.find({
+      groupId,
+    });
+
+    if (!userGroupConnections) {
+      return [];
+    }
+
+    const parsedFilterObject = createModelSearchQuery(filterObject);
+    const skipValue = (page - 1) * limit;
+
+    userGroupConnections = userGroupConnections.map((connection) => {
+      return String(connection.userId);
+    });
+
+    const users = await UserModel.find({
+      _id: { $in: [...userGroupConnections] },
+      ...parsedFilterObject,
+    })
+      .skip(skipValue || 0)
+      .limit(limit || 5);
+
+    const usersCount = await UserModel.count({
+      _id: { $in: [...userGroupConnections] },
+      ...parsedFilterObject,
+    });
+
+    return { count: usersCount, rows: users };
   }
 
   static async addUserToGroup(userId, groupId) {

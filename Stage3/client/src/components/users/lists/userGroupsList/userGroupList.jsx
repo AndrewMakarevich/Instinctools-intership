@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import listStyles from './userGroupList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import useDelayFetching from '../../../../hooks/useDelayFetching';
@@ -45,18 +46,9 @@ const UserGroupList = ({ userId }) => {
 
   useEffect(() => {
     if (userId) {
-      getUserGroupsList(
-        undefined,
-        undefined,
-        groupQueryParams.page,
-        groupQueryParams.limit
-      );
+      fetchUserGroups(undefined, groupQueryParams.page, groupQueryParams.limit);
     }
   }, [userId]);
-
-  useEffect(() => {
-    console.log(groupQueryParams);
-  }, [groupQueryParams]);
 
   // if (userGroupsLoading) {
   //   return <p>User groups is loading</p>;
@@ -77,9 +69,15 @@ const UserGroupList = ({ userId }) => {
           delayFetchGroups={getUserGroupsWithCurrentQueryParams}
         />
         {userGroupReducer.userGroups.length ? (
-          userGroupReducer.userGroups.map((group) => (
-            <div>{group.groupName}</div>
-          ))
+          <div
+            className={`${listStyles['groups-list__wrapper']} ${
+              userGroupsLoading ? listStyles['loading'] : ''
+            }`}
+          >
+            {userGroupReducer.userGroups.map((group) => (
+              <div key={group._id}>{group.groupName}</div>
+            ))}
+          </div>
         ) : (
           <p>User isn't a member of any group</p>
         )}

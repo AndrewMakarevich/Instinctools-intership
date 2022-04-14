@@ -23,7 +23,7 @@ const UserPage = () => {
 
   useEffect(() => {
     getUserByUsername();
-  }, []);
+  }, [username]);
 
   if (userIsLoading) {
     return (
@@ -46,9 +46,11 @@ const UserPage = () => {
       {userReducer.user ? (
         <>
           <p>{username} user page</p>
-          <EditUserForm userObj={userReducer.user} />
+          <EditUserForm
+            userObj={userReducer.user}
+            actualizeUserInfo={fetchUser}
+          />
           <UserGroupList userId={userReducer.user._id} />
-          <select></select>
         </>
       ) : (
         "Can't find user with such username"

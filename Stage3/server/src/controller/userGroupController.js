@@ -18,6 +18,23 @@ class UserGroupController {
     }
   }
 
+  static async getGroupUsers(req, res, next) {
+    try {
+      const { groupId } = req.params;
+      const { filterObject, page, limit } = req.query;
+      const response = await UserGroupService.getGroupUsers(
+        groupId,
+        filterObject,
+        page,
+        limit
+      );
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   static async addUserToGroup(req, res, next) {
     try {
       const { userId, groupId } = req.body;

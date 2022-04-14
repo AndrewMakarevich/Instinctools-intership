@@ -4,6 +4,14 @@ import GroupsPage from '../../pages/groupsPage/groupsPage';
 import UserPage from '../../pages/userPage/userPage';
 import UsersPage from '../../pages/usersPage/usersPage';
 
+export const userPaths = {
+  mainPath: '/users',
+};
+
+export const groupPaths = {
+  mainPath: '/groups',
+};
+
 const publicRoutes = [
   {
     id: 0,

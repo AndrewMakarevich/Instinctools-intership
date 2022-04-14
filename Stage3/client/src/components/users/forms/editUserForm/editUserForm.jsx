@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import formStyles from './editUserForm.module.css';
 import MyInputWithLabel from '../../../../UI/myInput/myInputWithLabel';
 import useDelayState from '../../../../hooks/useDelayState';
+import SubmitUserChangesBtn from '../../btns/submitUserChangesBtn/submitUserChangesBtn';
 
-const EditUserForm = ({ userObj }) => {
+const EditUserForm = ({ userObj, actualizeUserInfo }) => {
   const [newUserInfo, setNewUserInfo] = useState({
     username: '',
     firstName: '',
@@ -25,34 +26,16 @@ const EditUserForm = ({ userObj }) => {
   return (
     <form className={formStyles['form']}>
       <div className={formStyles['form-inputs__wrapper']}>
-        <MyInputWithLabel
-          labelText={"User's username"}
-          value={newUserInfo.username}
-          onChange={(e) => {
-            setNewUserInfo({ ...newUserInfo, username: e.target.value });
-          }}
-        />
-        <MyInputWithLabel
-          labelText={"User's first name"}
-          value={newUserInfo.firstName}
-          onChange={(e) => {
-            setNewUserInfo({ ...newUserInfo, firstName: e.target.value });
-          }}
-        />
-        <MyInputWithLabel
-          labelText={"User's last name"}
-          value={newUserInfo.lastName}
-          onChange={(e) => {
-            setNewUserInfo({ ...newUserInfo, lastName: e.target.value });
-          }}
-        />
-        <MyInputWithLabel
-          labelText={"User's email"}
-          value={newUserInfo.email}
-          onChange={(e) => {
-            setNewUserInfo({ ...newUserInfo, email: e.target.value });
-          }}
-        />
+        {Object.keys(newUserInfo).map((userParam) => (
+          <MyInputWithLabel
+            key={userParam}
+            labelText={`User's ${userParam}`}
+            value={newUserInfo[userParam]}
+            onChange={(e) => {
+              setNewUserInfo({ ...newUserInfo, [userParam]: e.target.value });
+            }}
+          />
+        ))}
       </div>
       <button
         onClick={(e) => {
@@ -67,7 +50,12 @@ const EditUserForm = ({ userObj }) => {
       >
         Clear changes
       </button>
-      <button>Submit changes</button>
+      <SubmitUserChangesBtn
+        userId={userObj._id}
+        initialParamsObj={userObj}
+        paramsToEditObj={newUserInfo}
+        actualizeUserInfo={actualizeUserInfo}
+      />
     </form>
   );
 };

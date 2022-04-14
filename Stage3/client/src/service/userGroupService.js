@@ -12,6 +12,18 @@ class UserGroupService {
 
     return response;
   }
+
+  static async getGroupUsers(groupId, filterObject, page, limit) {
+    const response = await $host.get(`user-group/get-users/${groupId}`, {
+      params: {
+        filterObject,
+        page,
+        limit,
+      },
+    });
+
+    return response;
+  }
 }
 
 export default UserGroupService;

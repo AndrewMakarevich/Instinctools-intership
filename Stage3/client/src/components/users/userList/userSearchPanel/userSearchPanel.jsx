@@ -2,25 +2,7 @@ import PropTypes from 'prop-types';
 import SearchInput from '../../../../UI/searchInput/searchInput';
 import panelStyles from './userSearchPanel.module.css';
 
-const UserSearchPanel = ({
-  paramsMap,
-  queryParams,
-  setQueryParams,
-  delayedFetchUsers,
-}) => {
-  function getUsersListWithCurrentQueryParams(param, value) {
-    const newQueryParamsObj = {
-      ...queryParams,
-      filterObject: {
-        ...queryParams.filterObject,
-        [param]: value,
-      },
-      page: 1,
-    };
-    delayedFetchUsers(undefined, newQueryParamsObj);
-    setQueryParams(newQueryParamsObj);
-  }
-
+const UserSearchPanel = ({ paramsMap, queryParams, delayedFetchUsers }) => {
   return (
     <section className={panelStyles['search-panel']}>
       {paramsMap.map((param) => (
@@ -29,7 +11,15 @@ const UserSearchPanel = ({
           placeholder={`Search by ${param}`}
           value={queryParams.filterObject[param]}
           onChange={(e) => {
-            getUsersListWithCurrentQueryParams(param, e.target.value);
+            const newQueryParamsObj = {
+              ...queryParams,
+              filterObject: {
+                ...queryParams.filterObject,
+                [param]: e.target.value,
+              },
+              page: 1,
+            };
+            delayedFetchUsers(newQueryParamsObj);
           }}
         />
       ))}
@@ -44,8 +34,7 @@ const UserSearchPanel = ({
               email: '',
             },
           };
-          setQueryParams(newQueryParamsObj);
-          delayedFetchUsers(undefined, newQueryParamsObj);
+          delayedFetchUsers(newQueryParamsObj);
         }}
       >
         Clear search inputs

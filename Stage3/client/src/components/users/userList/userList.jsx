@@ -28,13 +28,14 @@ const UserList = () => {
 
   const [delayedFetchUsers, usersLoading] = useDelayFetching(fetchUsers, 400);
 
+  function getUsersListWithCurrentQueryParams(newQueryParamsObj) {
+    delayedFetchUsers(undefined, newQueryParamsObj);
+    setQueryParams(newQueryParamsObj);
+  }
+
   useEffect(() => {
     fetchUsers(queryParams);
   }, []);
-
-  useEffect(() => {
-    console.log(queryParams);
-  }, [queryParams]);
 
   return (
     <article className={listStyles['user-list-wrapper']}>
@@ -42,7 +43,7 @@ const UserList = () => {
         paramsMap={['username', 'firstName', 'lastName', 'email']}
         queryParams={queryParams}
         setQueryParams={setQueryParams}
-        delayedFetchUsers={delayedFetchUsers}
+        delayedFetchUsers={getUsersListWithCurrentQueryParams}
       />
       <AddButton />
       <ul
@@ -60,8 +61,7 @@ const UserList = () => {
         limit={queryParams.limit}
         setPage={(page) => {
           const newQueryParamsObj = { ...queryParams, page };
-          setQueryParams(newQueryParamsObj);
-          delayedFetchUsers(undefined, newQueryParamsObj);
+          getUsersListWithCurrentQueryParams(newQueryParamsObj);
         }}
         delayedFetchUsers={delayedFetchUsers}
       />

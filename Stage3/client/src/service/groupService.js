@@ -15,6 +15,14 @@ class GroupService {
 
     return response;
   }
+
+  static async editGroup(groupId, paramsToEditObj) {
+    const response = await $host.put(`group/edit/${groupId}`, {
+      ...paramsToEditObj,
+    });
+
+    return response;
+  }
 }
 
 export default GroupService;

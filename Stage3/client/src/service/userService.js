@@ -14,6 +14,14 @@ class UserService {
 
     return response;
   }
+
+  static async editUser(userId, paramsToEditObj) {
+    const response = await $host.put(`user/edit/${userId}`, {
+      ...paramsToEditObj,
+    });
+
+    return response;
+  }
 }
 
 export default UserService;
