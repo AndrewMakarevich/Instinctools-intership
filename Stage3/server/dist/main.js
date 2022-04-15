@@ -678,7 +678,7 @@ class UserGroupService {
     const user = await UserModel.findById(userId);
 
     if (!user) {
-      throw ApiError.badRequest("User with such id doesn't edit");
+      throw ApiError.badRequest("User with such id doesn't exists");
     }
 
     let userGroupsConnections = await UsersGroupsModel.find({

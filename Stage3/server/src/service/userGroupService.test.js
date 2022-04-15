@@ -20,13 +20,13 @@ afterAll(async () => {
   await server.disconnect();
 });
 
-async function createTestUser() {
+async function createTestUser(myUsername, myFirstName, myLastName, myEmail) {
   const { username, firstName, lastName, email } = correctUserObj;
   const testUser = await UserService.createUser(
-    username,
-    firstName,
-    lastName,
-    email
+    myUsername || username,
+    myFirstName || firstName,
+    myLastName || lastName,
+    myEmail || email
   );
 
   return testUser.user[0];
@@ -57,13 +57,53 @@ describe('UserGroupService: getting user groups', () => {
       testGroup2._id
     );
 
-    let userGroups = await UserGroupService.getUsersGroups(testUser._id);
-    userGroups = userGroups.map((userGroup) => String(userGroup._id));
+    let userGroups = await UserGroupService.getUsersGroups(
+      testUser._id,
+      '{"groupName": "Nin"}',
+      1,
+      2
+    );
+    userGroups.rows = userGroups.rows.map((userGroup) => String(userGroup._id));
 
-    expect(userGroups).toEqual([
-      String(testGroup1._id),
-      String(testGroup2._id),
-    ]);
+    expect(userGroups.rows).toEqual([String(testGroup2._id)]);
+  });
+
+  test('Trying to get groups of unexisting user', async () => {
+    await expect(
+      UserGroupService.getUsersGroups('624189fa131989eaef2453e3')
+    ).rejects.toThrow("User with such id doesn't exists");
+  });
+
+  test('Trying to get users of an existing group', async () => {
+    const testUser1 = await createTestUser();
+    const testUser2 = await createTestUser(
+      'Artyom',
+      null,
+      null,
+      'artyom@mail.ru'
+    );
+
+    const testGroup = await createTestGroup();
+
+    await UserGroupService.addUserToGroup(testUser1._id, testGroup._id);
+    await UserGroupService.addUserToGroup(testUser2._id, testGroup._id);
+
+    let groupUsers = await UserGroupService.getGroupUsers(
+      testGroup._id,
+      '{"username":"Art"}',
+      1,
+      2
+    );
+
+    groupUsers.rows = groupUsers.rows.map((groupUser) => String(groupUser._id));
+
+    expect(groupUsers.rows).toEqual([String(testUser2._id)]);
+  });
+
+  test('Trying to get users of unexisting group', async () => {
+    await expect(
+      UserGroupService.getGroupUsers('6241b1b517692d26ffbd18b3')
+    ).rejects.toThrow("Group with such id doesn't exists");
   });
 });
 
