@@ -5,7 +5,7 @@ import EditGroupForm from '../../components/groups/forms/editGroupForm/editGroup
 import GroupUsersList from '../../components/groups/lists/groupUsersList/groupUsersList';
 import useFetching from '../../hooks/useFetching';
 import { getGroupThunk } from '../../store/reducers/groupReducer/actionCreators';
-// import pageStyles from './groupPage.module.css';
+import pageStyles from './groupPage.module.css';
 
 const GroupPage = () => {
   const { groupname } = useParams();
@@ -44,14 +44,16 @@ const GroupPage = () => {
   return (
     <article>
       {groupReducer.group ? (
-        <>
-          <p>{groupname} group page</p>
+        <section className={pageStyles['edit-group-section']}>
+          <p className={pageStyles['edit-user-section-header']}>
+            {groupname} group page
+          </p>
           <EditGroupForm
             groupObj={groupReducer.group}
             actualizeGroupInfo={fetchGroup}
           />
           <GroupUsersList groupId={groupReducer.group._id} />
-        </>
+        </section>
       ) : (
         <p>Can't find group with such groupname</p>
       )}

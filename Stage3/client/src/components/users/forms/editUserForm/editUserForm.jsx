@@ -3,6 +3,7 @@ import formStyles from './editUserForm.module.css';
 import MyInputWithLabel from '../../../../UI/myInput/myInputWithLabel';
 import useDelayState from '../../../../hooks/useDelayState';
 import SubmitUserChangesBtn from '../../btns/submitUserChangesBtn/submitUserChangesBtn';
+import MyButton from '../../../../UI/myButton/myButton';
 
 const EditUserForm = ({ userObj, actualizeUserInfo }) => {
   const [newUserInfo, setNewUserInfo] = useState({
@@ -37,25 +38,27 @@ const EditUserForm = ({ userObj, actualizeUserInfo }) => {
           />
         ))}
       </div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          setNewUserInfo({
-            username: userObj.username,
-            firstName: userObj.firstName,
-            lastName: userObj.lastName,
-            email: userObj.email,
-          });
-        }}
-      >
-        Clear changes
-      </button>
-      <SubmitUserChangesBtn
-        userId={userObj._id}
-        initialParamsObj={userObj}
-        paramsToEditObj={newUserInfo}
-        actualizeUserInfo={actualizeUserInfo}
-      />
+      <div className={formStyles['form-buttons__wrapper']}>
+        <MyButton
+          onClick={(e) => {
+            e.preventDefault();
+            setNewUserInfo({
+              username: userObj.username,
+              firstName: userObj.firstName,
+              lastName: userObj.lastName,
+              email: userObj.email,
+            });
+          }}
+        >
+          Clear changes
+        </MyButton>
+        <SubmitUserChangesBtn
+          userId={userObj._id}
+          initialParamsObj={userObj}
+          paramsToEditObj={newUserInfo}
+          actualizeUserInfo={actualizeUserInfo}
+        />
+      </div>
     </form>
   );
 };

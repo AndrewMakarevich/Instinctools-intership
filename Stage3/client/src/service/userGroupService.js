@@ -24,6 +24,17 @@ class UserGroupService {
 
     return response;
   }
+
+  static async deleteUserFromTheGroup(userId, groupId) {
+    const response = await $host.delete('user-group/delete-user', {
+      params: {
+        userId,
+        groupId,
+      },
+    });
+
+    return response;
+  }
 }
 
 export default UserGroupService;

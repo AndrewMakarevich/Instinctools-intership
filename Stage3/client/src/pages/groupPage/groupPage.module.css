@@ -1,0 +1,9 @@
+.edit-user-section-header {
+  padding: 10px 0;
+}
+
+.edit-group-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

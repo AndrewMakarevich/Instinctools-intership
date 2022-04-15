@@ -7,6 +7,10 @@ import { getUserGroupsThunk } from '../../../../store/reducers/userGroupReducer/
 import GroupSearchPanel from '../../../groups/groupList/groupSearchPanel/groupSearchPanel';
 import ModalWindow from '../../../modalWindow/modalWindow';
 import PaginationLine from '../../../paginationLine/paginationLine';
+import { groupPaths } from '../../../router/routes';
+import MyButton from '../../../../UI/myButton/myButton';
+import UserGroupService from '../../../../service/userGroupService';
+import useFetching from '../../../../hooks/useFetching';
 
 const UserGroupList = ({ userId }) => {
   const [groupQueryParams, setGroupQueryParams] = useState({
@@ -50,17 +54,22 @@ const UserGroupList = ({ userId }) => {
     }
   }, [userId]);
 
-  // if (userGroupsLoading) {
-  //   return <p>User groups is loading</p>;
-  // }
+  //Deleting user from the group
+  const deleteUserFromGroup = useCallback(
+    async (groupId) => {
+      await UserGroupService.deleteUserFromTheGroup(userId, groupId);
+    },
+    [userId]
+  );
 
-  // if (userGroupsError) {
-  //   return <p>{userGroupsError}</p>;
-  // }
+  const {
+    executeCallback: sendRequestToDeleteUserFromGroup,
+    isLoading: deleteUserFromGroupIsLoading,
+  } = useFetching(async (groupId) => await deleteUserFromGroup(groupId));
 
   return (
     <>
-      <button onClick={() => setUserGroupsIsOpen(true)}>User groups</button>
+      <MyButton onClick={() => setUserGroupsIsOpen(true)}>User groups</MyButton>
       <ModalWindow isOpen={userGroupsIsOpen} setIsOpen={setUserGroupsIsOpen}>
         <GroupSearchPanel
           paramsMap={['groupName', 'groupTitle']}
@@ -69,15 +78,42 @@ const UserGroupList = ({ userId }) => {
           delayFetchGroups={getUserGroupsWithCurrentQueryParams}
         />
         {userGroupReducer.userGroups.length ? (
-          <div
-            className={`${listStyles['groups-list__wrapper']} ${
+          <ul
+            className={`${listStyles['groups-list']} ${
               userGroupsLoading ? listStyles['loading'] : ''
             }`}
           >
             {userGroupReducer.userGroups.map((group) => (
-              <div key={group._id}>{group.groupName}</div>
+              <li className={listStyles['groups-list__item']} key={group._id}>
+                <Link
+                  className={listStyles['group-link']}
+                  to={`${groupPaths.mainPath}/${group.groupName}`}
+                >
+                  {group.groupName}
+                </Link>
+                <MyButton
+                  className={listStyles['delete-user-group-btn']}
+                  disabled={deleteUserFromGroupIsLoading}
+                  onClick={async () => {
+                    if (confirm('Are you sure you want to leave this group?')) {
+                      await sendRequestToDeleteUserFromGroup(
+                        undefined,
+                        group._id
+                      );
+                    }
+                    await getUserGroupsList(
+                      undefined,
+                      groupQueryParams.filterObject,
+                      groupQueryParams.page,
+                      groupQueryParams.limit
+                    );
+                  }}
+                >
+                  Leave this group
+                </MyButton>
+              </li>
             ))}
-          </div>
+          </ul>
         ) : (
           <p>User isn't a member of any group</p>
         )}

@@ -1,5 +1,8 @@
-.groups-list__wrapper {
-  min-height: 200px;
+.groups-list {
+  display: flex;
+  gap: 5px 10px;
+  flex-wrap: wrap;
+  justify-content: center;
   padding: 5px;
 }
 
@@ -22,6 +25,26 @@
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 15px;
   animation: appear 0.3s forwards;
+}
+
+.groups-list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 15px;
+  color: var(---extra-light);
+}
+
+.group-link {
+  color: var(--extra-light);
+  text-decoration: none;
+}
+
+.delete-user-group-btn {
+  color: var(--medium-light);
 }
 
 @keyframes appear {

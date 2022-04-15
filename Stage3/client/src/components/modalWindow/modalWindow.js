@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import CloseButton from '../../UI/closeButton/closeButton';
 import modalStyles from './modalWindow.module.css';
 
 const ModalWindow = ({
@@ -35,12 +36,10 @@ const ModalWindow = ({
         className={modalStyles['modal-window']}
         onClick={(e) => e.stopPropagation()}
       >
-        <button
+        <CloseButton
           className={modalStyles['modal-window__close-btn']}
           onClick={() => setIsOpen(false)}
-        >
-          close
-        </button>
+        />
         <div className={modalStyles['modal-window__content']}>{children}</div>
       </div>
     </div>

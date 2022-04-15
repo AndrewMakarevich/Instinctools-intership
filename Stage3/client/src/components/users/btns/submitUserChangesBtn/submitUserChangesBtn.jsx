@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useFetching from '../../../../hooks/useFetching';
 import UserService from '../../../../service/userService';
+import MyButton from '../../../../UI/myButton/myButton';
 import parseDataToEdit from '../../../../utils/parseDataToSend/parseDataToEdit';
 import UserValidator from '../../../../utils/validator/userValidator';
 import { userPaths } from '../../../router/routes';
@@ -13,8 +15,15 @@ const SubmitUserChangesBtn = ({
 }) => {
   const navigate = useNavigate();
 
+  const { executeCallback: editUser, isLoading: userInfoIsLoading } =
+    useFetching(
+      async (userId, paramsObject) =>
+        await UserService.editUser(userId, paramsObject)
+    );
+
   return (
-    <button
+    <MyButton
+      disabled={userInfoIsLoading}
       onClick={async (e) => {
         try {
           e.preventDefault();
@@ -25,6 +34,7 @@ const SubmitUserChangesBtn = ({
 
           if (!Object.keys(paramsObject).length) {
             alert('Nothing to change');
+            return;
           }
 
           UserValidator.validateUsername(paramsObject.username, true);
@@ -32,7 +42,7 @@ const SubmitUserChangesBtn = ({
           UserValidator.validateLastName(paramsObject.lastName, true);
           UserValidator.validateEmail(paramsObject.email, true);
 
-          await UserService.editUser(userId, paramsObject);
+          await editUser(undefined, userId, paramsObject);
           //if user changed username, reload the page
           if (paramsObject.username) {
             navigate(userPaths.mainPath + '/' + paramsObject.username);
@@ -45,7 +55,7 @@ const SubmitUserChangesBtn = ({
       }}
     >
       Submit changes
-    </button>
+    </MyButton>
   );
 };
 

@@ -1,3 +1,4 @@
+import pageStyles from './userPage.module.css';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -5,7 +6,6 @@ import EditUserForm from '../../components/users/forms/editUserForm/editUserForm
 import UserGroupList from '../../components/users/lists/userGroupsList/userGroupList';
 import useFetching from '../../hooks/useFetching';
 import { getUserThunk } from '../../store/reducers/userReducer/actionCreators';
-// import pageStyles from './userPage.module.css';
 
 const UserPage = () => {
   const { username } = useParams();
@@ -44,14 +44,16 @@ const UserPage = () => {
   return (
     <article>
       {userReducer.user ? (
-        <>
-          <p>{username} user page</p>
+        <section className={pageStyles['edit-user-section']}>
+          <p className={pageStyles['edit-user-section-header']}>
+            {username} user page
+          </p>
           <EditUserForm
             userObj={userReducer.user}
             actualizeUserInfo={fetchUser}
           />
           <UserGroupList userId={userReducer.user._id} />
-        </>
+        </section>
       ) : (
         "Can't find user with such username"
       )}

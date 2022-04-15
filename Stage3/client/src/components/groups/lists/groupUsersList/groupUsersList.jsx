@@ -6,10 +6,16 @@ import { getGroupUsersThunk } from '../../../../store/reducers/userGroupReducer/
 import ModalWindow from '../../../modalWindow/modalWindow';
 import PaginationLine from '../../../paginationLine/paginationLine';
 import UserSearchPanel from '../../../users/userList/userSearchPanel/userSearchPanel';
+import { userPaths } from '../../../router/routes';
+import { Link } from 'react-router-dom';
+import MyButton from '../../../../UI/myButton/myButton';
+import UserGroupService from '../../../../service/userGroupService';
+import useFetching from '../../../../hooks/useFetching';
 
 const GroupUsersList = ({ groupId }) => {
   const dispatch = useDispatch();
   const userGroupReducer = useSelector((store) => store.userGroupReducer);
+
   const [groupUsersIsOpen, setGroupUsersIsOpen] = useState(false);
   const [userQueryParams, setUserQueryParams] = useState({
     filterObject: {
@@ -49,9 +55,23 @@ const GroupUsersList = ({ groupId }) => {
       fetchGroupUsers(undefined, userQueryParams.page, userQueryParams.limit);
     }
   }, [groupId]);
+
+  //Deleting user from the group
+  const deleteUserFromGroup = useCallback(
+    async (userId) => {
+      await UserGroupService.deleteUserFromTheGroup(userId, groupId);
+    },
+    [groupId]
+  );
+
+  const {
+    executeCallback: sendRequestToDeleteUserFromGroup,
+    isLoading: deleteUserFromGroupIsLoading,
+  } = useFetching(async (userId) => await deleteUserFromGroup(userId));
+
   return (
     <>
-      <button onClick={() => setGroupUsersIsOpen(true)}>Users</button>
+      <MyButton onClick={() => setGroupUsersIsOpen(true)}>Users</MyButton>
       <ModalWindow isOpen={groupUsersIsOpen} setIsOpen={setGroupUsersIsOpen}>
         <UserSearchPanel
           paramsMap={['username', 'firstName', 'lastName', 'email']}
@@ -59,15 +79,46 @@ const GroupUsersList = ({ groupId }) => {
           delayedFetchUsers={getGroupUsersListWithCurrentQueryParams}
         />
         {userGroupReducer.groupUsers.length ? (
-          <div
-            className={`${listStyles['users-list__wrapper']} ${
+          <ul
+            className={`${listStyles['users-list']} ${
               groupUsersLoading ? `${listStyles['loading']}` : ''
             }`}
           >
             {userGroupReducer.groupUsers.map((user) => (
-              <div key={user._id}>{user.username}</div>
+              <li key={user._id} className={listStyles['users-list__item']}>
+                <Link
+                  className={listStyles['user-link']}
+                  to={`${userPaths.mainPath}/${user.username}`}
+                >
+                  {user.username}
+                </Link>
+                <MyButton
+                  className={listStyles['delete-group-user-btn']}
+                  disabled={deleteUserFromGroupIsLoading}
+                  onClick={async () => {
+                    if (
+                      confirm(
+                        'Are you sure you want to delete user fron this group?'
+                      )
+                    ) {
+                      await sendRequestToDeleteUserFromGroup(
+                        undefined,
+                        user._id
+                      );
+                      getGroupUsersList(
+                        undefined,
+                        userQueryParams.filterObject,
+                        userQueryParams.page,
+                        userQueryParams.limit
+                      );
+                    }
+                  }}
+                >
+                  Delete user from the group
+                </MyButton>
+              </li>
             ))}
-          </div>
+          </ul>
         ) : (
           <p>Group has no members</p>
         )}

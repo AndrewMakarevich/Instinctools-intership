@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import useFetching from '../../../../hooks/useFetching';
 import GroupService from '../../../../service/groupService';
+import MyButton from '../../../../UI/myButton/myButton';
 import parseDataToEdit from '../../../../utils/parseDataToSend/parseDataToEdit';
 import GroupValidator from '../../../../utils/validator/groupValidator';
 import { groupPaths } from '../../../router/routes';
@@ -11,8 +13,14 @@ const SubmitGroupChangesBtn = ({
   actualizeGroupInfo,
 }) => {
   const navigate = useNavigate();
+  const { executeCallback: editGroup, isLoading: groupInfoIsLoading } =
+    useFetching(
+      async (groupId, paramsObject) =>
+        await GroupService.editGroup(groupId, paramsObject)
+    );
   return (
-    <button
+    <MyButton
+      disabled={groupInfoIsLoading}
       onClick={async (e) => {
         try {
           e.preventDefault();
@@ -20,12 +28,13 @@ const SubmitGroupChangesBtn = ({
 
           if (!Object.keys(paramsObject).length) {
             alert('Nothing to change');
+            return;
           }
 
           GroupValidator.validateGroupTitle(paramsToEditObj.groupTitle, true);
           GroupValidator.validatedGroupName(paramsToEditObj.groupName, true);
 
-          await GroupService.editGroup(groupId, paramsObject);
+          await editGroup(undefined, groupId, paramsObject);
 
           if (paramsObject.groupName) {
             navigate(groupPaths.mainPath + '/' + paramsObject.groupName);
@@ -38,7 +47,7 @@ const SubmitGroupChangesBtn = ({
       }}
     >
       Submit changes
-    </button>
+    </MyButton>
   );
 };
 
