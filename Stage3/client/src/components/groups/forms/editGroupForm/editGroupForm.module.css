@@ -1,6 +1,7 @@
 .form-inputs__wrapper,
 .form-buttons__wrapper {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
 }

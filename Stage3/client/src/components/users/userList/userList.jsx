@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useDelayFetching from '../../../hooks/useDelayFetching';
+import useFetching from '../../../hooks/useFetching';
 import { getUsersThunk } from '../../../store/reducers/userReducer/actionCreators';
 import AddButton from '../../../UI/addButton/addButton';
 import PaginationLine from '../../paginationLine/paginationLine';
@@ -17,24 +18,49 @@ const UserList = () => {
       email: '',
     },
     page: 1,
-    limit: 1,
+    limit: 5,
   });
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state.userReducer);
 
-  const fetchUsers = useCallback(async (queryParamsObj) => {
-    await dispatch(getUsersThunk(queryParamsObj));
+  const getUsers = useCallback(async (filterObject, page, limit) => {
+    await dispatch(getUsersThunk(filterObject, page, limit));
   }, []);
 
-  const [delayedFetchUsers, usersLoading] = useDelayFetching(fetchUsers, 400);
+  const { executeCallback: fetchUsers, isLoading: usersFetchLoading } =
+    useFetching(getUsers);
 
-  function getUsersListWithCurrentQueryParams(newQueryParamsObj) {
-    delayedFetchUsers(undefined, newQueryParamsObj);
+  const [delayedFetchUsers, usersDelayFetchLoading] = useDelayFetching(
+    getUsers,
+    400
+  );
+
+  async function getUsersListWithCurrentQueryParams(
+    newQueryParamsObj,
+    delayed
+  ) {
     setQueryParams(newQueryParamsObj);
+
+    if (delayed) {
+      await delayedFetchUsers(
+        null,
+        newQueryParamsObj.filterObject,
+        newQueryParamsObj.page,
+        newQueryParamsObj.limit
+      );
+      return;
+    }
+
+    await fetchUsers(
+      null,
+      queryParams.filterObject,
+      queryParams.page,
+      queryParams.limit
+    );
   }
 
   useEffect(() => {
-    fetchUsers(queryParams);
+    getUsersListWithCurrentQueryParams(queryParams, false);
   }, []);
 
   return (
@@ -43,12 +69,14 @@ const UserList = () => {
         paramsMap={['username', 'firstName', 'lastName', 'email']}
         queryParams={queryParams}
         setQueryParams={setQueryParams}
-        delayedFetchUsers={getUsersListWithCurrentQueryParams}
+        fetchUsers={getUsersListWithCurrentQueryParams}
       />
       <AddButton />
       <ul
         className={`${listStyles['user-list']} ${
-          usersLoading ? listStyles.loading : 'lol'
+          usersDelayFetchLoading || usersFetchLoading
+            ? listStyles.loading
+            : 'lol'
         }`}
       >
         {userReducer.users.map((user) => (
@@ -59,11 +87,10 @@ const UserList = () => {
         count={userReducer.count}
         page={queryParams.page}
         limit={queryParams.limit}
-        setPage={(page) => {
+        setPage={async (page) => {
           const newQueryParamsObj = { ...queryParams, page };
-          getUsersListWithCurrentQueryParams(newQueryParamsObj);
+          await getUsersListWithCurrentQueryParams(newQueryParamsObj, false);
         }}
-        delayedFetchUsers={delayedFetchUsers}
       />
     </article>
   );

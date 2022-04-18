@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { v4 } from 'uuid';
 import PropTypes from 'prop-types';
 import lineStyles from './paginationLine.module.css';
+import MyInput from '../../UI/myInput/myInput';
 
 const PaginationLine = ({ count, page, limit, setPage }) => {
   function createPagesArr(countVal, limitVal) {
@@ -51,12 +52,42 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
     [page, pages]
   );
 
+  if (!pages.length) {
+    return null;
+  }
+
   return (
     <div className={lineStyles['pagination-line']}>
+      <div className={lineStyles['custom-page-block']}>
+        <MyInput
+          type='number'
+          className={lineStyles['custom-page-input']}
+          placeholder='Page number'
+          title='Enter your page here'
+          disabled={pages.length === 1}
+          onChange={(e) => {
+            const typedPage = Number(e.target.value);
+
+            if (
+              typedPage >= pages[0] &&
+              typedPage <= pages[pages.length - 1] &&
+              pages.length !== 1
+            ) {
+              setPage(typedPage, true);
+            }
+          }}
+        ></MyInput>
+      </div>
+
       <button
+        disabled={pages.length === 1}
         type='button'
         className={lineStyles['pagination-btn']}
         onClick={() => {
+          if (pages.length === 1) {
+            return;
+          }
+
           if (page > 1) {
             setPage(page - 1);
             return;
@@ -75,7 +106,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
             pageNumber === page ? lineStyles.active : ''
           }`}
           onClick={() => {
-            if (Number(pageNumber)) {
+            if (Number(pageNumber) && pageNumber !== page) {
               setPage(pageNumber);
             }
           }}
@@ -84,13 +115,19 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
         </button>
       ))}
       <button
+        disabled={pages.length === 1}
         type='button'
         className={lineStyles['pagination-btn']}
         onClick={() => {
+          if (pages.length === 1) {
+            return;
+          }
+
           if (page < pages.length) {
             setPage(page + 1);
             return;
           }
+
           setPage(pages[0]);
         }}
       >

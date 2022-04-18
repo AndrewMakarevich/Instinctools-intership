@@ -6,6 +6,7 @@ const useFetching = (callback) => {
 
   const executeCallback = useCallback(
     async (additionalCallback, ...restArgs) => {
+      console.log(restArgs);
       try {
         setIsLoading(true);
 

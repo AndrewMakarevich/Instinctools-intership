@@ -15,7 +15,7 @@ import useFetching from '../../../../hooks/useFetching';
 const UserGroupList = ({ userId }) => {
   const [groupQueryParams, setGroupQueryParams] = useState({
     page: 1,
-    limit: 2,
+    limit: 1,
     filterObject: {
       groupName: '',
       groupTitle: '',
@@ -40,12 +40,12 @@ const UserGroupList = ({ userId }) => {
 
   const getUserGroupsWithCurrentQueryParams = (newQueryParamObj) => {
     setGroupQueryParams(newQueryParamObj);
-    getUserGroupsList(
-      undefined,
-      newQueryParamObj.filterObject,
-      newQueryParamObj.page,
-      newQueryParamObj.limit
-    );
+    // getUserGroupsList(
+    //   undefined,
+    //   newQueryParamObj.filterObject,
+    //   newQueryParamObj.page,
+    //   newQueryParamObj.limit
+    // );
   };
 
   useEffect(() => {

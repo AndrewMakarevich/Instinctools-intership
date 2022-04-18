@@ -2,12 +2,7 @@ import MyButton from '../../../../UI/myButton/myButton';
 import SearchInput from '../../../../UI/searchInput/searchInput';
 import panelStyles from './groupSearchPanel.module.css';
 
-const GroupSearchPanel = ({
-  paramsMap,
-  queryParams,
-  setQueryParams,
-  delayFetchGroups,
-}) => {
+const GroupSearchPanel = ({ paramsMap, queryParams, fetchGroups }) => {
   return (
     <section className={panelStyles['search-panel']}>
       <div className={panelStyles['search-panel__inputs']}>
@@ -16,7 +11,7 @@ const GroupSearchPanel = ({
             key={param}
             placeholder={`Search by ${param}`}
             value={queryParams.filterObject[param]}
-            onChange={(e) => {
+            onChange={async (e) => {
               const newQueryParamObj = {
                 ...queryParams,
                 filterObject: {
@@ -25,14 +20,14 @@ const GroupSearchPanel = ({
                 },
                 page: 1,
               };
-              delayFetchGroups(newQueryParamObj);
+              await fetchGroups(newQueryParamObj, true);
             }}
           />
         ))}
       </div>
 
       <MyButton
-        onClick={() => {
+        onClick={async () => {
           const newQueryParamsObj = {
             ...queryParams,
             filterObject: {
@@ -40,7 +35,7 @@ const GroupSearchPanel = ({
               groupTitle: '',
             },
           };
-          delayFetchGroups(newQueryParamsObj);
+          await fetchGroups(newQueryParamsObj, true);
         }}
       >
         Clear search inputs

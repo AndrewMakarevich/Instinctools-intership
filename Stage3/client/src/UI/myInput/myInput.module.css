@@ -1,7 +1,7 @@
 .my-input {
   border-radius: 15px;
   border: none;
-  background-color: transparent;
+  background-color: var(--extra-light);
   padding: 5px 7px;
 
   -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);

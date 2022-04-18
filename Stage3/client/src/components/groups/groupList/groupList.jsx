@@ -6,6 +6,7 @@ import GroupItem from '../groupItem/groupItem';
 import PaginationLine from '../../paginationLine/paginationLine';
 import useDelayFetching from '../../../hooks/useDelayFetching';
 import GroupSearchPanel from './groupSearchPanel/groupSearchPanel';
+import useFetching from '../../../hooks/useFetching';
 
 const GroupList = () => {
   const [queryParams, setQueryParams] = useState({
@@ -18,18 +19,35 @@ const GroupList = () => {
   });
   const dispatch = useDispatch();
   const groupReducer = useSelector((state) => state.groupReducer);
+
   const getGroups = useCallback(async (queryParamsObj) => {
     await dispatch(getGroupsThunk(queryParamsObj));
   }, []);
-  const [fetchGroups, usersAreLoading] = useDelayFetching(getGroups, 200);
 
-  const getUserGroupsWithCurrentQueryParams = (newQueryParamObj) => {
+  const { executeCallback: fetchGroups, isLoading: fetchGroupsLoading } =
+    useFetching(getGroups);
+  const [delayedFetchGroups, delayedFetchGroupsLoading] = useDelayFetching(
+    getGroups,
+    400
+  );
+
+  const getUserGroupsWithCurrentQueryParams = async (
+    newQueryParamObj,
+    delayed
+  ) => {
     setQueryParams(newQueryParamObj);
-    fetchGroups(undefined, newQueryParamObj);
+
+    if (delayed) {
+      await delayedFetchGroups(undefined, newQueryParamObj);
+
+      return;
+    }
+
+    await fetchGroups(undefined, newQueryParamObj);
   };
 
   useEffect(() => {
-    getGroups(queryParams);
+    getUserGroupsWithCurrentQueryParams(queryParams, false);
   }, []);
 
   return (
@@ -37,12 +55,13 @@ const GroupList = () => {
       <GroupSearchPanel
         paramsMap={['groupName', 'groupTitle']}
         queryParams={queryParams}
-        setQueryParams={setQueryParams}
-        delayFetchGroups={getUserGroupsWithCurrentQueryParams}
+        fetchGroups={getUserGroupsWithCurrentQueryParams}
       />
       <ul
         className={`${listStyles['group-list']} ${
-          usersAreLoading ? listStyles.loading : ''
+          delayedFetchGroupsLoading || fetchGroupsLoading
+            ? listStyles.loading
+            : ''
         }`}
       >
         {groupReducer.groups.map((group) => (
@@ -53,9 +72,9 @@ const GroupList = () => {
         count={groupReducer.count}
         page={queryParams.page}
         limit={queryParams.limit}
-        setPage={(page) => {
+        setPage={(page, delayed = false) => {
           const newQueryParamsObj = { ...queryParams, page };
-          getUserGroupsWithCurrentQueryParams(newQueryParamsObj);
+          getUserGroupsWithCurrentQueryParams(newQueryParamsObj, delayed);
         }}
       />
     </article>
