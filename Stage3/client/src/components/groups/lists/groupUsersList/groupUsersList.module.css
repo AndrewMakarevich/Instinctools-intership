@@ -1,9 +1,9 @@
-.users-list {
+.group-users-content__wrapper {
   display: flex;
-  gap: 5px 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 5px;
+  flex-direction: column;
+}
+
+.users-table {
 }
 
 .loading {
@@ -26,20 +26,19 @@
   animation: appear 0.3s forwards;
 }
 
-.users-list__item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex: 1;
-  padding: 5px;
+.user-row {
+  cursor: pointer;
   background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 15px;
-  color: var(---extra-light);
+  color: var(--extra-light);
+  transition: background-color 0.2s;
 }
 
-.user-link {
-  color: var(--extra-light);
-  text-decoration: none;
+.user-row:hover {
+  background-color: rgb(0, 0, 0);
+}
+
+.user-row td {
+  padding: 5px 10px;
 }
 
 .delete-group-user-btn {

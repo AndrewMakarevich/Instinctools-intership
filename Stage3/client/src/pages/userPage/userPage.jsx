@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import EditUserForm from '../../components/users/forms/editUserForm/editUserForm';
-import UserGroupList from '../../components/users/lists/userGroupsList/userGroupList';
+import UserGroupsList from '../../components/users/lists/userGroupsList/userGroupsList';
 import useFetching from '../../hooks/useFetching';
 import { getUserThunk } from '../../store/reducers/userReducer/actionCreators';
 
@@ -52,7 +52,7 @@ const UserPage = () => {
             userObj={userReducer.user}
             actualizeUserInfo={fetchUser}
           />
-          <UserGroupList userId={userReducer.user._id} />
+          <UserGroupsList userId={userReducer.user._id} />
         </section>
       ) : (
         "Can't find user with such username"

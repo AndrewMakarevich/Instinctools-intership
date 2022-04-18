@@ -7,12 +7,13 @@ import ModalWindow from '../../../modalWindow/modalWindow';
 import PaginationLine from '../../../paginationLine/paginationLine';
 import UserSearchPanel from '../../../users/userList/userSearchPanel/userSearchPanel';
 import { userPaths } from '../../../router/routes';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import MyButton from '../../../../UI/myButton/myButton';
 import UserGroupService from '../../../../service/userGroupService';
 import useFetching from '../../../../hooks/useFetching';
 
 const GroupUsersList = ({ groupId }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userGroupReducer = useSelector((store) => store.userGroupReducer);
 
@@ -28,21 +29,37 @@ const GroupUsersList = ({ groupId }) => {
     limit: 2,
   });
 
-  const fetchGroupUsers = useCallback(
+  const getGroupUsers = useCallback(
     async (filterObject, page, limit) => {
       await dispatch(getGroupUsersThunk(groupId, filterObject, page, limit));
     },
     [groupId]
   );
 
-  const [getGroupUsersList, groupUsersLoading] = useDelayFetching(
-    fetchGroupUsers,
-    200
-  );
+  const {
+    executeCallback: fetchGroupUsers,
+    isLoading: fetchGroupUsersLoading,
+  } = useFetching(getGroupUsers);
+  const [delayedFetchGroupUsers, delayedFetchGroupUsersLoading] =
+    useDelayFetching(getGroupUsers, 200);
 
-  const getGroupUsersListWithCurrentQueryParams = (newQueryParamsObj) => {
+  const getGroupUsersListWithCurrentQueryParams = async (
+    newQueryParamsObj,
+    delayed
+  ) => {
     setUserQueryParams(newQueryParamsObj);
-    getGroupUsersList(
+
+    if (delayed) {
+      await delayedFetchGroupUsers(
+        undefined,
+        newQueryParamsObj.filterObject,
+        newQueryParamsObj.page,
+        newQueryParamsObj.limit
+      );
+      return;
+    }
+
+    await fetchGroupUsers(
       undefined,
       newQueryParamsObj.filterObject,
       newQueryParamsObj.page,
@@ -51,10 +68,10 @@ const GroupUsersList = ({ groupId }) => {
   };
 
   useEffect(() => {
-    if (groupId) {
-      fetchGroupUsers(undefined, userQueryParams.page, userQueryParams.limit);
+    if (groupUsersIsOpen) {
+      getGroupUsersListWithCurrentQueryParams(userQueryParams, false);
     }
-  }, [groupId]);
+  }, [groupUsersIsOpen]);
 
   //Deleting user from the group
   const deleteUserFromGroup = useCallback(
@@ -72,53 +89,66 @@ const GroupUsersList = ({ groupId }) => {
   return (
     <>
       <MyButton onClick={() => setGroupUsersIsOpen(true)}>Users</MyButton>
-      <ModalWindow isOpen={groupUsersIsOpen} setIsOpen={setGroupUsersIsOpen}>
+      <ModalWindow
+        isOpen={groupUsersIsOpen}
+        setIsOpen={setGroupUsersIsOpen}
+        modalContentClassName={listStyles['group-users-content__wrapper']}
+      >
         <UserSearchPanel
           paramsMap={['username', 'firstName', 'lastName', 'email']}
           queryParams={userQueryParams}
-          delayedFetchUsers={getGroupUsersListWithCurrentQueryParams}
+          fetchUsers={getGroupUsersListWithCurrentQueryParams}
         />
         {userGroupReducer.groupUsers.length ? (
-          <ul
-            className={`${listStyles['users-list']} ${
-              groupUsersLoading ? `${listStyles['loading']}` : ''
+          <table
+            className={`${listStyles['users-table']} ${
+              delayedFetchGroupUsersLoading || fetchGroupUsersLoading
+                ? `${listStyles['loading']}`
+                : ''
             }`}
           >
             {userGroupReducer.groupUsers.map((user) => (
-              <li key={user._id} className={listStyles['users-list__item']}>
-                <Link
-                  className={listStyles['user-link']}
-                  to={`${userPaths.mainPath}/${user.username}`}
-                >
-                  {user.username}
-                </Link>
-                <MyButton
-                  className={listStyles['delete-group-user-btn']}
-                  disabled={deleteUserFromGroupIsLoading}
-                  onClick={async () => {
-                    if (
-                      confirm(
-                        'Are you sure you want to delete user fron this group?'
-                      )
-                    ) {
-                      await sendRequestToDeleteUserFromGroup(
-                        undefined,
-                        user._id
-                      );
-                      getGroupUsersList(
-                        undefined,
-                        userQueryParams.filterObject,
-                        userQueryParams.page,
-                        userQueryParams.limit
-                      );
-                    }
-                  }}
-                >
-                  Delete user from the group
-                </MyButton>
-              </li>
+              <tr
+                key={user._id}
+                className={listStyles['user-row']}
+                onClick={() =>
+                  navigate(`${userPaths.mainPath}/${user.username}`)
+                }
+              >
+                <td>{user.username}</td>
+                <td>
+                  {user.firstName} {user.lastName}
+                </td>
+                <td>{user.email}</td>
+                <td>
+                  <MyButton
+                    className={listStyles['delete-group-user-btn']}
+                    disabled={deleteUserFromGroupIsLoading}
+                    onClick={async (e) => {
+                      e.stopPropagation();
+
+                      if (
+                        confirm(
+                          'Are you sure you want to delete user fron this group?'
+                        )
+                      ) {
+                        await sendRequestToDeleteUserFromGroup(
+                          undefined,
+                          user._id
+                        );
+                        getGroupUsersListWithCurrentQueryParams(
+                          { ...userQueryParams, page: 1 },
+                          false
+                        );
+                      }
+                    }}
+                  >
+                    Delete user from the group
+                  </MyButton>
+                </td>
+              </tr>
             ))}
-          </ul>
+          </table>
         ) : (
           <p>Group has no members</p>
         )}
@@ -127,9 +157,9 @@ const GroupUsersList = ({ groupId }) => {
           page={userQueryParams.page}
           limit={userQueryParams.limit}
           count={userGroupReducer.count}
-          setPage={(pageValue) => {
+          setPage={(pageValue, delayed = false) => {
             const newQueryParamsObj = { ...userQueryParams, page: pageValue };
-            getGroupUsersListWithCurrentQueryParams(newQueryParamsObj);
+            getGroupUsersListWithCurrentQueryParams(newQueryParamsObj, delayed);
           }}
         />
       </ModalWindow>

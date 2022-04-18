@@ -64,7 +64,7 @@ const UserList = () => {
   }, []);
 
   return (
-    <article className={listStyles['user-list-wrapper']}>
+    <article className={listStyles['users-table-wrapper']}>
       <UserSearchPanel
         paramsMap={['username', 'firstName', 'lastName', 'email']}
         queryParams={queryParams}
@@ -72,17 +72,20 @@ const UserList = () => {
         fetchUsers={getUsersListWithCurrentQueryParams}
       />
       {/* <AddButton /> */}
-      <ul
-        className={`${listStyles['user-list']} ${
-          usersDelayFetchLoading || usersFetchLoading
-            ? listStyles.loading
-            : 'lol'
+      <table
+        className={`${listStyles['users-table']} ${
+          usersDelayFetchLoading || usersFetchLoading ? listStyles.loading : ''
         }`}
       >
+        <tr>
+          <th>Username</th>
+          <th>Full name</th>
+          <th>Email</th>
+        </tr>
         {userReducer.users.map((user) => (
           <UserItem key={user._id} user={user} />
         ))}
-      </ul>
+      </table>
       <PaginationLine
         count={userReducer.count}
         page={queryParams.page}

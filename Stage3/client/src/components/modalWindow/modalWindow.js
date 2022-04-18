@@ -33,14 +33,22 @@ const ModalWindow = ({
       onClick={() => setIsOpen(false)}
     >
       <div
-        className={modalStyles['modal-window']}
+        className={`${modalStyles['modal-window']} ${
+          modalWindowClassName || ''
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <CloseButton
           className={modalStyles['modal-window__close-btn']}
           onClick={() => setIsOpen(false)}
         />
-        <div className={modalStyles['modal-window__content']}>{children}</div>
+        <div
+          className={`${modalStyles['modal-window__content']} ${
+            modalContentClassName || ''
+          }`}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

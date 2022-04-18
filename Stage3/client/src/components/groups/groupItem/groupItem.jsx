@@ -1,21 +1,22 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import MyLink from '../../../UI/myLink/myLink';
 import itemStyles from './groupItem.module.css';
 
-const GroupItem = ({ group }) => (
-  <li key={group._id} className={itemStyles['group-item']}>
-    <MyLink className={itemStyles['edit-group-link']} to={group.groupName} />
-    <p>
-      Group name:
-      {group.groupName}
-    </p>
-    <hr />
-    <p>
-      Group title:
-      {group.groupTitle}
-    </p>
-  </li>
-);
+const GroupItem = ({ group }) => {
+  const navigate = useNavigate();
+  return (
+    <tr
+      className={itemStyles['group-row']}
+      onClick={() => {
+        navigate(group.groupName);
+      }}
+    >
+      <td className={itemStyles['group-param-cell']}>{group.groupName}</td>
+      <td className={itemStyles['group-param-cell']}>{group.groupTitle}</td>
+    </tr>
+  );
+};
 
 GroupItem.propTypes = {
   group: {

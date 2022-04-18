@@ -1,14 +1,14 @@
-.user-list-wrapper {
+.users-table-wrapper {
   display: flex;
   flex-direction: column;
   row-gap: 10px;
 }
 
 .user-list {
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px 15px;
+  gap: 10px 15px; */
 }
 
 .loading {
@@ -17,7 +17,7 @@
 
 .loading:before {
   z-index: 3;
-  content: "Users are loading";
+  content: 'Users are loading';
   position: absolute;
   top: 0;
   left: 0;
@@ -30,12 +30,12 @@
   background-color: rgba(0, 0, 0, 0.664);
   color: var(--extra-light);
   font-weight: 500;
-  animation: appear .2s forwards;
+  animation: appear 0.2s forwards;
 }
 
 @keyframes appear {
   0% {
-    opacity: 0
+    opacity: 0;
   }
 
   100% {

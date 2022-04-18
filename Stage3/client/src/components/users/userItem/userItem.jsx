@@ -1,25 +1,25 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import MyLink from '../../../UI/myLink/myLink';
 import itemStyles from './userItem.module.css';
 
-const UserItem = ({ user }) => (
-  <li className={itemStyles['user-item']}>
-    <MyLink className={itemStyles['edit-user-link']} to={user.username} />
-    <p>
-      Username:
-      {user.username}
-    </p>
-    <hr />
-    <p>
-      Full name:
-      {user.firstName} {user.lastName}
-    </p>
-    <p>
-      Email:
-      {user.email}
-    </p>
-  </li>
-);
+const UserItem = ({ user }) => {
+  const navigate = useNavigate();
+  return (
+    <tr
+      className={itemStyles['user-row']}
+      onClick={() => {
+        navigate(user.username);
+      }}
+    >
+      <td className={itemStyles['user-param-cell']}>{user.username}</td>
+      <td>
+        {user.firstName} {user.lastName}
+      </td>
+      <td>{user.email}</td>
+    </tr>
+  );
+};
 
 UserItem.propTypes = {
   user: {
