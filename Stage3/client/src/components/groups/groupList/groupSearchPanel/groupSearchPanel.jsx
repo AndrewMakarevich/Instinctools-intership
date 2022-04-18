@@ -3,6 +3,9 @@ import SearchInput from '../../../../UI/searchInput/searchInput';
 import panelStyles from './groupSearchPanel.module.css';
 
 const GroupSearchPanel = ({ paramsMap, queryParams, fetchGroups }) => {
+  const filterObjectIsEmpty = !Object.values(queryParams.filterObject).some(
+    (value) => value !== ''
+  );
   return (
     <section className={panelStyles['search-panel']}>
       <div className={panelStyles['search-panel__inputs']}>
@@ -27,7 +30,12 @@ const GroupSearchPanel = ({ paramsMap, queryParams, fetchGroups }) => {
       </div>
 
       <MyButton
+        disabled={filterObjectIsEmpty}
         onClick={async () => {
+          if (filterObjectIsEmpty) {
+            return;
+          }
+
           const newQueryParamsObj = {
             ...queryParams,
             filterObject: {
@@ -35,7 +43,7 @@ const GroupSearchPanel = ({ paramsMap, queryParams, fetchGroups }) => {
               groupTitle: '',
             },
           };
-          await fetchGroups(newQueryParamsObj, true);
+          await fetchGroups(newQueryParamsObj, false);
         }}
       >
         Clear search inputs

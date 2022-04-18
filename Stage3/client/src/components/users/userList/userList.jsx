@@ -53,9 +53,9 @@ const UserList = () => {
 
     await fetchUsers(
       null,
-      queryParams.filterObject,
-      queryParams.page,
-      queryParams.limit
+      newQueryParamsObj.filterObject,
+      newQueryParamsObj.page,
+      newQueryParamsObj.limit
     );
   }
 
@@ -71,7 +71,7 @@ const UserList = () => {
         setQueryParams={setQueryParams}
         fetchUsers={getUsersListWithCurrentQueryParams}
       />
-      <AddButton />
+      {/* <AddButton /> */}
       <ul
         className={`${listStyles['user-list']} ${
           usersDelayFetchLoading || usersFetchLoading

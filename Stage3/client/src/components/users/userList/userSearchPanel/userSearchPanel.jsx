@@ -4,6 +4,10 @@ import SearchInput from '../../../../UI/searchInput/searchInput';
 import panelStyles from './userSearchPanel.module.css';
 
 const UserSearchPanel = ({ paramsMap, queryParams, fetchUsers }) => {
+  const filterObjectIsEmpty = !Object.values(queryParams.filterObject).some(
+    (value) => value !== ''
+  );
+
   return (
     <section className={panelStyles['search-panel']}>
       <div className={panelStyles['search-panel__inputs']}>
@@ -28,7 +32,12 @@ const UserSearchPanel = ({ paramsMap, queryParams, fetchUsers }) => {
       </div>
 
       <MyButton
+        disabled={filterObjectIsEmpty}
         onClick={async () => {
+          if (filterObjectIsEmpty) {
+            return;
+          }
+
           const newQueryParamsObj = {
             ...queryParams,
             filterObject: {
@@ -38,7 +47,8 @@ const UserSearchPanel = ({ paramsMap, queryParams, fetchUsers }) => {
               email: '',
             },
           };
-          await fetchUsers(newQueryParamsObj);
+
+          await fetchUsers(newQueryParamsObj, false);
         }}
       >
         Clear search inputs
