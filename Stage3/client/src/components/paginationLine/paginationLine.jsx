@@ -71,7 +71,8 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
             if (
               typedPage >= pages[0] &&
               typedPage <= pages[pages.length - 1] &&
-              pages.length !== 1
+              pages.length !== 1 &&
+              typedPage !== page
             ) {
               setPage(typedPage, true);
             }

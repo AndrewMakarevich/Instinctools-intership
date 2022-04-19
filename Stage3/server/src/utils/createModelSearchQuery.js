@@ -36,7 +36,10 @@ function createModelSearchQuery(obj) {
       const numberRange = mockObj[objKey].split('|');
 
       if (numberRange.length !== 2) {
-        finalObject[finalObjectParamName] = { $regex: mockObj[objKey] };
+        finalObject[finalObjectParamName] = {
+          $regex: mockObj[objKey],
+          $options: 'gi',
+        };
       } else {
         if (Number(numberRange[0])) {
           finalObject[finalObjectParamName] = {
