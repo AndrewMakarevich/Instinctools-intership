@@ -4,7 +4,7 @@
   "description": "Stage 3 instinctools test task",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles",
+    "test": "jest --detectOpenHandles --verbose",
     "dev": "webpack --mode development --watch",
     "start": "nodemon ./dist/main.js"
   },
@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/AndrewMakarevich/InstinctoolsTestTask#readme",
   "devDependencies": {
+    "@types/jest": "^27.4.1",
     "clean-webpack-plugin": "^4.0.0",
     "core-js": "^3.21.1",
     "jest": "^27.5.1",

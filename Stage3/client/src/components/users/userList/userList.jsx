@@ -64,7 +64,10 @@ const UserList = () => {
   }, []);
 
   return (
-    <article className={listStyles['users-table-wrapper']}>
+    <article
+      data-testid='users-table-wrapper'
+      className={listStyles['users-table-wrapper']}
+    >
       <UserSearchPanel
         paramsMap={['username', 'firstName', 'lastName', 'email']}
         queryParams={queryParams}
@@ -73,18 +76,24 @@ const UserList = () => {
       />
       {/* <AddButton /> */}
       <table
+        data-testid='users-table'
         className={`${listStyles['users-table']} ${
           usersDelayFetchLoading || usersFetchLoading ? listStyles.loading : ''
         }`}
       >
-        <tr>
-          <th>Username</th>
-          <th>Full name</th>
-          <th>Email</th>
-        </tr>
-        {userReducer.users.map((user) => (
-          <UserItem key={user._id} user={user} />
-        ))}
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Full name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userReducer.users.map((user) => (
+            <UserItem key={user._id} user={user} />
+          ))}
+        </tbody>
+        <tfoot></tfoot>
       </table>
       <PaginationLine
         count={userReducer.count}

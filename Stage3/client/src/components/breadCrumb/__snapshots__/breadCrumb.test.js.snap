@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Bread crumb renders correctly: Bread crumb: component final version 1`] = `
+<article
+  class="crumb-wrapper"
+  data-testid="bread-crumb"
+>
+  <div
+    class="crumb-link__item"
+  >
+    <a
+      class="link crumb-link"
+      href="/"
+    />
+  </div>
+</article>
+`;

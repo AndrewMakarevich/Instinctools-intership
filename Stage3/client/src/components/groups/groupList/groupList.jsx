@@ -51,26 +51,35 @@ const GroupList = () => {
   }, []);
 
   return (
-    <article className={listStyles['groups-table-wrapper']}>
+    <article
+      data-testid='groups-table-wrapper'
+      className={listStyles['groups-table-wrapper']}
+    >
       <GroupSearchPanel
         paramsMap={['groupName', 'groupTitle']}
         queryParams={queryParams}
         fetchGroups={getUserGroupsWithCurrentQueryParams}
       />
       <table
+        data-testid='groups-table'
         className={`${listStyles['groups-table']} ${
           delayedFetchGroupsLoading || fetchGroupsLoading
             ? listStyles.loading
             : ''
         }`}
       >
-        <tr>
-          <th>Group name</th>
-          <th>Group title</th>
-        </tr>
-        {groupReducer.groups.map((group) => (
-          <GroupItem key={group._id} group={group} />
-        ))}
+        <thead>
+          <tr>
+            <th>Group name</th>
+            <th>Group title</th>
+          </tr>
+        </thead>
+        <tbody>
+          {groupReducer.groups.map((group) => (
+            <GroupItem key={group._id} group={group} />
+          ))}
+        </tbody>
+        <tfoot></tfoot>
       </table>
       <PaginationLine
         count={groupReducer.count}

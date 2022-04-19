@@ -8,7 +8,11 @@ const NavBar = () => (
       {publicRoutes &&
         publicRoutes.map(({ id, name, path }) => (
           <li className={navStyles['links-item']} key={id}>
-            <MyLink className={navStyles.link} to={path}>
+            <MyLink
+              className={navStyles.link}
+              to={path}
+              data-testid={`nav-bar-${name}-link`}
+            >
               {name}
             </MyLink>
           </li>

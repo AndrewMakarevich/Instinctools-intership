@@ -1,7 +1,7 @@
 import GroupList from '../../components/groups/groupList/groupList';
 
 const GroupsPage = () => (
-  <article>
+  <article data-testid='groups-list-wrapper'>
     Groups page
     <GroupList />
   </article>

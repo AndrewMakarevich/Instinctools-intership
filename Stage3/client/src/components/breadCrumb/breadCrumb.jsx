@@ -25,7 +25,7 @@ const BreadCrumb = () => {
   const paths = useMemo(createPaths, [history]);
 
   return (
-    <article className={crumbStyles['crumb-wrapper']}>
+    <article className={crumbStyles['crumb-wrapper']} data-testid='bread-crumb'>
       {paths.map(({ id, name, path }) => (
         <div key={id} className={crumbStyles['crumb-link__item']}>
           <MyLink className={crumbStyles['crumb-link']} to={path}>

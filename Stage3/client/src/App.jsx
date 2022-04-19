@@ -5,7 +5,7 @@ import NavBar from './components/navBar/navBar';
 import AppRouter from './components/router/appRouter';
 
 const App = () => (
-  <div className='App'>
+  <div className='App' data-testid='app'>
     <NavBar />
     <div>
       <BreadCrumb />
