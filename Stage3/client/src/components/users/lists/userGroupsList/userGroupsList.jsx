@@ -108,48 +108,57 @@ const UserGroupsList = ({ userId }) => {
               delayedFetchUserGroupsLoading ? listStyles['loading'] : ''
             }`}
           >
-            <tr>
-              <th>Group name</th>
-              <th>Group title</th>
-              <th>Leave group</th>
-            </tr>
-            {userGroupReducer.userGroups.map((group) => (
-              <tr
-                key={group._id}
-                className={listStyles['group-row']}
-                onClick={() =>
-                  navigate(`${groupPaths.mainPath}/${group.groupName}`)
-                }
-              >
-                <td className={listStyles['group-cell']}>{group.groupName}</td>
-                <td className={listStyles['group-cell']}>{group.groupTitle}</td>
-                <td className={listStyles['group-cell']}>
-                  <MyButton
-                    className={listStyles['delete-user-group-btn']}
-                    disabled={deleteUserFromGroupIsLoading}
-                    onClick={async (e) => {
-                      e.stopPropagation();
-
-                      if (
-                        confirm('Are you sure you want to leave this group?')
-                      ) {
-                        await sendRequestToDeleteUserFromGroup(
-                          undefined,
-                          group._id
-                        );
-                      }
-
-                      await getUserGroupsWithCurrentQueryParams(
-                        { ...groupQueryParams, page: 1 },
-                        false
-                      );
-                    }}
-                  >
-                    Leave this group
-                  </MyButton>
-                </td>
+            <thead>
+              <tr>
+                <th>Group name</th>
+                <th>Group title</th>
+                <th>Leave group</th>
               </tr>
-            ))}
+            </thead>
+            <tbody>
+              {userGroupReducer.userGroups.map((group) => (
+                <tr
+                  key={group._id}
+                  className={listStyles['group-row']}
+                  onClick={() =>
+                    navigate(`${groupPaths.mainPath}/${group.groupName}`)
+                  }
+                >
+                  <td className={listStyles['group-cell']}>
+                    {group.groupName}
+                  </td>
+                  <td className={listStyles['group-cell']}>
+                    {group.groupTitle}
+                  </td>
+                  <td className={listStyles['group-cell']}>
+                    <MyButton
+                      className={listStyles['delete-user-group-btn']}
+                      disabled={deleteUserFromGroupIsLoading}
+                      onClick={async (e) => {
+                        e.stopPropagation();
+
+                        if (
+                          confirm('Are you sure you want to leave this group?')
+                        ) {
+                          await sendRequestToDeleteUserFromGroup(
+                            undefined,
+                            group._id
+                          );
+                        }
+
+                        await getUserGroupsWithCurrentQueryParams(
+                          { ...groupQueryParams, page: 1 },
+                          false
+                        );
+                      }}
+                    >
+                      Leave this group
+                    </MyButton>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot></tfoot>
           </table>
         ) : (
           <p>User isn't a member of any group</p>
