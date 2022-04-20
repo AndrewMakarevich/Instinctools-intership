@@ -1067,7 +1067,7 @@ const mainRouter = __webpack_require__(/*! ./routes */ "./src/routes/index.js");
 const app = express();
 app.use(
   cors({
-    origin: process.env.FRONT_APP_LINK,
+    origin: [process.env.FRONT_APP_LINK, 'http://localhost'],
   })
 );
 app.use(express.json());

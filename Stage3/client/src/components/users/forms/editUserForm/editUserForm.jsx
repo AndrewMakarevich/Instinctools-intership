@@ -25,7 +25,7 @@ const EditUserForm = ({ userObj, actualizeUserInfo }) => {
   }, [userObj]);
 
   return (
-    <form className={formStyles['form']}>
+    <form data-testid='edit-user-form' className={formStyles['form']}>
       <div className={formStyles['form-inputs__wrapper']}>
         {Object.keys(newUserInfo).map((userParam) => (
           <MyInputWithLabel

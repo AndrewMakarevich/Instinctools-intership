@@ -10,8 +10,11 @@ exports[`Bread crumb renders correctly: Bread crumb: component final version 1`]
   >
     <a
       class="link crumb-link"
-      href="/"
-    />
+      data-testid="crumb-Users-link"
+      href="/users"
+    >
+      Users
+    </a>
   </div>
 </article>
 `;
