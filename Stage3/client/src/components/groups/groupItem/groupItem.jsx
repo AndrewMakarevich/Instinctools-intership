@@ -7,6 +7,7 @@ const GroupItem = ({ group }) => {
   const navigate = useNavigate();
   return (
     <tr
+      data-testid='group-row'
       className={itemStyles['group-row']}
       onClick={() => {
         navigate(group.groupName);

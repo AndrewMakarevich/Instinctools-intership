@@ -20,6 +20,7 @@ const SubmitGroupChangesBtn = ({
     );
   return (
     <MyButton
+      data-testid='submit-group-changes-btn'
       disabled={groupInfoIsLoading}
       onClick={async (e) => {
         try {

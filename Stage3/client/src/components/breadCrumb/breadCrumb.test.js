@@ -1,6 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import UserEvent from '@testing-library/user-event';
-import renderWithRouterAndReduxProvider from '../../test/helpers/renderWithRouterAndReduxProvider';
+import {
+  renderWithRouter,
+  renderWithAppRouter,
+} from '../../test/helpers/renderWithRouterAndReduxProvider';
 import BreadCrumb from './breadCrumb';
 import NavBar from '../navBar/navBar';
 import publicRoutes from '../router/routes';
@@ -25,7 +28,7 @@ async function checkBreadCrumbLinks(
 }
 
 test('Bread crumb renders correctly', async () => {
-  renderWithRouterAndReduxProvider(<BreadCrumb />);
+  renderWithRouter(<BreadCrumb />);
   const breadCrumbComponent = screen.getByTestId('bread-crumb');
 
   expect(breadCrumbComponent).toBeInTheDocument();
@@ -36,7 +39,7 @@ test('Bread crumb renders correctly', async () => {
 
 describe('Bread crumb state check while routing', () => {
   test('Bread crumb values changes correctly while routing between main public routes', async () => {
-    renderWithRouterAndReduxProvider(
+    renderWithRouter(
       <>
         <NavBar />
         <BreadCrumb />
@@ -53,7 +56,7 @@ describe('Bread crumb state check while routing', () => {
   });
 
   test('Bread crumb correct state in nested Users route', async () => {
-    renderWithRouterAndReduxProvider(<BreadCrumb />, [
+    renderWithAppRouter(<BreadCrumb />, [
       `${publicRoutes[0].path}/AndrewTheFirst`,
     ]);
 
@@ -65,9 +68,7 @@ describe('Bread crumb state check while routing', () => {
   });
 
   test('Bread crumb correct state in nested Groups route', async () => {
-    renderWithRouterAndReduxProvider(<BreadCrumb />, [
-      `${publicRoutes[1].path}/FirstGroup`,
-    ]);
+    renderWithAppRouter(<BreadCrumb />, [`${publicRoutes[1].path}/FirstGroup`]);
 
     await checkBreadCrumbLinks(
       publicRoutes[1].name,
