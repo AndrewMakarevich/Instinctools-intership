@@ -1,22 +1,25 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-// import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import App from './App';
 import store from './store/store';
 import publicRoutes from './components/router/routes';
+import GroupService from './service/groupService';
+import UserService from './service/userService';
+
+jest.mock('./service/groupService');
+jest.mock('./service/userService');
 
 test('renders learn react link', async () => {
-  // const history = createMemoryHistory();
   const user = userEvent.setup();
 
   render(
-    <BrowserRouter>
+    <MemoryRouter>
       <Provider store={store}>
         <App />
       </Provider>
-    </BrowserRouter>
+    </MemoryRouter>
   );
 
   //Groups link

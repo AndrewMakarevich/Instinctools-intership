@@ -12,8 +12,6 @@ function validateText(
 
   const regEx = new RegExp(regExp);
 
-  console.log(regEx);
-
   if (minLength) {
     if (valueToValidate.length < minLength) {
       throw Error(errorMessage);

@@ -20,11 +20,7 @@ const GroupItem = ({ group }) => {
 };
 
 GroupItem.propTypes = {
-  group: {
-    _id: PropTypes.string,
-    groupName: PropTypes.string,
-    groupTitle: PropTypes.string,
-  },
+  group: PropTypes.object,
 };
 
 GroupItem.defaultProps = {

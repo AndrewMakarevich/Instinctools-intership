@@ -3,10 +3,17 @@ import UserEvent from '@testing-library/user-event';
 import {
   renderWithRouter,
   renderWithAppRouter,
-} from '../../test/helpers/renderWithRouterAndReduxProvider';
+} from '../../test/helpers/renderWith';
 import BreadCrumb from './breadCrumb';
 import NavBar from '../navBar/navBar';
 import publicRoutes from '../router/routes';
+import UserService from '../../service/userService';
+import GroupService from '../../service/groupService';
+import getGroupsListResponse from '../../test/mockData/groups';
+import getUsersListResponse from '../../test/mockData/users';
+
+jest.mock('../../service/userService');
+jest.mock('../../service/groupService');
 
 const user = UserEvent.setup();
 
@@ -26,6 +33,10 @@ async function checkBreadCrumbLinks(
   expect(screen.queryByTestId(`crumb-${nestedRouteName}-link`)).toBeNull();
   expect(screen.getByTestId(expectedElementTestId)).toBeInTheDocument();
 }
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 test('Bread crumb renders correctly', async () => {
   renderWithRouter(<BreadCrumb />);
@@ -56,6 +67,7 @@ describe('Bread crumb state check while routing', () => {
   });
 
   test('Bread crumb correct state in nested Users route', async () => {
+    UserService.getUsers.mockReturnValue(getUsersListResponse);
     renderWithAppRouter(<BreadCrumb />, [
       `${publicRoutes[0].path}/AndrewTheFirst`,
     ]);
@@ -68,8 +80,8 @@ describe('Bread crumb state check while routing', () => {
   });
 
   test('Bread crumb correct state in nested Groups route', async () => {
+    GroupService.getGroups.mockReturnValue(getGroupsListResponse);
     renderWithAppRouter(<BreadCrumb />, [`${publicRoutes[1].path}/FirstGroup`]);
-
     await checkBreadCrumbLinks(
       publicRoutes[1].name,
       'FirstGroup',

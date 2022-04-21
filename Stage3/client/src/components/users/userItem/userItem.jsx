@@ -7,6 +7,7 @@ const UserItem = ({ user }) => {
   const navigate = useNavigate();
   return (
     <tr
+      data-testid='user-row'
       className={itemStyles['user-row']}
       onClick={() => {
         navigate(user.username);
@@ -22,12 +23,7 @@ const UserItem = ({ user }) => {
 };
 
 UserItem.propTypes = {
-  user: {
-    _id: PropTypes.number,
-    username: PropTypes.string,
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-  },
+  user: PropTypes.object,
 };
 
 UserItem.defaultProps = {

@@ -1,53 +1,33 @@
 import { act, render, screen } from '@testing-library/react';
 import axios from 'axios';
-import {
-  renderWithAppRouter,
-  renderWithReduxProvider,
-} from '../../../test/helpers/renderWithRouterAndReduxProvider';
+import { renderWithReduxProvider } from '../../../test/helpers/renderWith';
 import GroupList from './groupList';
 import GroupService from '../../../service/groupService';
+import getGroupsListResponse from '../../../test/mockData/groups';
 
 jest.mock('../../../service/groupService');
 
 let response;
 
 beforeEach(() => {
-  response = {
-    data: {
-      count: 3,
-      rows: [
-        {
-          _id: '6241b1ad17692d26ffbd18ae',
-          groupName: 'First-group',
-          groupTitle: 'Thats-my-first-group',
-          __v: 0,
-        },
-        {
-          _id: '6241b1b517692d26ffbd18b3',
-          groupName: 'Second-group',
-          groupTitle: 'Thats-my-first-group',
-          __v: 0,
-        },
-        {
-          _id: '624581d8abeb4d8cbbb43c6b',
-          groupName: 'Tenth-group',
-          groupTitle: 'Thats-my-tenth-group',
-          __v: 0,
-        },
-      ],
-    },
-  };
+  response = getGroupsListResponse;
+});
+afterEach(() => {
+  jest.clearAllMocks();
 });
 
-test('Correct group list rendering after recieve group list data', async () => {
-  // const spyAxios = jest.spyOn(axios, 'get');
-  // await spyAxios.mockImplementation(() => Promise.resolve(response));
-  GroupService.getGroups.mockReturnValue(response);
-  // axios.get.mockReturnValue(response);
-  // console.log(mockAx);
-  renderWithReduxProvider(<GroupList />, ['/groups']);
-  // screen.debug();
-  const groupsRows = await screen.findAllByTestId('group-row');
+describe("Correct Group's list", () => {
+  test('render', () => {
+    // renderWithReduxProvider(<GroupList />, ['/groups']);
+    // const wrapper = await screen.findByTestId('groups-table-wrapper');
+    // expect(wrapper).toBeInTheDocument();
+  });
 
-  expect(groupsRows.length).toBe(3);
+  test('rendering after recieve group list data', async () => {
+    GroupService.getGroups.mockReturnValue(response);
+    renderWithReduxProvider(<GroupList />, ['/groups']);
+    const groupsRows = await screen.findAllByTestId('group-row');
+
+    expect(groupsRows.length).toBe(3);
+  });
 });

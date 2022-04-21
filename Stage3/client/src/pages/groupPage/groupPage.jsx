@@ -36,7 +36,11 @@ const GroupPage = () => {
   if (groupError) {
     return (
       <article>
-        <p>{errorGroup}</p>
+        <p>
+          {groupError.isAxiosError
+            ? groupError.response.data.message
+            : groupError.message}
+        </p>
       </article>
     );
   }

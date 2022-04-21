@@ -43,7 +43,7 @@ const SubmitGroupChangesBtn = ({
             await actualizeGroupInfo();
           }
         } catch (e) {
-          alert(e);
+          console.log(e);
         }
       }}
     >
