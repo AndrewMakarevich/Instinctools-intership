@@ -57,7 +57,10 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
   }
 
   return (
-    <div className={lineStyles['pagination-line']}>
+    <div
+      data-testid='pagination-line'
+      className={lineStyles['pagination-line']}
+    >
       <div className={lineStyles['custom-page-block']}>
         <MyInput
           type='number'

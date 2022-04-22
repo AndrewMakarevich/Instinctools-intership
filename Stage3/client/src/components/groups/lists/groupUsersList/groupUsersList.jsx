@@ -6,14 +6,12 @@ import { getGroupUsersThunk } from '../../../../store/reducers/userGroupReducer/
 import ModalWindow from '../../../modalWindow/modalWindow';
 import PaginationLine from '../../../paginationLine/paginationLine';
 import UserSearchPanel from '../../../users/userList/userSearchPanel/userSearchPanel';
-import { userPaths } from '../../../router/routes';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import MyButton from '../../../../UI/myButton/myButton';
-import UserGroupService from '../../../../service/userGroupService';
 import useFetching from '../../../../hooks/useFetching';
+import GroupUsersItem from './groupUsersItem';
 
 const GroupUsersList = ({ groupId }) => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userGroupReducer = useSelector((store) => store.userGroupReducer);
 
@@ -73,23 +71,16 @@ const GroupUsersList = ({ groupId }) => {
     }
   }, [groupUsersIsOpen]);
 
-  //Deleting user from the group
-  const deleteUserFromGroup = useCallback(
-    async (userId) => {
-      await UserGroupService.deleteUserFromTheGroup(userId, groupId);
-    },
-    [groupId]
-  );
-
-  const {
-    executeCallback: sendRequestToDeleteUserFromGroup,
-    isLoading: deleteUserFromGroupIsLoading,
-  } = useFetching(async (userId) => await deleteUserFromGroup(userId));
-
   return (
-    <>
-      <MyButton onClick={() => setGroupUsersIsOpen(true)}>Users</MyButton>
+    <article data-testid='group-users-list-wrapper'>
+      <MyButton
+        data-testid='open-group-users-modal-btn'
+        onClick={() => setGroupUsersIsOpen(true)}
+      >
+        Users
+      </MyButton>
       <ModalWindow
+        testId='group-users-modal'
         isOpen={groupUsersIsOpen}
         setIsOpen={setGroupUsersIsOpen}
         modalContentClassName={listStyles['group-users-content__wrapper']}
@@ -107,47 +98,29 @@ const GroupUsersList = ({ groupId }) => {
                 : ''
             }`}
           >
-            {userGroupReducer.groupUsers.map((user) => (
-              <tr
-                key={user._id}
-                className={listStyles['user-row']}
-                onClick={() =>
-                  navigate(`${userPaths.mainPath}/${user.username}`)
-                }
-              >
-                <td>{user.username}</td>
-                <td>
-                  {user.firstName} {user.lastName}
-                </td>
-                <td>{user.email}</td>
-                <td>
-                  <MyButton
-                    className={listStyles['delete-group-user-btn']}
-                    disabled={deleteUserFromGroupIsLoading}
-                    onClick={async (e) => {
-                      e.stopPropagation();
-
-                      if (
-                        confirm(
-                          'Are you sure you want to delete user fron this group?'
-                        )
-                      ) {
-                        await sendRequestToDeleteUserFromGroup(
-                          undefined,
-                          user._id
-                        );
-                        getGroupUsersListWithCurrentQueryParams(
-                          { ...userQueryParams, page: 1 },
-                          false
-                        );
-                      }
-                    }}
-                  >
-                    Delete user from the group
-                  </MyButton>
-                </td>
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Full name</th>
+                <th>Email</th>
+                <th>Delete from</th>
               </tr>
-            ))}
+            </thead>
+            <tbody>
+              {userGroupReducer.groupUsers.map((user) => (
+                <GroupUsersItem
+                  key={user._id}
+                  user={user}
+                  groupId={groupId}
+                  actualizeGroupUsersList={() => {
+                    getGroupUsersListWithCurrentQueryParams(
+                      { ...userQueryParams, page: 1 },
+                      false
+                    );
+                  }}
+                />
+              ))}
+            </tbody>
           </table>
         ) : (
           <p>Group has no members</p>
@@ -163,7 +136,7 @@ const GroupUsersList = ({ groupId }) => {
           }}
         />
       </ModalWindow>
-    </>
+    </article>
   );
 };
 

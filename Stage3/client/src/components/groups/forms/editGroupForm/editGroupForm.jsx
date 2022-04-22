@@ -20,7 +20,7 @@ const EditGroupForm = ({ groupObj, actualizeGroupInfo }) => {
   }, [groupObj]);
 
   return (
-    <form className={formStyles['form']}>
+    <form data-testid='edit-group-form' className={formStyles['form']}>
       <div className={formStyles['form-inputs__wrapper']}>
         {Object.keys(newGroupInfo).map((groupParam) => (
           <MyInputWithLabel

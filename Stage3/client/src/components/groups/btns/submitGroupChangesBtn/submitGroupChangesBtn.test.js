@@ -86,7 +86,7 @@ describe('Correct submit changes button', () => {
     expect(actualizeGroupInfo.mock.calls.length).toBe(1);
   });
 
-  test('throwing error', async () => {
+  test('alerting when nothing to change', async () => {
     const actualizeGroupInfo = jest.fn();
     renderWithRouter(
       <SubmitGroupChangesBtn

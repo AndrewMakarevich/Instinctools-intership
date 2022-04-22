@@ -48,8 +48,8 @@ test('Bread crumb renders correctly', async () => {
   );
 });
 
-describe('Bread crumb state check while routing', () => {
-  test('Bread crumb values changes correctly while routing between main public routes', async () => {
+describe("Bread crumb's correct", () => {
+  test('values changes while routing between main public routes', async () => {
     renderWithRouter(
       <>
         <NavBar />
@@ -57,7 +57,7 @@ describe('Bread crumb state check while routing', () => {
       </>
     );
 
-    // Checking bread crumb behaviuor while routing on main public routes: /users and /groups
+    // Checking bread crumb behaviour while routing on main public routes: /users and /groups
     for (let publicRoute of publicRoutes) {
       await user.click(screen.getByTestId(`nav-bar-${publicRoute.name}-link`));
       expect(
@@ -66,7 +66,7 @@ describe('Bread crumb state check while routing', () => {
     }
   });
 
-  test('Bread crumb correct state in nested Users route', async () => {
+  test('state in nested Users route', async () => {
     UserService.getUsers.mockReturnValue(getUsersListResponse);
     renderWithAppRouter(<BreadCrumb />, [
       `${publicRoutes[0].path}/AndrewTheFirst`,
@@ -79,7 +79,7 @@ describe('Bread crumb state check while routing', () => {
     );
   });
 
-  test('Bread crumb correct state in nested Groups route', async () => {
+  test('state in nested Groups route', async () => {
     GroupService.getGroups.mockReturnValue(getGroupsListResponse);
     renderWithAppRouter(<BreadCrumb />, [`${publicRoutes[1].path}/FirstGroup`]);
     await checkBreadCrumbLinks(

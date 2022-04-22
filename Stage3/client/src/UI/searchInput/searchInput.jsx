@@ -5,7 +5,11 @@ import inputStyles from './searchInput.module.css';
 const SearchInput = (props) => {
   const { className, ...restProps } = props;
   return (
-    <label htmlFor='search-input' className={inputStyles.label}>
+    <label
+      data-testid='search-input'
+      htmlFor='search-input'
+      className={inputStyles.label}
+    >
       <input
         id='search-input'
         className={`${inputStyles.input} ${className}`}

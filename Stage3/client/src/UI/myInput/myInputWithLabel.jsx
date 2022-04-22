@@ -9,7 +9,10 @@ const MyInputWithLabel = ({
   ...restProps
 }) => {
   return (
-    <label className={`${inputStyles['label']} ${labelClassName || ''}`}>
+    <label
+      data-testid='my-label-input'
+      className={`${inputStyles['label']} ${labelClassName || ''}`}
+    >
       <MyInput className={className} {...restProps} />
       <span className={spanClassName}>{labelText}</span>
     </label>

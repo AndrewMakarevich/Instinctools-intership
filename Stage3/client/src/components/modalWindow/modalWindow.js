@@ -8,6 +8,7 @@ const ModalWindow = ({
   children,
   isOpen,
   setIsOpen,
+  testId,
 }) => {
   useEffect(() => {
     const closeModalByKeyboard = (e) => {
@@ -33,6 +34,7 @@ const ModalWindow = ({
       onClick={() => setIsOpen(false)}
     >
       <div
+        data-testid={testId}
         className={`${modalStyles['modal-window']} ${
           modalWindowClassName || ''
         }`}

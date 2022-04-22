@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import {
   renderWithRouter,
   renderWithReduxProvider,
@@ -19,14 +19,15 @@ afterEach(() => {
 });
 
 describe("Correct User's list", () => {
-  // test('render', async () => {
-  //   renderWithReduxProvider(<UserList />, ['/users']);
-
-  //   expect(screen.getByTestId('users-table-wrapper')).toBeInTheDocument();
-  // });
+  test('render', async () => {
+    await act(async () => {
+      renderWithReduxProvider(<UserList />, ['/users']);
+    });
+    expect(screen.getByTestId('users-table-wrapper')).toBeInTheDocument();
+  });
 
   test('correct redering after recieving user list data', async () => {
-    UserService.getUsers.mockReturnValue(getUsersListResponse);
+    UserService.getUsers.mockReturnValue(response);
     renderWithReduxProvider(<UserList />);
 
     const usersRows = await screen.findAllByTestId('user-row');

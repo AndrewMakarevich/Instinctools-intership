@@ -21,39 +21,35 @@ const SubmitUserChangesBtn = ({
         await UserService.editUser(userId, paramsObject)
     );
 
+  const submitUserChanges = async (e) => {
+    try {
+      e.preventDefault();
+      const paramsObject = parseDataToEdit(initialParamsObj, paramsToEditObj);
+
+      if (!Object.keys(paramsObject).length) {
+        alert('Nothing to change');
+        return;
+      }
+
+      UserValidator.validateUsername(paramsObject.username, true);
+      UserValidator.validateFirstName(paramsObject.firstName, true);
+      UserValidator.validateLastName(paramsObject.lastName, true);
+      UserValidator.validateEmail(paramsObject.email, true);
+
+      await editUser(undefined, userId, paramsObject);
+      //if user changed username, reload the page
+      if (paramsObject.username) {
+        navigate(userPaths.mainPath + '/' + paramsObject.username);
+      } else {
+        await actualizeUserInfo();
+      }
+    } catch (e) {
+      alert(e);
+    }
+  };
+
   return (
-    <MyButton
-      disabled={userInfoIsLoading}
-      onClick={async (e) => {
-        try {
-          e.preventDefault();
-          const paramsObject = parseDataToEdit(
-            initialParamsObj,
-            paramsToEditObj
-          );
-
-          if (!Object.keys(paramsObject).length) {
-            alert('Nothing to change');
-            return;
-          }
-
-          UserValidator.validateUsername(paramsObject.username, true);
-          UserValidator.validateFirstName(paramsObject.firstName, true);
-          UserValidator.validateLastName(paramsObject.lastName, true);
-          UserValidator.validateEmail(paramsObject.email, true);
-
-          await editUser(undefined, userId, paramsObject);
-          //if user changed username, reload the page
-          if (paramsObject.username) {
-            navigate(userPaths.mainPath + '/' + paramsObject.username);
-          } else {
-            await actualizeUserInfo();
-          }
-        } catch (e) {
-          alert(e);
-        }
-      }}
-    >
+    <MyButton disabled={userInfoIsLoading} onClick={submitUserChanges}>
       Submit changes
     </MyButton>
   );

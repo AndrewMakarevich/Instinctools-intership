@@ -7,7 +7,7 @@ const GroupSearchPanel = ({ paramsMap, queryParams, fetchGroups }) => {
     (value) => value !== ''
   );
   return (
-    <section className={panelStyles['search-panel']}>
+    <section data-testid='search-panel' className={panelStyles['search-panel']}>
       <div className={panelStyles['search-panel__inputs']}>
         {paramsMap.map((param) => (
           <SearchInput
@@ -30,6 +30,7 @@ const GroupSearchPanel = ({ paramsMap, queryParams, fetchGroups }) => {
       </div>
 
       <MyButton
+        data-testid='clear-group-search-panel-btn'
         disabled={filterObjectIsEmpty}
         onClick={async () => {
           if (filterObjectIsEmpty) {
