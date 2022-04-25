@@ -6,6 +6,7 @@ import EditUserForm from '../../components/users/forms/editUserForm/editUserForm
 import UserGroupsList from '../../components/users/lists/userGroupsList/userGroupsList';
 import useFetching from '../../hooks/useFetching';
 import { getUserThunk } from '../../store/reducers/userReducer/actionCreators';
+import UserGroupsModal from '../../components/users/modals/userGroupsModal/userGroupsModal';
 
 const UserPage = () => {
   const { username } = useParams();
@@ -52,7 +53,7 @@ const UserPage = () => {
             userObj={userReducer.user}
             actualizeUserInfo={fetchUser}
           />
-          <UserGroupsList userId={userReducer.user._id} />
+          <UserGroupsModal userId={userReducer.user._id} />
         </section>
       ) : (
         "Can't find user with such username"

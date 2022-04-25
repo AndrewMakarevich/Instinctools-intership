@@ -1,11 +1,14 @@
 import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 import MyButton from '../../../../UI/myButton/myButton';
 import SearchInput from '../../../../UI/searchInput/searchInput';
 import panelStyles from './userSearchPanel.module.css';
 
 const UserSearchPanel = ({ paramsMap, queryParams, fetchUsers }) => {
-  const filterObjectIsEmpty = !Object.values(queryParams.filterObject).some(
-    (value) => value !== ''
+  const filterObjectIsEmpty = useMemo(
+    () =>
+      !Object.values(queryParams.filterObject).some((value) => value !== ''),
+    [queryParams]
   );
 
   return (
@@ -25,7 +28,7 @@ const UserSearchPanel = ({ paramsMap, queryParams, fetchUsers }) => {
                 },
                 page: 1,
               };
-              await fetchUsers(newQueryParamsObj, true);
+              await fetchUsers(true, newQueryParamsObj);
             }}
           />
         ))}
@@ -48,7 +51,7 @@ const UserSearchPanel = ({ paramsMap, queryParams, fetchUsers }) => {
             },
           };
 
-          await fetchUsers(newQueryParamsObj, false);
+          await fetchUsers(false, newQueryParamsObj);
         }}
       >
         Clear search inputs

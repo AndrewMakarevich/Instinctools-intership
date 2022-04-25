@@ -4,9 +4,8 @@ import listStyles from './groupList.module.css';
 import { getGroupsThunk } from '../../../store/reducers/groupReducer/actionCreators';
 import GroupItem from '../groupItem/groupItem';
 import PaginationLine from '../../paginationLine/paginationLine';
-import useDelayFetching from '../../../hooks/useDelayFetching';
 import GroupSearchPanel from './groupSearchPanel/groupSearchPanel';
-import useFetching from '../../../hooks/useFetching';
+import useCombineFetching from '../../../hooks/useCombineFetching';
 
 const GroupList = () => {
   const [queryParams, setQueryParams] = useState({
@@ -24,30 +23,19 @@ const GroupList = () => {
     await dispatch(getGroupsThunk(queryParamsObj));
   }, []);
 
-  const { executeCallback: fetchGroups, isLoading: fetchGroupsLoading } =
-    useFetching(getGroups);
-  const [delayedFetchGroups, delayedFetchGroupsLoading] = useDelayFetching(
-    getGroups,
-    400
-  );
+  const [fetchGroups, fetchGroupsLoading, delayedFetchGroupsLoading] =
+    useCombineFetching(getGroups);
 
   const getUserGroupsWithCurrentQueryParams = async (
-    newQueryParamObj,
-    delayed
+    delayed,
+    newQueryParamObj
   ) => {
     setQueryParams(newQueryParamObj);
-
-    if (delayed) {
-      await delayedFetchGroups(undefined, newQueryParamObj);
-
-      return;
-    }
-
-    await fetchGroups(undefined, newQueryParamObj);
+    await fetchGroups(delayed, newQueryParamObj);
   };
 
   useEffect(() => {
-    getUserGroupsWithCurrentQueryParams(queryParams, false);
+    getUserGroupsWithCurrentQueryParams(false, queryParams);
   }, []);
 
   return (
@@ -87,7 +75,7 @@ const GroupList = () => {
         limit={queryParams.limit}
         setPage={(page, delayed = false) => {
           const newQueryParamsObj = { ...queryParams, page };
-          getUserGroupsWithCurrentQueryParams(newQueryParamsObj, delayed);
+          getUserGroupsWithCurrentQueryParams(delayed, newQueryParamsObj);
         }}
       />
     </article>

@@ -25,6 +25,38 @@ class UserGroupService {
     return response;
   }
 
+  static async getGroupsUserNotParticipateIn(
+    userId,
+    filterObject,
+    page,
+    limit
+  ) {
+    const response = await $host.get(
+      `user-group/get-groups-user-not-participate/${userId}`,
+      {
+        params: {
+          filterObject,
+          page,
+          limit,
+        },
+      }
+    );
+
+    return response;
+  }
+
+  static async getNotGroupMembers(groupId, filterObject, page, limit) {
+    const response = await $host.get(`user-group/get-not-members/${groupId}`, {
+      params: {
+        filterObject,
+        page,
+        limit,
+      },
+    });
+
+    return response;
+  }
+
   static async deleteUserFromTheGroup(userId, groupId) {
     const response = await $host.delete('user-group/delete-user', {
       params: {

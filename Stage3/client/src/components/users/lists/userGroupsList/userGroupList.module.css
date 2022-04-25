@@ -1,11 +1,6 @@
 .groups-table {
 }
 
-.user-groups-content__wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
 .loading {
   position: relative;
 }

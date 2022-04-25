@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import useDelayFetching from '../../../hooks/useDelayFetching';
-import useFetching from '../../../hooks/useFetching';
+import useCombineFetching from '../../../hooks/useCombineFetching';
 import { getUsersThunk } from '../../../store/reducers/userReducer/actionCreators';
-import AddButton from '../../../UI/addButton/addButton';
 import PaginationLine from '../../paginationLine/paginationLine';
 import UserItem from '../userItem/userItem';
 import listStyles from './userList.module.css';
@@ -27,32 +25,16 @@ const UserList = () => {
     await dispatch(getUsersThunk(filterObject, page, limit));
   }, []);
 
-  const { executeCallback: fetchUsers, isLoading: usersFetchLoading } =
-    useFetching(getUsers);
-
-  const [delayedFetchUsers, usersDelayFetchLoading] = useDelayFetching(
-    getUsers,
-    400
-  );
+  const [fetchUsers, usersFetchLoading, usersDelayFetchLoading] =
+    useCombineFetching(getUsers);
 
   async function getUsersListWithCurrentQueryParams(
-    newQueryParamsObj,
-    delayed
+    delayed,
+    newQueryParamsObj
   ) {
     setQueryParams(newQueryParamsObj);
-
-    if (delayed) {
-      await delayedFetchUsers(
-        null,
-        newQueryParamsObj.filterObject,
-        newQueryParamsObj.page,
-        newQueryParamsObj.limit
-      );
-      return;
-    }
-
     await fetchUsers(
-      null,
+      delayed,
       newQueryParamsObj.filterObject,
       newQueryParamsObj.page,
       newQueryParamsObj.limit
@@ -60,7 +42,7 @@ const UserList = () => {
   }
 
   useEffect(() => {
-    getUsersListWithCurrentQueryParams(queryParams, false);
+    getUsersListWithCurrentQueryParams(false, queryParams);
   }, []);
 
   return (
@@ -99,9 +81,9 @@ const UserList = () => {
         count={userReducer.count}
         page={queryParams.page}
         limit={queryParams.limit}
-        setPage={async (page) => {
+        setPage={async (page, delayed = false) => {
           const newQueryParamsObj = { ...queryParams, page };
-          await getUsersListWithCurrentQueryParams(newQueryParamsObj, false);
+          await getUsersListWithCurrentQueryParams(delayed, newQueryParamsObj);
         }}
       />
     </article>

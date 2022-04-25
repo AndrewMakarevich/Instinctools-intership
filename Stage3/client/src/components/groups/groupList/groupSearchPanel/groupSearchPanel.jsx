@@ -23,7 +23,7 @@ const GroupSearchPanel = ({ paramsMap, queryParams, fetchGroups }) => {
                 },
                 page: 1,
               };
-              await fetchGroups(newQueryParamObj, true);
+              await fetchGroups(true, newQueryParamObj);
             }}
           />
         ))}
@@ -44,7 +44,7 @@ const GroupSearchPanel = ({ paramsMap, queryParams, fetchGroups }) => {
               groupTitle: '',
             },
           };
-          await fetchGroups(newQueryParamsObj, false);
+          await fetchGroups(false, newQueryParamsObj);
         }}
       >
         Clear search inputs

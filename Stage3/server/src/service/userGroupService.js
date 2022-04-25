@@ -2,12 +2,7 @@ const ApiError = require('../apiError/apiError');
 const { GroupModel, UserModel, UsersGroupsModel } = require('../models/models');
 const createModelSearchQuery = require('../utils/createModelSearchQuery');
 
-async function checkUserAndGroup(
-  userId,
-  groupId,
-  userErrorMessage,
-  groupErrorMessage
-) {
+async function checkUser(userId, userErrorMessage) {
   const user = await UserModel.findById(userId).catch(() => {
     throw ApiError.badRequest("Incorrect user's id");
   });
@@ -16,6 +11,10 @@ async function checkUserAndGroup(
     throw ApiError.badRequest(userErrorMessage);
   }
 
+  return user;
+}
+
+async function checkGroup(groupId, groupErrorMessage) {
   const group = await GroupModel.findById(groupId).catch(() => {
     throw ApiError.badRequest("Incorrect group's id");
   });
@@ -23,6 +22,18 @@ async function checkUserAndGroup(
   if (!group) {
     throw ApiError.badRequest(groupErrorMessage);
   }
+
+  return group;
+}
+
+async function checkUserAndGroup(
+  userId,
+  groupId,
+  userErrorMessage,
+  groupErrorMessage
+) {
+  const user = await checkUser(userId, userErrorMessage);
+  const group = await checkGroup(groupId, groupErrorMessage);
 
   return { user, group };
 }
@@ -35,11 +46,7 @@ class UserGroupService {
   }
 
   static async getUsersGroups(userId, filterObject, page, limit) {
-    const user = await UserModel.findById(userId);
-
-    if (!user) {
-      throw ApiError.badRequest("User with such id doesn't exists");
-    }
+    await checkUser(userId, "User with such id doesn't exists");
 
     let userGroupsConnections = await UsersGroupsModel.find({
       userId,
@@ -69,11 +76,7 @@ class UserGroupService {
   }
 
   static async getGroupUsers(groupId, filterObject, page, limit) {
-    const group = await GroupModel.findById(groupId);
-
-    if (!group) {
-      throw ApiError.badRequest("Group with such id doesn't exists");
-    }
+    await checkGroup(groupId, "Group with such id doesn't exists");
 
     let userGroupConnections = await UsersGroupsModel.find({
       groupId,
@@ -103,6 +106,78 @@ class UserGroupService {
     });
 
     return { count: usersCount, rows: users };
+  }
+
+  static async getNotGroupMembers(groupId, filterObject, page, limit) {
+    await checkGroup(groupId, "Group with such id doesn't exists");
+
+    let userGroupConnections = await UsersGroupsModel.find({
+      groupId,
+    });
+
+    if (!userGroupConnections) {
+      const allUsers = UserModel.find();
+      return allUsers;
+    }
+
+    const parsedFilterObj = createModelSearchQuery(filterObject);
+    const skipValue = (page - 1) * limit;
+
+    userGroupConnections = userGroupConnections.map(
+      (connection) => connection.userId
+    );
+    const notMembers = await UserModel.find({
+      _id: { $nin: userGroupConnections },
+      ...parsedFilterObj,
+    })
+      .skip(skipValue || 0)
+      .limit(limit || 5);
+
+    const notMembersCount = await UserModel.count({
+      _id: { $nin: userGroupConnections },
+      ...parsedFilterObj,
+    });
+
+    return { count: notMembersCount, rows: notMembers };
+  }
+
+  static async getGroupsUserNotParticipateIn(
+    userId,
+    filterObject,
+    page,
+    limit
+  ) {
+    await checkUser(userId, "User with such id doesn't exists");
+
+    let userGroupConnections = await UsersGroupsModel.find({
+      userId,
+    });
+
+    if (!userGroupConnections) {
+      const allGroups = GroupModel.find();
+      return allGroups;
+    }
+
+    const userGroupsIds = userGroupConnections.map(
+      (connection) => connection.groupId
+    );
+
+    const parsedFilterObj = createModelSearchQuery(filterObject);
+    const skipValue = (page - 1) * limit;
+
+    const groups = await GroupModel.find({
+      _id: { $nin: userGroupsIds },
+      ...parsedFilterObj,
+    })
+      .skip(skipValue || 0)
+      .limit(limit || 5);
+
+    const groupsCount = await GroupModel.count({
+      _id: { $nin: userGroupsIds },
+      ...parsedFilterObj,
+    });
+
+    return { count: groupsCount, rows: groups };
   }
 
   static async addUserToGroup(userId, groupId) {

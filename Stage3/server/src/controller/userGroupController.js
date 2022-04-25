@@ -35,6 +35,37 @@ class UserGroupController {
     }
   }
 
+  static async getNotGroupMembers(req, res, next) {
+    try {
+      const { groupId } = req.params;
+      const { filterObject, page, limit } = req.query;
+      const response = await UserGroupService.getNotGroupMembers(
+        groupId,
+        filterObject,
+        page,
+        limit
+      );
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async getGroupsUserNotParticipateIn(req, res, next) {
+    const { userId } = req.params;
+    const { filterObject, page, limit } = req.query;
+
+    const response = await UserGroupService.getGroupsUserNotParticipateIn(
+      userId,
+      filterObject,
+      page,
+      limit
+    );
+
+    return res.json(response);
+  }
+
   static async addUserToGroup(req, res, next) {
     try {
       const { userId, groupId } = req.body;

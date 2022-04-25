@@ -233,6 +233,37 @@ class UserGroupController {
     }
   }
 
+  static async getNotGroupMembers(req, res, next) {
+    try {
+      const { groupId } = req.params;
+      const { filterObject, page, limit } = req.query;
+      const response = await UserGroupService.getNotGroupMembers(
+        groupId,
+        filterObject,
+        page,
+        limit
+      );
+
+      return res.json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  static async getGroupsUserNotParticipateIn(req, res, next) {
+    const { userId } = req.params;
+    const { filterObject, page, limit } = req.query;
+
+    const response = await UserGroupService.getGroupsUserNotParticipateIn(
+      userId,
+      filterObject,
+      page,
+      limit
+    );
+
+    return res.json(response);
+  }
+
   static async addUserToGroup(req, res, next) {
     try {
       const { userId, groupId } = req.body;
@@ -508,6 +539,14 @@ const userGroupRouter = new Router();
 
 userGroupRouter.get('/get-groups/:userId', UserGroupController.getUserGroups);
 userGroupRouter.get('/get-users/:groupId', UserGroupController.getGroupUsers);
+userGroupRouter.get(
+  '/get-not-members/:groupId',
+  UserGroupController.getNotGroupMembers
+);
+userGroupRouter.get(
+  '/get-groups-user-not-participate/:userId',
+  UserGroupController.getGroupsUserNotParticipateIn
+);
 userGroupRouter.post('/add-user', UserGroupController.addUserToGroup);
 userGroupRouter.delete('/delete-user', UserGroupController.deleteUserFromGroup);
 
@@ -642,12 +681,7 @@ const ApiError = __webpack_require__(/*! ../apiError/apiError */ "./src/apiError
 const { GroupModel, UserModel, UsersGroupsModel } = __webpack_require__(/*! ../models/models */ "./src/models/models.js");
 const createModelSearchQuery = __webpack_require__(/*! ../utils/createModelSearchQuery */ "./src/utils/createModelSearchQuery.js");
 
-async function checkUserAndGroup(
-  userId,
-  groupId,
-  userErrorMessage,
-  groupErrorMessage
-) {
+async function checkUser(userId, userErrorMessage) {
   const user = await UserModel.findById(userId).catch(() => {
     throw ApiError.badRequest("Incorrect user's id");
   });
@@ -656,6 +690,10 @@ async function checkUserAndGroup(
     throw ApiError.badRequest(userErrorMessage);
   }
 
+  return user;
+}
+
+async function checkGroup(groupId, groupErrorMessage) {
   const group = await GroupModel.findById(groupId).catch(() => {
     throw ApiError.badRequest("Incorrect group's id");
   });
@@ -663,6 +701,18 @@ async function checkUserAndGroup(
   if (!group) {
     throw ApiError.badRequest(groupErrorMessage);
   }
+
+  return group;
+}
+
+async function checkUserAndGroup(
+  userId,
+  groupId,
+  userErrorMessage,
+  groupErrorMessage
+) {
+  const user = await checkUser(userId, userErrorMessage);
+  const group = await checkGroup(groupId, groupErrorMessage);
 
   return { user, group };
 }
@@ -675,11 +725,7 @@ class UserGroupService {
   }
 
   static async getUsersGroups(userId, filterObject, page, limit) {
-    const user = await UserModel.findById(userId);
-
-    if (!user) {
-      throw ApiError.badRequest("User with such id doesn't exists");
-    }
+    await checkUser(userId, "User with such id doesn't exists");
 
     let userGroupsConnections = await UsersGroupsModel.find({
       userId,
@@ -709,11 +755,7 @@ class UserGroupService {
   }
 
   static async getGroupUsers(groupId, filterObject, page, limit) {
-    const group = await GroupModel.findById(groupId);
-
-    if (!group) {
-      throw ApiError.badRequest("Group with such id doesn't exists");
-    }
+    await checkGroup(groupId, "Group with such id doesn't exists");
 
     let userGroupConnections = await UsersGroupsModel.find({
       groupId,
@@ -743,6 +785,78 @@ class UserGroupService {
     });
 
     return { count: usersCount, rows: users };
+  }
+
+  static async getNotGroupMembers(groupId, filterObject, page, limit) {
+    await checkGroup(groupId, "Group with such id doesn't exists");
+
+    let userGroupConnections = await UsersGroupsModel.find({
+      groupId,
+    });
+
+    if (!userGroupConnections) {
+      const allUsers = UserModel.find();
+      return allUsers;
+    }
+
+    const parsedFilterObj = createModelSearchQuery(filterObject);
+    const skipValue = (page - 1) * limit;
+
+    userGroupConnections = userGroupConnections.map(
+      (connection) => connection.userId
+    );
+    const notMembers = await UserModel.find({
+      _id: { $nin: userGroupConnections },
+      ...parsedFilterObj,
+    })
+      .skip(skipValue || 0)
+      .limit(limit || 5);
+
+    const notMembersCount = await UserModel.count({
+      _id: { $nin: userGroupConnections },
+      ...parsedFilterObj,
+    });
+
+    return { count: notMembersCount, rows: notMembers };
+  }
+
+  static async getGroupsUserNotParticipateIn(
+    userId,
+    filterObject,
+    page,
+    limit
+  ) {
+    await checkUser(userId, "User with such id doesn't exists");
+
+    let userGroupConnections = await UsersGroupsModel.find({
+      userId,
+    });
+
+    if (!userGroupConnections) {
+      const allGroups = GroupModel.find();
+      return allGroups;
+    }
+
+    const userGroupsIds = userGroupConnections.map(
+      (connection) => connection.groupId
+    );
+
+    const parsedFilterObj = createModelSearchQuery(filterObject);
+    const skipValue = (page - 1) * limit;
+
+    const groups = await GroupModel.find({
+      _id: { $nin: userGroupsIds },
+      ...parsedFilterObj,
+    })
+      .skip(skipValue || 0)
+      .limit(limit || 5);
+
+    const groupsCount = await GroupModel.count({
+      _id: { $nin: userGroupsIds },
+      ...parsedFilterObj,
+    });
+
+    return { count: groupsCount, rows: groups };
   }
 
   static async addUserToGroup(userId, groupId) {

@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import listStyles from './groupUsersList.module.css';
+import listStyles from './notGroupMembersList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGroupUsersThunk } from '../../../../store/reducers/userGroupReducer/actionCreator';
+import useCombineFetching from '../../../../hooks/useCombineFetching';
+import { getNotGroupMembersThunk } from '../../../../store/reducers/userGroupReducer/actionCreator';
 import PaginationLine from '../../../paginationLine/paginationLine';
 import UserSearchPanel from '../../../users/userList/userSearchPanel/userSearchPanel';
-import GroupUsersItem from './groupUsersItem';
-import useCombineFetching from '../../../../hooks/useCombineFetching';
 
-const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
-  const dispatch = useDispatch();
-  const userGroupReducer = useSelector((store) => store.userGroupReducer);
+import NotGroupMembersItem from './notGroupMembersItem';
+
+const NotGroupMembersList = ({ groupId, groupUsersIsOpen }) => {
   const [userQueryParams, setUserQueryParams] = useState({
     filterObject: {
       username: '',
@@ -20,25 +19,25 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
     page: 1,
     limit: 2,
   });
+  const dispatch = useDispatch();
+  const userGroupReducer = useSelector((store) => store.userGroupReducer);
+  console.log(userGroupReducer.notGroupMembers);
 
-  const getGroupUsers = useCallback(
+  const getUsers = useCallback(
     async (filterObject, page, limit) => {
-      await dispatch(getGroupUsersThunk(groupId, filterObject, page, limit));
+      await dispatch(
+        getNotGroupMembersThunk(groupId, filterObject, page, limit)
+      );
     },
     [groupId]
   );
 
-  const [
-    fetchGroupUsers,
-    fetchGroupUsersLoading,
-    delayedFetchGroupUsersLoading,
-  ] = useCombineFetching(getGroupUsers);
-  const getGroupUsersListWithCurrentQueryParams = async (
-    delayed,
-    newQueryParamsObj
-  ) => {
+  const [fetchUsers, fetchUsersLoading, delayFetchUsersLoading] =
+    useCombineFetching(getUsers);
+
+  const getUsersWithCurrentQuryParams = (delayed, newQueryParamsObj) => {
     setUserQueryParams(newQueryParamsObj);
-    await fetchGroupUsers(
+    fetchUsers(
       delayed,
       newQueryParamsObj.filterObject,
       newQueryParamsObj.page,
@@ -47,22 +46,19 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
   };
 
   useEffect(() => {
-    if (groupUsersIsOpen) {
-      getGroupUsersListWithCurrentQueryParams(false, userQueryParams);
-    }
+    getUsersWithCurrentQuryParams(false, userQueryParams);
   }, [groupUsersIsOpen]);
-
   return (
-    <article data-testid='group-users-list-wrapper'>
+    <>
       <UserSearchPanel
         paramsMap={['username', 'firstName', 'lastName', 'email']}
         queryParams={userQueryParams}
-        fetchUsers={getGroupUsersListWithCurrentQueryParams}
+        fetchUsers={getUsersWithCurrentQuryParams}
       />
-      {userGroupReducer.groupUsers.length ? (
+      {userGroupReducer.notGroupMembers.length ? (
         <table
           className={`${listStyles['users-table']} ${
-            delayedFetchGroupUsersLoading || fetchGroupUsersLoading
+            fetchUsersLoading || delayFetchUsersLoading
               ? `${listStyles['loading']}`
               : ''
           }`}
@@ -72,12 +68,12 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
               <th>Username</th>
               <th>Full name</th>
               <th>Email</th>
-              <th>Delete from</th>
+              <th>Add to</th>
             </tr>
           </thead>
           <tbody>
-            {userGroupReducer.groupUsers.map((user) => (
-              <GroupUsersItem
+            {userGroupReducer.notGroupMembers.map((user) => (
+              <NotGroupMembersItem
                 key={user._id}
                 user={user}
                 groupId={groupId}
@@ -101,11 +97,11 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
         count={userGroupReducer.count}
         setPage={(pageValue, delayed = false) => {
           const newQueryParamsObj = { ...userQueryParams, page: pageValue };
-          getGroupUsersListWithCurrentQueryParams(delayed, newQueryParamsObj);
+          getUsersWithCurrentQuryParams(delayed, newQueryParamsObj);
         }}
       />
-    </article>
+    </>
   );
 };
 
-export default GroupUsersList;
+export default NotGroupMembersList;

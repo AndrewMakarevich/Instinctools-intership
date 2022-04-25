@@ -24,7 +24,7 @@ const useDelayFetching = (callback, delay) => {
         setError(e);
       }
     },
-    [callback, delay]
+    [callback, delay, error]
   );
 
   return [executeCallback, isLoading];

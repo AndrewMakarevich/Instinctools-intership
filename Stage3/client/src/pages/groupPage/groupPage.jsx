@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import EditGroupForm from '../../components/groups/forms/editGroupForm/editGroupForm';
-import GroupUsersList from '../../components/groups/lists/groupUsersList/groupUsersList';
+import GroupUsersModal from '../../components/groups/modals/groupUsersModal/groupUsersModal';
 import useFetching from '../../hooks/useFetching';
 import { getGroupThunk } from '../../store/reducers/groupReducer/actionCreators';
 import pageStyles from './groupPage.module.css';
@@ -56,7 +56,7 @@ const GroupPage = () => {
             groupObj={groupReducer.group}
             actualizeGroupInfo={fetchGroup}
           />
-          <GroupUsersList groupId={groupReducer.group._id} />
+          <GroupUsersModal groupId={groupReducer.group._id} />
         </section>
       ) : (
         <p>Can't find group with such groupname</p>
