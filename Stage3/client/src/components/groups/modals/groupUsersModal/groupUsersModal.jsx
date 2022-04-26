@@ -7,7 +7,7 @@ import modalStyles from './groupUsersModal.module.css';
 
 const GroupUsersModal = ({ groupId }) => {
   const [groupUsersIsOpen, setGroupUsersIsOpen] = useState(false);
-  const [deleteState, setDeleteState] = useState(false);
+  const [deleteState, setDeleteState] = useState(true);
   return (
     <>
       <MyButton
@@ -22,10 +22,6 @@ const GroupUsersModal = ({ groupId }) => {
         setIsOpen={setGroupUsersIsOpen}
         modalContentClassName={modalStyles['group-users-content__wrapper']}
       >
-        <button onClick={() => setDeleteState(!deleteState)}>
-          {deleteState ? 'Add' : 'Delete'}
-        </button>
-
         {deleteState ? (
           <GroupUsersList
             groupId={groupId}
@@ -37,6 +33,10 @@ const GroupUsersModal = ({ groupId }) => {
             groupUsersIsOpen={groupUsersIsOpen}
           />
         )}
+
+        <MyButton onClick={() => setDeleteState(!deleteState)}>
+          {deleteState ? 'Add new users to the group' : 'Delete users'}
+        </MyButton>
       </ModalWindow>
     </>
   );

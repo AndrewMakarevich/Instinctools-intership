@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import listStyles from './groupsUserNotPartOfList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import useCombineFetching from '../../../../hooks/useCombineFetching';
 import { getGroupsUserNotParticipateInThunk } from '../../../../store/reducers/userGroupReducer/actionCreator';
@@ -51,19 +52,45 @@ const GroupsUserNotPartOfList = ({ userId, userGroupsIsOpen }) => {
         queryParams={groupQueryParams}
         fetchGroups={getGroupsWithCurrentQueryParams}
       />
-      <table>
-        <thead>
-          <th>Group name</th>
-          <th>Group title</th>
-          <th>Enter group</th>
-        </thead>
-        <tbody>
-          {userGroupReducer.groupsUserNotParticipateIn.map((group) => (
-            <GroupsUserNotPartOfItem group={group} />
-          ))}
-        </tbody>
-        <tfoot></tfoot>
-      </table>
+      {userGroupReducer.groupsUserNotParticipateIn.length ? (
+        <table
+          className={`${listStyles['groups-table']} ${
+            fetchGroupsLoading || delayedFetchGroupsLoading
+              ? listStyles['loading']
+              : ''
+          }`}
+        >
+          <thead>
+            <tr>
+              <th>Group name</th>
+              <th>Group title</th>
+              <th>Enter group</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userGroupReducer.groupsUserNotParticipateIn.map((group) => (
+              <GroupsUserNotPartOfItem
+                key={group._id}
+                group={group}
+                userId={userId}
+                actualizeUserGroupsList={() =>
+                  getGroupsWithCurrentQueryParams(false, {
+                    ...groupQueryParams,
+                    page: 1,
+                  })
+                }
+              />
+            ))}
+          </tbody>
+          <tfoot></tfoot>
+        </table>
+      ) : (
+        <p>
+          Can't find group with such query params or user already the member of
+          all existing groups
+        </p>
+      )}
+
       <PaginationLine
         page={groupQueryParams.page}
         count={userGroupReducer.count}

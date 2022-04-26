@@ -1,32 +1,19 @@
-import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useFetching from '../../../../hooks/useFetching';
-import UserGroupService from '../../../../service/userGroupService';
 import MyButton from '../../../../UI/myButton/myButton';
+import deleteUserFromGroup from '../../../../utils/userGroup/deleteUserFromTheGroup';
+import { groupPaths } from '../../../router/routes';
 import listStyles from './userGroupList.module.css';
 
 const UserGroupsItem = ({ group, userId, actualizeUserGroupsList }) => {
-  //Deleting user from the group
-  const deleteUserFromGroup = useCallback(
-    async (groupId) => {
-      await UserGroupService.deleteUserFromTheGroup(userId, groupId);
-    },
-    [userId]
-  );
-
+  const navigate = useNavigate();
   const {
     executeCallback: sendRequestToDeleteUserFromGroup,
     isLoading: deleteUserFromGroupIsLoading,
-  } = useFetching(async (groupId) => await deleteUserFromGroup(groupId));
-
-  const confirmDeleteUserFromGroup = async (e, groupId) => {
-    e.stopPropagation();
-
-    if (confirm('Are you sure you want to leave this group?')) {
-      await sendRequestToDeleteUserFromGroup(undefined, groupId);
-    }
-
-    await actualizeUserGroupsList();
-  };
+  } = useFetching(
+    async (userId, groupId, actualizeUserGroupsList) =>
+      await deleteUserFromGroup(userId, groupId, actualizeUserGroupsList)
+  );
 
   return (
     <tr
@@ -41,7 +28,13 @@ const UserGroupsItem = ({ group, userId, actualizeUserGroupsList }) => {
           className={listStyles['delete-user-group-btn']}
           disabled={deleteUserFromGroupIsLoading}
           onClick={async (e) => {
-            await confirmDeleteUserFromGroup(e, group._id);
+            e.stopPropagation();
+            await sendRequestToDeleteUserFromGroup(
+              undefined,
+              userId,
+              group._id,
+              actualizeUserGroupsList
+            );
           }}
         >
           Leave this group

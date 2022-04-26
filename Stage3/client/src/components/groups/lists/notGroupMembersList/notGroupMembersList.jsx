@@ -21,7 +21,6 @@ const NotGroupMembersList = ({ groupId, groupUsersIsOpen }) => {
   });
   const dispatch = useDispatch();
   const userGroupReducer = useSelector((store) => store.userGroupReducer);
-  console.log(userGroupReducer.notGroupMembers);
 
   const getUsers = useCallback(
     async (filterObject, page, limit) => {
@@ -78,7 +77,7 @@ const NotGroupMembersList = ({ groupId, groupUsersIsOpen }) => {
                 user={user}
                 groupId={groupId}
                 actualizeGroupUsersList={() => {
-                  getGroupUsersListWithCurrentQueryParams(false, {
+                  getUsersWithCurrentQuryParams(false, {
                     ...userQueryParams,
                     page: 1,
                   });
@@ -88,7 +87,10 @@ const NotGroupMembersList = ({ groupId, groupUsersIsOpen }) => {
           </tbody>
         </table>
       ) : (
-        <p>Group has no members</p>
+        <p>
+          Can't find user with such query params or group already have all
+          members in
+        </p>
       )}
 
       <PaginationLine

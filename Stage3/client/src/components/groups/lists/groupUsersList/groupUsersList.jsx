@@ -53,7 +53,7 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
   }, [groupUsersIsOpen]);
 
   return (
-    <article data-testid='group-users-list-wrapper'>
+    <>
       <UserSearchPanel
         paramsMap={['username', 'firstName', 'lastName', 'email']}
         queryParams={userQueryParams}
@@ -92,7 +92,7 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
           </tbody>
         </table>
       ) : (
-        <p>Group has no members</p>
+        <p>Can't find user with such query params or group has no members</p>
       )}
 
       <PaginationLine
@@ -104,7 +104,7 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
           getGroupUsersListWithCurrentQueryParams(delayed, newQueryParamsObj);
         }}
       />
-    </article>
+    </>
   );
 };
 

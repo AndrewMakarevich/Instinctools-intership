@@ -38,3 +38,15 @@
     opacity: 1;
   }
 }
+
+@media (max-width: 768px) {
+  .groups-table {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .groups-table {
+    font-size: 0.5rem;
+  }
+}

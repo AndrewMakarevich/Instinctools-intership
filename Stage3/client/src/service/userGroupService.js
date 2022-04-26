@@ -57,6 +57,15 @@ class UserGroupService {
     return response;
   }
 
+  static async addUserToTheGroup(userId, groupId) {
+    const response = await $host.post('user-group/add-user', {
+      userId,
+      groupId,
+    });
+
+    return response;
+  }
+
   static async deleteUserFromTheGroup(userId, groupId) {
     const response = await $host.delete('user-group/delete-user', {
       params: {

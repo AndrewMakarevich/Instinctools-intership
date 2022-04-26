@@ -7,7 +7,7 @@ import GroupsUserNotPartOfList from '../../lists/groupsUserNotPartOfList/groupsU
 
 const UserGroupsModal = ({ userId }) => {
   const [userGroupsIsOpen, setUserGroupsIsOpen] = useState(false);
-  const [leaveState, setLeaveState] = useState(false);
+  const [leaveState, setLeaveState] = useState(true);
 
   return (
     <>
@@ -17,10 +17,6 @@ const UserGroupsModal = ({ userId }) => {
         setIsOpen={setUserGroupsIsOpen}
         modalContentClassName={modalStyles['user-groups-content__wrapper']}
       >
-        <button onClick={() => setLeaveState(!leaveState)}>
-          {leaveState ? 'Enter' : 'Leave'}
-        </button>
-
         {leaveState ? (
           <UserGroupsList userId={userId} userGroupsIsOpen={userGroupsIsOpen} />
         ) : (
@@ -29,6 +25,10 @@ const UserGroupsModal = ({ userId }) => {
             userGroupsIsOpen={userGroupsIsOpen}
           />
         )}
+
+        <MyButton onClick={() => setLeaveState(!leaveState)}>
+          {leaveState ? 'Enter into other groups' : 'Leave groups'}
+        </MyButton>
       </ModalWindow>
     </>
   );

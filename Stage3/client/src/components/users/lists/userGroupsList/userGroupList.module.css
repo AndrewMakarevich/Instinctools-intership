@@ -6,7 +6,7 @@
 }
 
 .loading::before {
-  content: 'Users are loading';
+  content: 'Groups are loading';
   position: absolute;
   top: 0;
   left: 0;
@@ -47,5 +47,22 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .groups-table,
+  .delete-user-group-btn {
+    font-size: 0.7rem;
+  }
+  .group-cell {
+    padding: 1px 2px;
+  }
+}
+
+@media (max-width: 425px) {
+  .groups-table,
+  .delete-user-group-btn {
+    font-size: 0.5rem;
   }
 }

@@ -181,6 +181,7 @@ class UserGroupService {
   }
 
   static async addUserToGroup(userId, groupId) {
+    console.log(userId, groupId);
     const userAndGroup = await checkUserAndGroup(
       userId,
       groupId,

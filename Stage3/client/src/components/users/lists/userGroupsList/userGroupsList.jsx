@@ -94,7 +94,10 @@ const UserGroupsList = ({ userId, userGroupsIsOpen }) => {
           <tfoot></tfoot>
         </table>
       ) : (
-        <p>User isn't a member of any group</p>
+        <p>
+          Can't find group with such query params or user isn't a member of any
+          group
+        </p>
       )}
       <PaginationLine
         page={groupQueryParams.page}
