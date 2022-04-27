@@ -4,8 +4,8 @@ import listStyles from './groupList.module.css';
 import { getGroupsThunk } from '../../../store/reducers/groupReducer/actionCreators';
 import GroupItem from '../groupItem/groupItem';
 import PaginationLine from '../../paginationLine/paginationLine';
-import GroupSearchPanel from './groupSearchPanel/groupSearchPanel';
 import useCombineFetching from '../../../hooks/useCombineFetching';
+import SearchPanel from '../../searchPanel/searchPanel';
 
 const GroupList = () => {
   const [queryParams, setQueryParams] = useState({
@@ -34,6 +34,17 @@ const GroupList = () => {
     await fetchGroups(delayed, newQueryParamObj);
   };
 
+  const clearQueryParams = useCallback(async () => {
+    const clearedQueryParamsObj = {
+      ...queryParams,
+      filterObject: {
+        groupName: '',
+        groupTitle: '',
+      },
+    };
+    await getUserGroupsWithCurrentQueryParams(false, clearedQueryParamsObj);
+  }, [queryParams, getUserGroupsWithCurrentQueryParams]);
+
   useEffect(() => {
     getUserGroupsWithCurrentQueryParams(false, queryParams);
   }, []);
@@ -43,10 +54,11 @@ const GroupList = () => {
       data-testid='groups-table-wrapper'
       className={listStyles['groups-table-wrapper']}
     >
-      <GroupSearchPanel
+      <SearchPanel
         paramsMap={['groupName', 'groupTitle']}
         queryParams={queryParams}
-        fetchGroups={getUserGroupsWithCurrentQueryParams}
+        fetchFunction={getUserGroupsWithCurrentQueryParams}
+        clearFieldsFunction={clearQueryParams}
       />
       <table
         data-testid='groups-table'

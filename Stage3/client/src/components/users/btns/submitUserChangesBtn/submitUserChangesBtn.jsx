@@ -49,7 +49,11 @@ const SubmitUserChangesBtn = ({
   };
 
   return (
-    <MyButton disabled={userInfoIsLoading} onClick={submitUserChanges}>
+    <MyButton
+      type='submit'
+      disabled={userInfoIsLoading}
+      onClick={submitUserChanges}
+    >
       Submit changes
     </MyButton>
   );

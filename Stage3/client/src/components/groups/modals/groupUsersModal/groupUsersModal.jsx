@@ -1,13 +1,19 @@
 import { useState } from 'react';
+import {
+  getGroupUsersThunk,
+  getNotGroupMembersThunk,
+} from '../../../../store/reducers/userGroupReducer/actionCreator';
 import MyButton from '../../../../UI/myButton/myButton';
+import addUserToTheGroup from '../../../../utils/userGroup/addUserToTheGroup';
+import deleteUserFromGroup from '../../../../utils/userGroup/deleteUserFromTheGroup';
 import ModalWindow from '../../../modalWindow/modalWindow';
-import GroupUsersList from '../../lists/groupUsersList/groupUsersList';
-import NotGroupMembersList from '../../lists/notGroupMembersList/notGroupMembersList';
+import GroupUsersPanel from '../../lists/groupUsersPanel/groupUsersPanel';
 import modalStyles from './groupUsersModal.module.css';
 
 const GroupUsersModal = ({ groupId }) => {
   const [groupUsersIsOpen, setGroupUsersIsOpen] = useState(false);
   const [deleteState, setDeleteState] = useState(true);
+
   return (
     <>
       <MyButton
@@ -23,17 +29,24 @@ const GroupUsersModal = ({ groupId }) => {
         modalContentClassName={modalStyles['group-users-content__wrapper']}
       >
         {deleteState ? (
-          <GroupUsersList
+          <GroupUsersPanel
+            key={1}
             groupId={groupId}
-            groupUsersIsOpen={groupUsersIsOpen}
+            groupUsersStateArrName='groupUsers'
+            thunkFunction={getGroupUsersThunk}
+            actionsArr={[
+              { header: 'delete', clickHandler: deleteUserFromGroup },
+            ]}
           />
         ) : (
-          <NotGroupMembersList
+          <GroupUsersPanel
+            key={2}
             groupId={groupId}
-            groupUsersIsOpen={groupUsersIsOpen}
+            groupUsersStateArrName='notGroupMembers'
+            thunkFunction={getNotGroupMembersThunk}
+            actionsArr={[{ header: 'add', clickHandler: addUserToTheGroup }]}
           />
         )}
-
         <MyButton onClick={() => setDeleteState(!deleteState)}>
           {deleteState ? 'Add new users to the group' : 'Delete users'}
         </MyButton>

@@ -14,10 +14,10 @@ const useFetching = (callback) => {
         }
 
         await callback(...restArgs);
-        setIsLoading(false);
       } catch (e) {
-        setIsLoading(false);
         setError(e);
+      } finally {
+        setIsLoading(false);
       }
     },
     [callback]

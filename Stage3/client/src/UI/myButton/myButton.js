@@ -5,7 +5,7 @@ const MyButton = ({ className, children, onClick, ...restProps }) => {
     <button
       className={`${buttonStyles['my-button']} ${className || ''}`}
       onClick={(e) => {
-        e.preventDefault();
+        // e.preventDefault();
 
         if (onClick) {
           onClick(e);

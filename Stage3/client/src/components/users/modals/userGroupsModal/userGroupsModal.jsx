@@ -2,8 +2,13 @@ import { useState } from 'react';
 import modalStyles from './userGroupsModal.module.css';
 import MyButton from '../../../../UI/myButton/myButton';
 import ModalWindow from '../../../modalWindow/modalWindow';
-import UserGroupsList from '../../lists/userGroupsList/userGroupsList';
-import GroupsUserNotPartOfList from '../../lists/groupsUserNotPartOfList/groupsUserNotPartOfList';
+import {
+  getGroupsUserNotParticipateInThunk,
+  getUserGroupsThunk,
+} from '../../../../store/reducers/userGroupReducer/actionCreator';
+import deleteUserFromGroup from '../../../../utils/userGroup/deleteUserFromTheGroup';
+import UserGroupsPanel from '../../lists/userGroupsPanel/userGroupsPanel';
+import addUserToTheGroup from '../../../../utils/userGroup/addUserToTheGroup';
 
 const UserGroupsModal = ({ userId }) => {
   const [userGroupsIsOpen, setUserGroupsIsOpen] = useState(false);
@@ -18,11 +23,22 @@ const UserGroupsModal = ({ userId }) => {
         modalContentClassName={modalStyles['user-groups-content__wrapper']}
       >
         {leaveState ? (
-          <UserGroupsList userId={userId} userGroupsIsOpen={userGroupsIsOpen} />
-        ) : (
-          <GroupsUserNotPartOfList
+          <UserGroupsPanel
+            key={1}
             userId={userId}
-            userGroupsIsOpen={userGroupsIsOpen}
+            thunkFunction={getUserGroupsThunk}
+            userGroupsStateArrName='userGroups'
+            actionsArr={[
+              { header: 'leave', clickHandler: deleteUserFromGroup },
+            ]}
+          />
+        ) : (
+          <UserGroupsPanel
+            key={2}
+            userId={userId}
+            thunkFunction={getGroupsUserNotParticipateInThunk}
+            userGroupsStateArrName='groupsUserNotParticipateIn'
+            actionsArr={[{ header: 'enter', clickHandler: addUserToTheGroup }]}
           />
         )}
 

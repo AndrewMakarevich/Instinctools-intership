@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 const { default: useDelayFetching } = require('./useDelayFetching');
 const { default: useFetching } = require('./useFetching');
 
@@ -13,14 +15,17 @@ const useCombineFetching = (callback) => {
     delayedFetchCallbackError,
   ] = useDelayFetching(callback, 400);
 
-  const fetch = (delayed, ...params) => {
-    if (delayed) {
-      delayedFetchCallback(undefined, ...params);
-      return;
-    }
+  const fetch = useCallback(
+    (delayed, ...params) => {
+      if (delayed) {
+        delayedFetchCallback(undefined, ...params);
+        return;
+      }
 
-    fetchCallback(undefined, ...params);
-  };
+      fetchCallback(undefined, ...params);
+    },
+    [callback]
+  );
 
   return [
     fetch,

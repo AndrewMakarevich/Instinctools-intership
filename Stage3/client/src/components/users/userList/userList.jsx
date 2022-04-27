@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import useCombineFetching from '../../../hooks/useCombineFetching';
 import { getUsersThunk } from '../../../store/reducers/userReducer/actionCreators';
 import PaginationLine from '../../paginationLine/paginationLine';
+import SearchPanel from '../../searchPanel/searchPanel';
 import UserItem from '../userItem/userItem';
 import listStyles from './userList.module.css';
-import UserSearchPanel from './userSearchPanel/userSearchPanel';
 
 const UserList = () => {
   const [queryParams, setQueryParams] = useState({
@@ -16,7 +16,7 @@ const UserList = () => {
       email: '',
     },
     page: 1,
-    limit: 5,
+    limit: 1,
   });
   const dispatch = useDispatch();
   const userReducer = useSelector((state) => state.userReducer);
@@ -41,6 +41,24 @@ const UserList = () => {
     );
   }
 
+  const clearQueryParams = useCallback(async () => {
+    const clearedQueryParamsObj = {
+      ...userQueryParams,
+      filterObject: {
+        username: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+      },
+    };
+    await getUsersListWithCurrentQueryParams(false, clearedQueryParamsObj);
+  }, [queryParams, getUsersListWithCurrentQueryParams]);
+
+  const setPage = async (page, delayed = false) => {
+    const newQueryParamsObj = { ...queryParams, page };
+    await getUsersListWithCurrentQueryParams(delayed, newQueryParamsObj);
+  };
+
   useEffect(() => {
     getUsersListWithCurrentQueryParams(false, queryParams);
   }, []);
@@ -50,13 +68,13 @@ const UserList = () => {
       data-testid='users-table-wrapper'
       className={listStyles['users-table-wrapper']}
     >
-      <UserSearchPanel
+      <SearchPanel
         paramsMap={['username', 'firstName', 'lastName', 'email']}
         queryParams={queryParams}
         setQueryParams={setQueryParams}
-        fetchUsers={getUsersListWithCurrentQueryParams}
+        fetchFunction={getUsersListWithCurrentQueryParams}
+        clearFieldsFunction={clearQueryParams}
       />
-      {/* <AddButton /> */}
       <table
         data-testid='users-table'
         className={`${listStyles['users-table']} ${
@@ -81,10 +99,7 @@ const UserList = () => {
         count={userReducer.count}
         page={queryParams.page}
         limit={queryParams.limit}
-        setPage={async (page, delayed = false) => {
-          const newQueryParamsObj = { ...queryParams, page };
-          await getUsersListWithCurrentQueryParams(delayed, newQueryParamsObj);
-        }}
+        setPage={setPage}
       />
     </article>
   );

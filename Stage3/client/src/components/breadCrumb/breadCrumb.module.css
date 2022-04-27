@@ -1,5 +1,5 @@
 .crumb-wrapper {
-  padding: 15px;
+  padding: 15px 0;
   display: flex;
 }
 
@@ -7,7 +7,7 @@
   position: relative;
   background-color: var(--medium-dark);
   padding: 3px 13px 3px 10px;
-  transition: background-color .3s;
+  transition: background-color 0.3s;
 }
 
 .crumb-link__item:hover {
@@ -15,7 +15,7 @@
 }
 
 .crumb-link__item::before {
-  content: "";
+  content: '';
   position: absolute;
   height: 100%;
   top: 0;
@@ -26,7 +26,7 @@
 }
 
 .crumb-link__item::after {
-  content: "";
+  content: '';
   position: absolute;
   height: 100%;
   bottom: 0;
@@ -42,7 +42,7 @@
 }
 
 .crumb-link:before {
-  content: "";
+  content: '';
   position: absolute;
   height: 100%;
   top: 0;

@@ -12,14 +12,18 @@ const EditUserForm = ({ userObj, actualizeUserInfo }) => {
     email: '',
   });
 
+  const setInitialUserInfoParamValues = () => {
+    setNewUserInfo({
+      username: userObj.username,
+      firstName: userObj.firstName,
+      lastName: userObj.lastName,
+      email: userObj.email,
+    });
+  };
+
   useEffect(() => {
     if (userObj) {
-      setNewUserInfo({
-        username: userObj.username,
-        firstName: userObj.firstName,
-        lastName: userObj.lastName,
-        email: userObj.email,
-      });
+      setInitialUserInfoParamValues();
     }
   }, [userObj]);
 
@@ -38,17 +42,7 @@ const EditUserForm = ({ userObj, actualizeUserInfo }) => {
         ))}
       </div>
       <div className={formStyles['form-buttons__wrapper']}>
-        <MyButton
-          onClick={(e) => {
-            e.preventDefault();
-            setNewUserInfo({
-              username: userObj.username,
-              firstName: userObj.firstName,
-              lastName: userObj.lastName,
-              email: userObj.email,
-            });
-          }}
-        >
+        <MyButton type='button' onClick={setInitialUserInfoParamValues}>
           Clear changes
         </MyButton>
         <SubmitUserChangesBtn

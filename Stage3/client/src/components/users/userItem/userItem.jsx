@@ -12,6 +12,9 @@ const UserItem = ({ user }) => {
       onClick={() => {
         navigate(user.username);
       }}
+      tabIndex={0}
+      role='link'
+      title={user.username}
     >
       <td className={itemStyles['user-param-cell']}>{user.username}</td>
       <td>

@@ -4,3 +4,7 @@
   display: grid;
   grid-template-rows: min-content 1fr min-content;
 }
+
+.main-content-block {
+  padding: 0 10px;
+}

@@ -1,11 +1,3 @@
-.group-users-content__wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.users-table {
-}
-
 .loading {
   position: relative;
 }

@@ -52,6 +52,45 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
     [page, pages]
   );
 
+  const setPrevPage = () => {
+    if (pages.length === 1) {
+      return;
+    }
+
+    if (page > 1) {
+      setPage(page - 1);
+      return;
+    }
+
+    setPage(pages[pages.length - 1]);
+  };
+
+  const setNextPage = () => {
+    if (pages.length === 1) {
+      return;
+    }
+
+    if (page < pages.length) {
+      setPage(page + 1);
+      return;
+    }
+
+    setPage(pages[0]);
+  };
+
+  const setCustomPage = (e) => {
+    const typedPage = Number(e.target.value);
+
+    if (
+      typedPage >= pages[0] &&
+      typedPage <= pages[pages.length - 1] &&
+      pages.length !== 1 &&
+      typedPage !== page
+    ) {
+      setPage(typedPage, true);
+    }
+  };
+
   if (!pages.length) {
     return null;
   }
@@ -68,18 +107,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
           placeholder='Page number'
           title='Enter your page here'
           disabled={pages.length === 1}
-          onChange={(e) => {
-            const typedPage = Number(e.target.value);
-
-            if (
-              typedPage >= pages[0] &&
-              typedPage <= pages[pages.length - 1] &&
-              pages.length !== 1 &&
-              typedPage !== page
-            ) {
-              setPage(typedPage, true);
-            }
-          }}
+          onChange={setCustomPage}
         ></MyInput>
       </div>
 
@@ -87,18 +115,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
         disabled={pages.length === 1}
         type='button'
         className={lineStyles['pagination-btn']}
-        onClick={() => {
-          if (pages.length === 1) {
-            return;
-          }
-
-          if (page > 1) {
-            setPage(page - 1);
-            return;
-          }
-
-          setPage(pages[pages.length - 1]);
-        }}
+        onClick={setPrevPage}
       >
         {'<'}
       </button>
@@ -122,18 +139,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
         disabled={pages.length === 1}
         type='button'
         className={lineStyles['pagination-btn']}
-        onClick={() => {
-          if (pages.length === 1) {
-            return;
-          }
-
-          if (page < pages.length) {
-            setPage(page + 1);
-            return;
-          }
-
-          setPage(pages[0]);
-        }}
+        onClick={setNextPage}
       >
         {'>'}
       </button>

@@ -1,13 +1,17 @@
+import listStyles from './groupUsersPanel.module.css';
 import { useCallback, useEffect, useState } from 'react';
-import listStyles from './groupUsersList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGroupUsersThunk } from '../../../../store/reducers/userGroupReducer/actionCreator';
-import PaginationLine from '../../../paginationLine/paginationLine';
-import UserSearchPanel from '../../../users/userList/userSearchPanel/userSearchPanel';
-import GroupUsersItem from './groupUsersItem';
 import useCombineFetching from '../../../../hooks/useCombineFetching';
+import PaginationLine from '../../../paginationLine/paginationLine';
+import GroupUsersPanelListItem from './groupUsersPanelListItem';
+import SearchPanel from '../../../searchPanel/searchPanel';
 
-const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
+const GroupUsersPanel = ({
+  groupId,
+  groupUsersStateArrName,
+  thunkFunction,
+  actionsArr,
+}) => {
   const dispatch = useDispatch();
   const userGroupReducer = useSelector((store) => store.userGroupReducer);
   const [userQueryParams, setUserQueryParams] = useState({
@@ -23,9 +27,9 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
 
   const getGroupUsers = useCallback(
     async (filterObject, page, limit) => {
-      await dispatch(getGroupUsersThunk(groupId, filterObject, page, limit));
+      await dispatch(thunkFunction(groupId, filterObject, page, limit));
     },
-    [groupId]
+    [groupId, thunkFunction]
   );
 
   const [
@@ -33,6 +37,7 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
     fetchGroupUsersLoading,
     delayedFetchGroupUsersLoading,
   ] = useCombineFetching(getGroupUsers);
+
   const getGroupUsersListWithCurrentQueryParams = async (
     delayed,
     newQueryParamsObj
@@ -46,20 +51,44 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
     );
   };
 
+  const clearQueryParams = useCallback(async () => {
+    const clearedQueryParamsObj = {
+      ...userQueryParams,
+      filterObject: {
+        username: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+      },
+    };
+    await getGroupUsersListWithCurrentQueryParams(false, clearedQueryParamsObj);
+  }, [userQueryParams, getGroupUsersListWithCurrentQueryParams]);
+
+  const actualizeGroupUsersList = () => {
+    getGroupUsersListWithCurrentQueryParams(false, {
+      ...userQueryParams,
+      page: 1,
+    });
+  };
+
+  const setPage = (pageValue, delayed = false) => {
+    const newQueryParamsObj = { ...userQueryParams, page: pageValue };
+    getGroupUsersListWithCurrentQueryParams(delayed, newQueryParamsObj);
+  };
+
   useEffect(() => {
-    if (groupUsersIsOpen) {
-      getGroupUsersListWithCurrentQueryParams(false, userQueryParams);
-    }
-  }, [groupUsersIsOpen]);
+    getGroupUsersListWithCurrentQueryParams(false, userQueryParams);
+  }, []);
 
   return (
     <>
-      <UserSearchPanel
+      <SearchPanel
         paramsMap={['username', 'firstName', 'lastName', 'email']}
         queryParams={userQueryParams}
-        fetchUsers={getGroupUsersListWithCurrentQueryParams}
+        fetchFunction={getGroupUsersListWithCurrentQueryParams}
+        clearFieldsFunction={clearQueryParams}
       />
-      {userGroupReducer.groupUsers.length ? (
+      {userGroupReducer[groupUsersStateArrName].length ? (
         <table
           className={`${listStyles['users-table']} ${
             delayedFetchGroupUsersLoading || fetchGroupUsersLoading
@@ -72,40 +101,35 @@ const GroupUsersList = ({ groupId, groupUsersIsOpen }) => {
               <th>Username</th>
               <th>Full name</th>
               <th>Email</th>
-              <th>Delete from</th>
+              {actionsArr.map((action) => (
+                <th key={action.header}>Action</th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {userGroupReducer.groupUsers.map((user) => (
-              <GroupUsersItem
+            {userGroupReducer[groupUsersStateArrName].map((user) => (
+              <GroupUsersPanelListItem
                 key={user._id}
                 user={user}
                 groupId={groupId}
-                actualizeGroupUsersList={() => {
-                  getGroupUsersListWithCurrentQueryParams(false, {
-                    ...userQueryParams,
-                    page: 1,
-                  });
-                }}
+                actualizeGroupUsersList={actualizeGroupUsersList}
+                actionsArr={actionsArr}
               />
             ))}
           </tbody>
         </table>
       ) : (
-        <p>Can't find user with such query params or group has no members</p>
+        <p>Can't find users</p>
       )}
 
       <PaginationLine
         page={userQueryParams.page}
         limit={userQueryParams.limit}
         count={userGroupReducer.count}
-        setPage={(pageValue, delayed = false) => {
-          const newQueryParamsObj = { ...userQueryParams, page: pageValue };
-          getGroupUsersListWithCurrentQueryParams(delayed, newQueryParamsObj);
-        }}
+        setPage={setPage}
       />
     </>
   );
 };
 
-export default GroupUsersList;
+export default GroupUsersPanel;

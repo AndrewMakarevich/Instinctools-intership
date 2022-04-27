@@ -3,7 +3,6 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import EditUserForm from '../../components/users/forms/editUserForm/editUserForm';
-import UserGroupsList from '../../components/users/lists/userGroupsList/userGroupsList';
 import useFetching from '../../hooks/useFetching';
 import { getUserThunk } from '../../store/reducers/userReducer/actionCreators';
 import UserGroupsModal from '../../components/users/modals/userGroupsModal/userGroupsModal';

@@ -1,15 +1,17 @@
+import listStyles from './userGroupsPanel.module.css';
 import { useCallback, useEffect, useState } from 'react';
-import listStyles from './userGroupList.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserGroupsThunk } from '../../../../store/reducers/userGroupReducer/actionCreator';
-import GroupSearchPanel from '../../../groups/groupList/groupSearchPanel/groupSearchPanel';
-import ModalWindow from '../../../modalWindow/modalWindow';
-import PaginationLine from '../../../paginationLine/paginationLine';
-import MyButton from '../../../../UI/myButton/myButton';
-import UserGroupsItem from './userGroupsItem';
 import useCombineFetching from '../../../../hooks/useCombineFetching';
+import PaginationLine from '../../../paginationLine/paginationLine';
+import UserGroupsPanelListItem from './userGroupsPanelListItem';
+import SearchPanel from '../../../searchPanel/searchPanel';
 
-const UserGroupsList = ({ userId, userGroupsIsOpen }) => {
+const UserGroupsPanel = ({
+  userId,
+  userGroupsStateArrName,
+  thunkFunction,
+  actionsArr,
+}) => {
   const [groupQueryParams, setGroupQueryParams] = useState({
     page: 1,
     limit: 3,
@@ -24,7 +26,7 @@ const UserGroupsList = ({ userId, userGroupsIsOpen }) => {
 
   const getUserGroups = useCallback(
     async (filterObj, pageVal, limitVal) => {
-      await dispatch(getUserGroupsThunk(userId, filterObj, pageVal, limitVal));
+      await dispatch(thunkFunction(userId, filterObj, pageVal, limitVal));
     },
     [userId]
   );
@@ -48,20 +50,30 @@ const UserGroupsList = ({ userId, userGroupsIsOpen }) => {
     );
   };
 
+  const clearQueryParams = useCallback(async () => {
+    const clearedQueryParamsObj = {
+      ...queryParams,
+      filterObject: {
+        groupName: '',
+        groupTitle: '',
+      },
+    };
+    await getUserGroupsWithCurrentQueryParams(false, clearedQueryParamsObj);
+  }, [groupQueryParams, getUserGroupsWithCurrentQueryParams]);
+
   useEffect(() => {
-    if (userGroupsIsOpen) {
-      getUserGroupsWithCurrentQueryParams(false, groupQueryParams);
-    }
-  }, [userGroupsIsOpen]);
+    getUserGroupsWithCurrentQueryParams(false, groupQueryParams);
+  }, []);
 
   return (
     <>
-      <GroupSearchPanel
+      <SearchPanel
         paramsMap={['groupName', 'groupTitle']}
         queryParams={groupQueryParams}
-        fetchGroups={getUserGroupsWithCurrentQueryParams}
+        fetchFunction={getUserGroupsWithCurrentQueryParams}
+        clearFieldsFunction={clearQueryParams}
       />
-      {userGroupReducer.userGroups.length ? (
+      {userGroupReducer[userGroupsStateArrName].length ? (
         <table
           className={`${listStyles['groups-table']} ${
             fetchUserGroupsLoading || delayedFetchUserGroupsLoading
@@ -73,12 +85,14 @@ const UserGroupsList = ({ userId, userGroupsIsOpen }) => {
             <tr>
               <th>Group name</th>
               <th>Group title</th>
-              <th>Leave group</th>
+              {actionsArr.map((action) => (
+                <th key={action.header}>Action</th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {userGroupReducer.userGroups.map((group) => (
-              <UserGroupsItem
+            {userGroupReducer[userGroupsStateArrName].map((group) => (
+              <UserGroupsPanelListItem
                 key={group._id}
                 group={group}
                 userId={userId}
@@ -88,16 +102,14 @@ const UserGroupsList = ({ userId, userGroupsIsOpen }) => {
                     page: 1,
                   });
                 }}
+                actionsArr={actionsArr}
               />
             ))}
           </tbody>
           <tfoot></tfoot>
         </table>
       ) : (
-        <p>
-          Can't find group with such query params or user isn't a member of any
-          group
-        </p>
+        <p>Can't find groups</p>
       )}
       <PaginationLine
         page={groupQueryParams.page}
@@ -112,4 +124,4 @@ const UserGroupsList = ({ userId, userGroupsIsOpen }) => {
   );
 };
 
-export default UserGroupsList;
+export default UserGroupsPanel;

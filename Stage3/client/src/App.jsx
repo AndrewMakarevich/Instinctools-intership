@@ -7,7 +7,7 @@ import AppRouter from './components/router/appRouter';
 const App = () => (
   <div className='App' data-testid='app'>
     <NavBar />
-    <div>
+    <div className='main-content-block'>
       <BreadCrumb />
       <AppRouter />
     </div>
