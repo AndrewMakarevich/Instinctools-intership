@@ -24,6 +24,7 @@ const GroupUsersPanelListItem = ({
         return;
       }
 
+      alert(e.message);
       return;
     } finally {
       setActionIsLoading(false);
@@ -32,6 +33,7 @@ const GroupUsersPanelListItem = ({
 
   return (
     <tr
+      data-testid='group-users-row'
       key={user._id}
       className={listStyles['user-row']}
       onClick={() => navigate(`${userPaths.mainPath}/${user.username}`)}
@@ -44,6 +46,7 @@ const GroupUsersPanelListItem = ({
       {actionsArr.map((action) => (
         <td className={listStyles['user-cell']} key={action.header}>
           <MyButton
+            data-testid='user-row-action-btn'
             className={listStyles['delete-group-user-btn']}
             disabled={actionIsLoading}
             onClick={async (e) => await actionHandler(e, action)}

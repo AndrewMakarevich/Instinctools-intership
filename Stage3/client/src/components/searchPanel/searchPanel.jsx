@@ -24,7 +24,7 @@ const SearchPanel = ({
   };
 
   return (
-    <section className={panelStyles['search-panel']}>
+    <section data-testid='search-panel' className={panelStyles['search-panel']}>
       <div className={panelStyles['search-panel__inputs']}>
         {paramsMap.map((param) => (
           <SearchInput
@@ -36,7 +36,7 @@ const SearchPanel = ({
         ))}
       </div>
 
-      <MyButton disabled={filterObjectIsEmpty} onClick={clearFieldsFunction}>
+      <MyButton disabled={filterObjectIsEmpty()} onClick={clearFieldsFunction}>
         Clear search inputs
       </MyButton>
     </section>

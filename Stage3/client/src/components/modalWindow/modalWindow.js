@@ -67,7 +67,7 @@ const ModalWindow = ({
       onClick={() => setIsOpen(false)}
     >
       <div
-        data-testid={testId}
+        data-testid='modal-window'
         className={`${modalStyles['modal-window']} ${
           modalWindowClassName || ''
         }`}

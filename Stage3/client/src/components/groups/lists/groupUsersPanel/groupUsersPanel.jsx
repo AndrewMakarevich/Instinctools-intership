@@ -14,6 +14,7 @@ const GroupUsersPanel = ({
 }) => {
   const dispatch = useDispatch();
   const userGroupReducer = useSelector((store) => store.userGroupReducer);
+
   const [userQueryParams, setUserQueryParams] = useState({
     filterObject: {
       username: '',
@@ -22,7 +23,7 @@ const GroupUsersPanel = ({
       email: '',
     },
     page: 1,
-    limit: 2,
+    limit: 10,
   });
 
   const getGroupUsers = useCallback(
@@ -88,39 +89,36 @@ const GroupUsersPanel = ({
         fetchFunction={getGroupUsersListWithCurrentQueryParams}
         clearFieldsFunction={clearQueryParams}
       />
-      {userGroupReducer[groupUsersStateArrName].length ? (
-        <table
-          className={`${listStyles['users-table']} ${
-            delayedFetchGroupUsersLoading || fetchGroupUsersLoading
-              ? `${listStyles['loading']}`
-              : ''
-          }`}
-        >
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Full name</th>
-              <th>Email</th>
-              {actionsArr.map((action) => (
-                <th key={action.header}>Action</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {userGroupReducer[groupUsersStateArrName].map((user) => (
-              <GroupUsersPanelListItem
-                key={user._id}
-                user={user}
-                groupId={groupId}
-                actualizeGroupUsersList={actualizeGroupUsersList}
-                actionsArr={actionsArr}
-              />
+      <table
+        data-testid='group-users-table'
+        className={`${listStyles['users-table']} ${
+          delayedFetchGroupUsersLoading || fetchGroupUsersLoading
+            ? `${listStyles['loading']}`
+            : ''
+        }`}
+      >
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Full name</th>
+            <th>Email</th>
+            {actionsArr.map((action) => (
+              <th key={action.header}>Action</th>
             ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>Can't find users</p>
-      )}
+          </tr>
+        </thead>
+        <tbody>
+          {userGroupReducer[groupUsersStateArrName].map((user) => (
+            <GroupUsersPanelListItem
+              key={user._id}
+              user={user}
+              groupId={groupId}
+              actualizeGroupUsersList={actualizeGroupUsersList}
+              actionsArr={actionsArr}
+            />
+          ))}
+        </tbody>
+      </table>
 
       <PaginationLine
         page={userQueryParams.page}

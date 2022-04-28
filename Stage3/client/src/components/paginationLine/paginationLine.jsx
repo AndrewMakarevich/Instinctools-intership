@@ -112,6 +112,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
       </div>
 
       <button
+        data-testid='pagination-btn'
         disabled={pages.length === 1}
         type='button'
         className={lineStyles['pagination-btn']}
@@ -122,6 +123,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
       {paginationLineState.map(({ id, pageNumber }) => (
         <button
           key={id}
+          data-testid='pagination-btn'
           type='button'
           className={`${lineStyles['pagination-btn']} ${
             pageNumber === page ? lineStyles.active : ''
@@ -136,6 +138,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
         </button>
       ))}
       <button
+        data-testid='pagination-btn'
         disabled={pages.length === 1}
         type='button'
         className={lineStyles['pagination-btn']}

@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Correct pagination line render 1`] = `
+<div
+  class="pagination-line"
+  data-testid="pagination-line"
+>
+  <div
+    class="custom-page-block"
+  >
+    <input
+      class="my-input custom-page-input"
+      placeholder="Page number"
+      title="Enter your page here"
+      type="number"
+    />
+  </div>
+  <button
+    class="pagination-btn"
+    data-testid="pagination-btn"
+    type="button"
+  >
+    &lt;
+  </button>
+  <button
+    class="pagination-btn active"
+    data-testid="pagination-btn"
+    type="button"
+  >
+    1
+  </button>
+  <button
+    class="pagination-btn "
+    data-testid="pagination-btn"
+    type="button"
+  >
+    2
+  </button>
+  <button
+    class="pagination-btn "
+    data-testid="pagination-btn"
+    type="button"
+  >
+    3
+  </button>
+  <button
+    class="pagination-btn"
+    data-testid="pagination-btn"
+    type="button"
+  >
+    &gt;
+  </button>
+</div>
+`;

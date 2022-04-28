@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useFetching from '../../../../hooks/useFetching';
 import UserService from '../../../../service/userService';
@@ -50,6 +49,7 @@ const SubmitUserChangesBtn = ({
 
   return (
     <MyButton
+      data-testid='submit-user-changes-btn'
       type='submit'
       disabled={userInfoIsLoading}
       onClick={submitUserChanges}
