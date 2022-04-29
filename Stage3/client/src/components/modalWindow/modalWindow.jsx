@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import CloseButton from '../../UI/closeButton/closeButton';
+
 import modalStyles from './modalWindow.module.css';
 
 const ModalWindow = ({
@@ -9,7 +10,6 @@ const ModalWindow = ({
   children,
   isOpen,
   setIsOpen,
-  testId,
 }) => {
   const firstFocusableElementRef = useRef(null);
   const lastFocusableElementRef = useRef(null);

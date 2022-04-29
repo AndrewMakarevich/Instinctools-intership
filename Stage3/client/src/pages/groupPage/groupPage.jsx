@@ -5,6 +5,7 @@ import EditGroupForm from '../../components/groups/forms/editGroupForm/editGroup
 import GroupUsersModal from '../../components/groups/modals/groupUsersModal/groupUsersModal';
 import useFetching from '../../hooks/useFetching';
 import { getGroupThunk } from '../../store/reducers/groupReducer/actionCreators';
+
 import pageStyles from './groupPage.module.css';
 
 const GroupPage = () => {

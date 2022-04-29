@@ -7,7 +7,8 @@ import MyButton from '../../../../UI/myButton/myButton';
 import addUserToTheGroup from '../../../../utils/userGroup/addUserToTheGroup';
 import deleteUserFromGroup from '../../../../utils/userGroup/deleteUserFromTheGroup';
 import ModalWindow from '../../../modalWindow/modalWindow';
-import GroupUsersPanel from '../../lists/groupUsersPanel/groupUsersPanel';
+import GroupUsersList from '../../lists/groupUsersPanel/groupUsersList';
+
 import modalStyles from './groupUsersModal.module.css';
 
 const GroupUsersModal = ({ groupId }) => {
@@ -29,7 +30,7 @@ const GroupUsersModal = ({ groupId }) => {
         modalContentClassName={modalStyles['group-users-content__wrapper']}
       >
         {deleteState ? (
-          <GroupUsersPanel
+          <GroupUsersList
             key={1}
             groupId={groupId}
             groupUsersStateArrName='groupUsers'
@@ -39,7 +40,7 @@ const GroupUsersModal = ({ groupId }) => {
             ]}
           />
         ) : (
-          <GroupUsersPanel
+          <GroupUsersList
             key={2}
             groupId={groupId}
             groupUsersStateArrName='notGroupMembers'

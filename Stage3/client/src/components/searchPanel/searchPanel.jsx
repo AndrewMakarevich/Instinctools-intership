@@ -1,5 +1,6 @@
 import MyButton from '../../UI/myButton/myButton';
 import SearchInput from '../../UI/searchInput/searchInput';
+
 import panelStyles from './searchPanel.module.css';
 
 const SearchPanel = ({

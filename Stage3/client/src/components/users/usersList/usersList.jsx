@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import useCombineFetching from '../../../hooks/useCombineFetching';
-import { getUsersThunk } from '../../../store/reducers/userReducer/actionCreators';
 import PaginationLine from '../../paginationLine/paginationLine';
 import SearchPanel from '../../searchPanel/searchPanel';
-import UserItem from '../userItem/userItem';
-import listStyles from './userList.module.css';
+import UsersItem from '../usersItem/usersItem';
+import listStyles from './usersList.module.css';
 
-const UserList = () => {
+const UsersList = ({
+  usersArr,
+  usersCount,
+  getUsersFunction,
+  usersLoading,
+  groupId = 0,
+  actionsArr,
+}) => {
   const [queryParams, setQueryParams] = useState({
     filterObject: {
       username: '',
@@ -16,34 +20,20 @@ const UserList = () => {
       email: '',
     },
     page: 1,
-    limit: 1,
+    limit: 10,
   });
-  const dispatch = useDispatch();
-  const userReducer = useSelector((state) => state.userReducer);
-
-  const getUsers = useCallback(async (filterObject, page, limit) => {
-    await dispatch(getUsersThunk(filterObject, page, limit));
-  }, []);
-
-  const [fetchUsers, usersFetchLoading, usersDelayFetchLoading] =
-    useCombineFetching(getUsers);
 
   async function getUsersListWithCurrentQueryParams(
     delayed,
     newQueryParamsObj
   ) {
     setQueryParams(newQueryParamsObj);
-    await fetchUsers(
-      delayed,
-      newQueryParamsObj.filterObject,
-      newQueryParamsObj.page,
-      newQueryParamsObj.limit
-    );
+    await getUsersFunction(delayed, newQueryParamsObj);
   }
 
   const clearQueryParams = useCallback(async () => {
     const clearedQueryParamsObj = {
-      ...userQueryParams,
+      ...queryParams,
       filterObject: {
         username: '',
         firstName: '',
@@ -78,7 +68,7 @@ const UserList = () => {
       <table
         data-testid='users-table'
         className={`${listStyles['users-table']} ${
-          usersDelayFetchLoading || usersFetchLoading ? listStyles.loading : ''
+          usersLoading ? listStyles.loading : ''
         }`}
       >
         <thead>
@@ -86,17 +76,31 @@ const UserList = () => {
             <th>Username</th>
             <th>Full name</th>
             <th>Email</th>
+            {actionsArr.map((action) => (
+              <th key={action.header}>Action</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {userReducer.users.map((user) => (
-            <UserItem key={user._id} user={user} />
+          {usersArr.map((user) => (
+            <UsersItem
+              key={user._id}
+              user={user}
+              groupId={groupId}
+              actionsArr={actionsArr}
+              actualizeGroupUsersList={() =>
+                getUsersListWithCurrentQueryParams(false, {
+                  ...queryParams,
+                  page: 1,
+                })
+              }
+            />
           ))}
         </tbody>
         <tfoot></tfoot>
       </table>
       <PaginationLine
-        count={userReducer.count}
+        count={usersCount}
         page={queryParams.page}
         limit={queryParams.limit}
         setPage={setPage}
@@ -105,4 +109,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default UsersList;

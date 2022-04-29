@@ -1,12 +1,14 @@
 import { useLocation } from 'react-router-dom';
-import { v4 } from 'uuid';
 import { useMemo } from 'react';
-import crumbStyles from './breadCrumb.module.css';
+import { v4 } from 'uuid';
 import MyLink from '../../UI/myLink/myLink';
+
+import crumbStyles from './breadCrumb.module.css';
 
 const BreadCrumb = () => {
   const history = useLocation();
-  function createPaths() {
+
+  const paths = useMemo(() => {
     const pathsArr = [];
 
     history.pathname.split('/').reduce((prevV, curV) => {
@@ -20,9 +22,7 @@ const BreadCrumb = () => {
     });
 
     return pathsArr;
-  }
-
-  const paths = useMemo(createPaths, [history]);
+  }, [history]);
 
   return (
     <article className={crumbStyles['crumb-wrapper']} data-testid='bread-crumb'>

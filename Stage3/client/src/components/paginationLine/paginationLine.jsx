@@ -1,40 +1,41 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { v4 } from 'uuid';
 import PropTypes from 'prop-types';
-import lineStyles from './paginationLine.module.css';
 import MyInput from '../../UI/myInput/myInput';
 
+import lineStyles from './paginationLine.module.css';
+
 const PaginationLine = ({ count, page, limit, setPage }) => {
-  function createPagesArr(countVal, limitVal) {
+  const pages = useMemo(() => {
     const pagesArr = [];
-    const pagesAmount = Math.ceil(countVal / limitVal);
+    const pagesAmount = Math.ceil(count / limit);
 
     for (let i = 1; i <= pagesAmount; i += 1) {
       pagesArr.push(i);
     }
 
     return pagesArr;
-  }
+  }, [count, limit]);
 
-  function createCurrentPagLineState(currPage, pages) {
+  const paginationLineState = useMemo(() => {
     let paginationLineState = [];
 
     if (pages.length <= 6) {
       paginationLineState = pages;
-    } else if (currPage <= 4) {
+    } else if (page <= 4) {
       paginationLineState = pages.slice(0, 5);
       paginationLineState.push('...');
       paginationLineState.push(pages[pages.length - 1]);
-    } else if (currPage >= pages[pages.length - 4]) {
+    } else if (page >= pages[pages.length - 4]) {
       paginationLineState.push(pages[0]);
       paginationLineState.push('...');
       paginationLineState = [...paginationLineState, ...pages.slice(-5)];
     } else {
       paginationLineState.push(pages[0]);
       paginationLineState.push('...');
-      paginationLineState.push(pages[currPage - 2]);
-      paginationLineState.push(pages[currPage - 1]);
-      paginationLineState.push(pages[currPage]);
+      paginationLineState.push(pages[page - 2]);
+      paginationLineState.push(pages[page - 1]);
+      paginationLineState.push(pages[page]);
       paginationLineState.push('...');
       paginationLineState.push(pages[pages.length - 1]);
     }
@@ -44,13 +45,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
     });
 
     return paginationLineState;
-  }
-
-  const pages = useMemo(() => createPagesArr(count, limit), [count, limit]);
-  const paginationLineState = useMemo(
-    () => createCurrentPagLineState(page, pages),
-    [page, pages]
-  );
+  }, [page, pages]);
 
   const setPrevPage = () => {
     if (pages.length === 1) {

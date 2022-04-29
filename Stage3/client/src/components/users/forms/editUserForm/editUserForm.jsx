@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-import formStyles from './editUserForm.module.css';
-import MyInputWithLabel from '../../../../UI/myInput/myInputWithLabel';
 import SubmitUserChangesBtn from '../../btns/submitUserChangesBtn/submitUserChangesBtn';
-import MyButton from '../../../../UI/myButton/myButton';
+import EditForm from '../../../forms/editForm/editForm';
 
 const EditUserForm = ({ userObj, actualizeUserInfo }) => {
   const [newUserInfo, setNewUserInfo] = useState({
@@ -28,31 +26,19 @@ const EditUserForm = ({ userObj, actualizeUserInfo }) => {
   }, [userObj]);
 
   return (
-    <form data-testid='edit-user-form' className={formStyles['form']}>
-      <div className={formStyles['form-inputs__wrapper']}>
-        {Object.keys(newUserInfo).map((userParam) => (
-          <MyInputWithLabel
-            key={userParam}
-            labelText={`User's ${userParam}`}
-            value={newUserInfo[userParam]}
-            onChange={(e) => {
-              setNewUserInfo({ ...newUserInfo, [userParam]: e.target.value });
-            }}
-          />
-        ))}
-      </div>
-      <div className={formStyles['form-buttons__wrapper']}>
-        <MyButton type='button' onClick={setInitialUserInfoParamValues}>
-          Clear changes
-        </MyButton>
-        <SubmitUserChangesBtn
-          userId={userObj._id}
-          initialParamsObj={userObj}
-          paramsToEditObj={newUserInfo}
-          actualizeUserInfo={actualizeUserInfo}
-        />
-      </div>
-    </form>
+    <EditForm
+      essenceName='User'
+      initialParamValues={userObj}
+      newParamValues={newUserInfo}
+      setNewParamValues={setNewUserInfo}
+    >
+      <SubmitUserChangesBtn
+        userId={userObj._id}
+        initialParamsObj={userObj}
+        paramsToEditObj={newUserInfo}
+        actualizeUserInfo={actualizeUserInfo}
+      />
+    </EditForm>
   );
 };
 

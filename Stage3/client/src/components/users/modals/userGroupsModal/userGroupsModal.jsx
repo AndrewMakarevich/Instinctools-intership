@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import modalStyles from './userGroupsModal.module.css';
 import MyButton from '../../../../UI/myButton/myButton';
 import ModalWindow from '../../../modalWindow/modalWindow';
 import {
@@ -7,8 +6,10 @@ import {
   getUserGroupsThunk,
 } from '../../../../store/reducers/userGroupReducer/actionCreator';
 import deleteUserFromGroup from '../../../../utils/userGroup/deleteUserFromTheGroup';
-import UserGroupsPanel from '../../lists/userGroupsPanel/userGroupsPanel';
+import UserGroupsList from '../../lists/userGroupsPanel/userGroupsList';
 import addUserToTheGroup from '../../../../utils/userGroup/addUserToTheGroup';
+
+import modalStyles from './userGroupsModal.module.css';
 
 const UserGroupsModal = ({ userId }) => {
   const [userGroupsIsOpen, setUserGroupsIsOpen] = useState(false);
@@ -23,7 +24,7 @@ const UserGroupsModal = ({ userId }) => {
         modalContentClassName={modalStyles['user-groups-content__wrapper']}
       >
         {leaveState ? (
-          <UserGroupsPanel
+          <UserGroupsList
             key={1}
             userId={userId}
             thunkFunction={getUserGroupsThunk}
@@ -33,7 +34,7 @@ const UserGroupsModal = ({ userId }) => {
             ]}
           />
         ) : (
-          <UserGroupsPanel
+          <UserGroupsList
             key={2}
             userId={userId}
             thunkFunction={getGroupsUserNotParticipateInThunk}

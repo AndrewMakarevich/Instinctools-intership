@@ -1,4 +1,3 @@
-import pageStyles from './userPage.module.css';
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -6,6 +5,8 @@ import EditUserForm from '../../components/users/forms/editUserForm/editUserForm
 import useFetching from '../../hooks/useFetching';
 import { getUserThunk } from '../../store/reducers/userReducer/actionCreators';
 import UserGroupsModal from '../../components/users/modals/userGroupsModal/userGroupsModal';
+
+import pageStyles from './userPage.module.css';
 
 const UserPage = () => {
   const { username } = useParams();

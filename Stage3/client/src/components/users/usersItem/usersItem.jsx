@@ -1,14 +1,15 @@
-import listStyles from './groupUsersPanel.module.css';
-import { useNavigate } from 'react-router-dom';
-import MyButton from '../../../../UI/myButton/myButton';
 import { useState } from 'react';
-import { userPaths } from '../../../router/routes';
+import { useNavigate } from 'react-router-dom';
+import MyButton from '../../../UI/myButton/myButton';
+import { userPaths } from '../../router/routes';
 
-const GroupUsersPanelListItem = ({
+import itemStyles from './usersItem.module.css';
+
+const UsersItem = ({
   user,
-  groupId,
-  actualizeGroupUsersList,
+  groupId = 0,
   actionsArr,
+  actualizeGroupUsersList,
 }) => {
   const navigate = useNavigate();
   const [actionIsLoading, setActionIsLoading] = useState(false);
@@ -35,19 +36,19 @@ const GroupUsersPanelListItem = ({
     <tr
       data-testid='group-users-row'
       key={user._id}
-      className={listStyles['user-row']}
+      className={itemStyles['user-row']}
       onClick={() => navigate(`${userPaths.mainPath}/${user.username}`)}
     >
-      <td className={listStyles['user-cell']}>{user.username}</td>
-      <td className={listStyles['user-cell']}>
+      <td className={itemStyles['user-cell']}>{user.username}</td>
+      <td className={itemStyles['user-cell']}>
         {user.firstName} {user.lastName}
       </td>
-      <td className={listStyles['user-cell']}>{user.email}</td>
+      <td className={itemStyles['user-cell']}>{user.email}</td>
       {actionsArr.map((action) => (
-        <td className={listStyles['user-cell']} key={action.header}>
+        <td className={itemStyles['user-cell']} key={action.header}>
           <MyButton
             data-testid='user-row-action-btn'
-            className={listStyles['delete-group-user-btn']}
+            className={itemStyles['delete-group-user-btn']}
             disabled={actionIsLoading}
             onClick={async (e) => await actionHandler(e, action)}
           >
@@ -59,4 +60,4 @@ const GroupUsersPanelListItem = ({
   );
 };
 
-export default GroupUsersPanelListItem;
+export default UsersItem;

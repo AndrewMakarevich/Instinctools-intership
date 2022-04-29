@@ -4,7 +4,7 @@ import userAction from '@testing-library/user-event';
 import userGroupActions from '../../../../store/reducers/userGroupReducer/actions';
 import { renderWithReduxProvider } from '../../../../test/helpers/renderWith';
 import getUsersListResponse from '../../../../test/mockData/users';
-import GroupUsersPanel from './groupUsersPanel';
+import GroupUsersPanel from './groupUsersList';
 import { userPaths } from '../../../router/routes';
 
 const user = userAction.setup();

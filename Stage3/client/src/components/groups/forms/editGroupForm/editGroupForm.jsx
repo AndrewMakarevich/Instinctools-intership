@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-import formStyles from './editGroupForm.module.css';
-import MyInputWithLabel from '../../../../UI/myInput/myInputWithLabel';
 import SubmitGroupChangesBtn from '../../btns/submitGroupChangesBtn/submitGroupChangesBtn';
-import MyButton from '../../../../UI/myButton/myButton';
+import EditForm from '../../../forms/editForm/editForm';
 
 const EditGroupForm = ({ groupObj, actualizeGroupInfo }) => {
   const [newGroupInfo, setNewGroupInfo] = useState({
@@ -20,39 +18,21 @@ const EditGroupForm = ({ groupObj, actualizeGroupInfo }) => {
   }, [groupObj]);
 
   return (
-    <form data-testid='edit-group-form' className={formStyles['form']}>
-      <div className={formStyles['form-inputs__wrapper']}>
-        {Object.keys(newGroupInfo).map((groupParam) => (
-          <MyInputWithLabel
-            key={groupParam}
-            labelText={`Group's ${groupParam}`}
-            value={newGroupInfo[groupParam]}
-            onChange={(e) =>
-              setNewGroupInfo({ ...newGroupInfo, [groupParam]: e.target.value })
-            }
-          />
-        ))}
-      </div>
-      <div className={formStyles['form-buttons__wrapper']}>
-        <MyButton
-          onClick={(e) => {
-            e.preventDefault();
-            setNewGroupInfo({
-              groupName: groupObj.groupName,
-              groupTitle: groupObj.groupTitle,
-            });
-          }}
-        >
-          Clear changes
-        </MyButton>
+    <>
+      <EditForm
+        essenceName='Group'
+        initialParamValues={groupObj}
+        newParamValues={newGroupInfo}
+        setNewParamValues={setNewGroupInfo}
+      >
         <SubmitGroupChangesBtn
           groupId={groupObj._id}
           initialParams={groupObj}
           paramsToEditObj={newGroupInfo}
           actualizeGroupInfo={actualizeGroupInfo}
         />
-      </div>
-    </form>
+      </EditForm>
+    </>
   );
 };
 

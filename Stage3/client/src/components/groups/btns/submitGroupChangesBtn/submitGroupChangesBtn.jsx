@@ -47,6 +47,7 @@ const SubmitGroupChangesBtn = ({
     <MyButton
       data-testid='submit-group-changes-btn'
       disabled={groupInfoIsLoading}
+      type='submit'
       onClick={submitGroupChanges}
     >
       Submit changes

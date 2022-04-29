@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Correct edit user form render 1`] = `
+<form
+  class="form"
+  data-testid="edit-user-form"
+>
+  <div
+    class="form-inputs__wrapper"
+  >
+    <label
+      class="label "
+      data-testid="my-label-input"
+    >
+      <input
+        class="my-input "
+        placeholder=" "
+        value="AndrewTheFirst"
+      />
+      <span>
+        User's username
+      </span>
+    </label>
+    <label
+      class="label "
+      data-testid="my-label-input"
+    >
+      <input
+        class="my-input "
+        placeholder=" "
+        value="Andrew"
+      />
+      <span>
+        User's firstName
+      </span>
+    </label>
+    <label
+      class="label "
+      data-testid="my-label-input"
+    >
+      <input
+        class="my-input "
+        placeholder=" "
+        value="Makarevich"
+      />
+      <span>
+        User's lastName
+      </span>
+    </label>
+    <label
+      class="label "
+      data-testid="my-label-input"
+    >
+      <input
+        class="my-input "
+        placeholder=" "
+        value="andrei1@mail.ru"
+      />
+      <span>
+        User's email
+      </span>
+    </label>
+  </div>
+  <div
+    class="form-buttons__wrapper"
+  >
+    <button
+      class="my-button "
+      type="button"
+    >
+      Clear changes
+    </button>
+    <button
+      class="my-button "
+      data-testid="submit-user-changes-btn"
+      type="submit"
+    >
+      Submit changes
+    </button>
+  </div>
+</form>
+`;
