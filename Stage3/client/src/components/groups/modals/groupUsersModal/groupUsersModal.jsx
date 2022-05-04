@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   getGroupUsersThunk,
   getNotGroupMembersThunk,
@@ -14,6 +15,27 @@ import modalStyles from './groupUsersModal.module.css';
 const GroupUsersModal = ({ groupId }) => {
   const [groupUsersIsOpen, setGroupUsersIsOpen] = useState(false);
   const [deleteState, setDeleteState] = useState(true);
+
+  const groupUsersActionsArray = useMemo(
+    () => [
+      {
+        header: 'delete',
+        clickHandler: (userId, actualizeUsersListFunction) =>
+          deleteUserFromGroup(userId, groupId, actualizeUsersListFunction),
+      },
+    ],
+    [groupId]
+  );
+
+  const notGroupMembersActionsArray = useMemo(() => {
+    return [
+      {
+        header: 'add',
+        clickHandler: (userId, actualizeUsersListFunction) =>
+          addUserToTheGroup(userId, groupId, actualizeUsersListFunction),
+      },
+    ];
+  }, [groupId]);
 
   return (
     <>
@@ -35,9 +57,7 @@ const GroupUsersModal = ({ groupId }) => {
             groupId={groupId}
             groupUsersStateArrName='groupUsers'
             thunkFunction={getGroupUsersThunk}
-            actionsArr={[
-              { header: 'delete', clickHandler: deleteUserFromGroup },
-            ]}
+            actionsArr={groupUsersActionsArray}
           />
         ) : (
           <GroupUsersList
@@ -45,7 +65,7 @@ const GroupUsersModal = ({ groupId }) => {
             groupId={groupId}
             groupUsersStateArrName='notGroupMembers'
             thunkFunction={getNotGroupMembersThunk}
-            actionsArr={[{ header: 'add', clickHandler: addUserToTheGroup }]}
+            actionsArr={notGroupMembersActionsArray}
           />
         )}
         <MyButton onClick={() => setDeleteState(!deleteState)}>
@@ -54,6 +74,10 @@ const GroupUsersModal = ({ groupId }) => {
       </ModalWindow>
     </>
   );
+};
+
+GroupUsersModal.propTypes = {
+  groupId: PropTypes.string,
 };
 
 export default GroupUsersModal;

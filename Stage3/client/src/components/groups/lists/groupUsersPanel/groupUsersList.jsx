@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import useCombineFetching from '../../../../hooks/useCombineFetching';
 import UsersList from '../../../users/usersList/usersList';
@@ -25,17 +26,17 @@ const GroupUsersList = ({
     delayedFetchGroupUsersLoading,
   ] = useCombineFetching(getGroupUsers);
 
-  const getGroupUsersListWithCurrentQueryParams = async (
-    delayed,
-    newQueryParamsObj
-  ) => {
-    await fetchGroupUsers(
-      delayed,
-      newQueryParamsObj.filterObject,
-      newQueryParamsObj.page,
-      newQueryParamsObj.limit
-    );
-  };
+  const getGroupUsersListWithCurrentQueryParams = useCallback(
+    async (delayed, newQueryParamsObj) => {
+      await fetchGroupUsers(
+        delayed,
+        newQueryParamsObj.filterObject,
+        newQueryParamsObj.page,
+        newQueryParamsObj.limit
+      );
+    },
+    [fetchGroupUsers]
+  );
 
   return (
     <UsersList
@@ -44,9 +45,15 @@ const GroupUsersList = ({
       usersArr={userGroupReducer[groupUsersStateArrName]}
       usersCount={userGroupReducer.count}
       usersLoading={fetchGroupUsersLoading || delayedFetchGroupUsersLoading}
-      groupId={groupId}
     />
   );
+};
+
+GroupUsersList.propTypes = {
+  groupId: PropTypes.string,
+  groupUsersStateArrName: PropTypes.string,
+  thunkFunction: PropTypes.func,
+  actionsArr: PropTypes.array,
 };
 
 export default GroupUsersList;

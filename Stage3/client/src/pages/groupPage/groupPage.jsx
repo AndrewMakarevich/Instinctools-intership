@@ -23,7 +23,7 @@ const GroupPage = () => {
   } = useFetching(fetchGroup);
 
   useEffect(() => {
-    getGroupByGroupName();
+    getGroupByGroupName().catch((e) => alert(e));
   }, [groupname]);
 
   if (groupIsLoading) {

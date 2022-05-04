@@ -23,7 +23,7 @@ const UserPage = () => {
   } = useFetching(fetchUser);
 
   useEffect(() => {
-    getUserByUsername();
+    getUserByUsername().catch((e) => alert(e));
   }, [username]);
 
   if (userIsLoading) {

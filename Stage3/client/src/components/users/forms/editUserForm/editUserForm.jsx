@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import SubmitUserChangesBtn from '../../btns/submitUserChangesBtn/submitUserChangesBtn';
 import EditForm from '../../../forms/editForm/editForm';
 
@@ -40,6 +41,11 @@ const EditUserForm = ({ userObj, actualizeUserInfo }) => {
       />
     </EditForm>
   );
+};
+
+EditUserForm.propTypes = {
+  userObj: PropTypes.object,
+  actualizeUserInfo: PropTypes.func,
 };
 
 export default EditUserForm;

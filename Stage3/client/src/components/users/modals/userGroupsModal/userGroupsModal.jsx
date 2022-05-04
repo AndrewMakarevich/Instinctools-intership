@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import MyButton from '../../../../UI/myButton/myButton';
 import ModalWindow from '../../../modalWindow/modalWindow';
 import {
@@ -15,6 +16,29 @@ const UserGroupsModal = ({ userId }) => {
   const [userGroupsIsOpen, setUserGroupsIsOpen] = useState(false);
   const [leaveState, setLeaveState] = useState(true);
 
+  const userGroupsActionsArray = useMemo(
+    () => [
+      {
+        header: 'leave',
+        clickHandler: (groupId, actualizeGroupListFunction) =>
+          deleteUserFromGroup(userId, groupId, actualizeGroupListFunction),
+      },
+    ],
+    [userId]
+  );
+
+  const groupsNotPartOfActionsArray = useMemo(
+    () => [
+      {
+        header: 'enter',
+        clickHandler: (groupId, actualizeGroupListFunction) => {
+          addUserToTheGroup(userId, groupId, actualizeGroupListFunction);
+        },
+      },
+    ],
+    [userId]
+  );
+
   return (
     <>
       <MyButton onClick={() => setUserGroupsIsOpen(true)}>User groups</MyButton>
@@ -29,9 +53,7 @@ const UserGroupsModal = ({ userId }) => {
             userId={userId}
             thunkFunction={getUserGroupsThunk}
             userGroupsStateArrName='userGroups'
-            actionsArr={[
-              { header: 'leave', clickHandler: deleteUserFromGroup },
-            ]}
+            actionsArr={userGroupsActionsArray}
           />
         ) : (
           <UserGroupsList
@@ -39,7 +61,7 @@ const UserGroupsModal = ({ userId }) => {
             userId={userId}
             thunkFunction={getGroupsUserNotParticipateInThunk}
             userGroupsStateArrName='groupsUserNotParticipateIn'
-            actionsArr={[{ header: 'enter', clickHandler: addUserToTheGroup }]}
+            actionsArr={groupsNotPartOfActionsArray}
           />
         )}
 
@@ -49,6 +71,10 @@ const UserGroupsModal = ({ userId }) => {
       </ModalWindow>
     </>
   );
+};
+
+UserGroupsModal.propTypes = {
+  userId: PropTypes.string,
 };
 
 export default UserGroupsModal;

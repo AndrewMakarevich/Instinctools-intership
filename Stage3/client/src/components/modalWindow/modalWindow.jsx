@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import CloseButton from '../../UI/closeButton/closeButton';
 
@@ -94,6 +95,17 @@ const ModalWindow = ({
   );
 
   return createPortal(t, document.getElementById('root'));
+};
+
+ModalWindow.propTypes = {
+  modalWindowClassName: PropTypes.string,
+  modalContentClassName: PropTypes.string,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.element),
+    PropTypes.element,
+  ]),
+  isOpen: PropTypes.bool,
+  setIsOpen: PropTypes.func,
 };
 
 export default ModalWindow;

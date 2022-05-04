@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import MyButton from '../../UI/myButton/myButton';
 import SearchInput from '../../UI/searchInput/searchInput';
 
@@ -42,6 +43,13 @@ const SearchPanel = ({
       </MyButton>
     </section>
   );
+};
+
+SearchPanel.propTypes = {
+  paramsMap: PropTypes.array,
+  queryParams: PropTypes.object,
+  fetchFunction: PropTypes.func,
+  clearFieldsFunction: PropTypes.func,
 };
 
 export default SearchPanel;

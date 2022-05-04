@@ -16,6 +16,11 @@ const useFetching = (callback) => {
         await callback(...restArgs);
       } catch (e) {
         setError(e);
+        if (e.isAxiosError) {
+          throw Error(e.response.data.message);
+        } else {
+          throw Error(e.message);
+        }
       } finally {
         setIsLoading(false);
       }

@@ -1,5 +1,6 @@
 import MyButton from '../../../UI/myButton/myButton';
 import MyInputWithLabel from '../../../UI/myInput/myInputWithLabel';
+import PropTypes from 'prop-types';
 
 import formStyles from './editForm.module.css';
 
@@ -45,6 +46,14 @@ const EditForm = ({
       </div>
     </form>
   );
+};
+
+EditForm.propTypes = {
+  essenceName: PropTypes.string,
+  initialParamValues: PropTypes.object,
+  newParamValues: PropTypes.object,
+  setNewParamValues: PropTypes.func,
+  children: PropTypes.element,
 };
 
 export default EditForm;

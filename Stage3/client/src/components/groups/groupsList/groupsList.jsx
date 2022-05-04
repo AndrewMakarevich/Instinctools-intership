@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-import PaginationLine from '../../paginationLine/paginationLine';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
+import Table from '../../lists/table/table';
+import { groupPaths } from '../../router/routes';
 import SearchPanel from '../../searchPanel/searchPanel';
-import GroupsItem from '../groupsItem/groupsItem';
-
-import listStyles from './groupsList.module.css';
+import PaginationLine from '../../paginationLine/paginationLine';
 
 const GroupsList = ({
-  userId = 0,
   groupsArr,
   groupsCount,
   getGroupsFunction,
@@ -22,10 +21,13 @@ const GroupsList = ({
     },
   });
 
-  const getGroupsWithCurrentQueryParams = (delayed, newQueryParamsObj) => {
-    setGroupQueryParams(newQueryParamsObj);
-    getGroupsFunction(delayed, newQueryParamsObj);
-  };
+  const getGroupsWithCurrentQueryParams = useCallback(
+    async (delayed, newQueryParamsObj) => {
+      setGroupQueryParams(newQueryParamsObj);
+      await getGroupsFunction(delayed, newQueryParamsObj);
+    },
+    [setGroupQueryParams, getGroupsFunction]
+  );
 
   const clearQueryParams = useCallback(async () => {
     const clearedQueryParamsObj = {
@@ -38,66 +40,61 @@ const GroupsList = ({
     await getGroupsWithCurrentQueryParams(false, clearedQueryParamsObj);
   }, [groupQueryParams, getGroupsWithCurrentQueryParams]);
 
+  const setPage = useCallback(
+    async (page, delayed) => {
+      await getGroupsWithCurrentQueryParams(delayed, {
+        ...groupQueryParams,
+        page,
+      });
+    },
+    [groupQueryParams, getGroupsWithCurrentQueryParams]
+  );
+
   useEffect(() => {
     getGroupsWithCurrentQueryParams(false, groupQueryParams);
   }, []);
 
+  const navigateLinkLayout = useMemo(
+    () => ({
+      mainPath: groupPaths.mainPath,
+      entityParamNamesInnerPathsBasedOn: ['groupName'],
+    }),
+    []
+  );
+
   return (
-    <article className={listStyles['groups-table-wrapper']}>
+    <>
       <SearchPanel
+        clearFieldsFunction={clearQueryParams}
         paramsMap={['groupName', 'groupTitle']}
         queryParams={groupQueryParams}
         fetchFunction={getGroupsWithCurrentQueryParams}
-        clearFieldsFunction={clearQueryParams}
       />
-      {groupsArr.length ? (
-        <table
-          data-testid='user-groups-table'
-          className={`${listStyles['groups-table']} ${
-            groupsLoading ? listStyles['loading'] : ''
-          }`}
-        >
-          <thead>
-            <tr>
-              <th>Group name</th>
-              <th>Group title</th>
-              {actionsArr.map((action) => (
-                <th key={action.header}>Action</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {groupsArr.map((group) => (
-              <GroupsItem
-                key={group._id}
-                group={group}
-                userId={userId}
-                actualizeGroupsList={async (e) => {
-                  await getGroupsWithCurrentQueryParams(false, {
-                    ...groupQueryParams,
-                    page: 1,
-                  });
-                }}
-                actionsArr={actionsArr}
-              />
-            ))}
-          </tbody>
-          <tfoot></tfoot>
-        </table>
-      ) : (
-        <p>Can't find groups</p>
-      )}
+      <Table
+        actionsArray={actionsArr}
+        entitiesArray={groupsArr}
+        entitiesLoading={groupsLoading}
+        entityParamsToShow={['groupName', 'groupTitle']}
+        navigateLinkLayout={navigateLinkLayout}
+        thArray={['Group name', 'GroupTitle']}
+        actualizeList={async () => await setPage(1, false)}
+      />
       <PaginationLine
-        page={groupQueryParams.page}
         count={groupsCount}
         limit={groupQueryParams.limit}
-        setPage={(pageValue, delayed = false) => {
-          const newQueryParamObj = { ...groupQueryParams, page: pageValue };
-          getGroupsWithCurrentQueryParams(delayed, newQueryParamObj);
-        }}
+        page={groupQueryParams.page}
+        setPage={setPage}
       />
-    </article>
+    </>
   );
+};
+
+GroupsList.propTypes = {
+  groupsArr: PropTypes.array,
+  groupsCount: PropTypes.number,
+  getGroupsFunction: PropTypes.func,
+  groupsLoading: PropTypes.bool,
+  actionsArr: PropTypes.array,
 };
 
 export default GroupsList;

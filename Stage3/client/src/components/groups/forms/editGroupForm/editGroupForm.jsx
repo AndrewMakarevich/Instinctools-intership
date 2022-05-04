@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import SubmitGroupChangesBtn from '../../btns/submitGroupChangesBtn/submitGroupChangesBtn';
 import EditForm from '../../../forms/editForm/editForm';
 
@@ -34,6 +35,11 @@ const EditGroupForm = ({ groupObj, actualizeGroupInfo }) => {
       </EditForm>
     </>
   );
+};
+
+EditGroupForm.propTypes = {
+  groupObj: PropTypes.object,
+  actualizeGroupInfo: PropTypes.func,
 };
 
 export default EditGroupForm;

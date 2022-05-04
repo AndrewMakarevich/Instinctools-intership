@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import useFetching from '../../../../hooks/useFetching';
 import UserService from '../../../../service/userService';
@@ -57,6 +58,13 @@ const SubmitUserChangesBtn = ({
       Submit changes
     </MyButton>
   );
+};
+
+SubmitUserChangesBtn.propTypes = {
+  userId: PropTypes.string,
+  initialParamsObj: PropTypes.object,
+  paramsToEditObj: PropTypes.object,
+  actualizeUserInfo: PropTypes.func,
 };
 
 export default SubmitUserChangesBtn;

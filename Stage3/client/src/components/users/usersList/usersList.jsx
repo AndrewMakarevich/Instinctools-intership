@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
-import PaginationLine from '../../paginationLine/paginationLine';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
+import { userPaths } from '../../router/routes';
+import Table from '../../lists/table/table';
 import SearchPanel from '../../searchPanel/searchPanel';
-import UsersItem from '../usersItem/usersItem';
-import listStyles from './usersList.module.css';
+import PaginationLine from '../../paginationLine/paginationLine';
 
 const UsersList = ({
   usersArr,
   usersCount,
   getUsersFunction,
   usersLoading,
-  groupId = 0,
   actionsArr,
 }) => {
   const [queryParams, setQueryParams] = useState({
@@ -23,13 +23,13 @@ const UsersList = ({
     limit: 10,
   });
 
-  async function getUsersListWithCurrentQueryParams(
-    delayed,
-    newQueryParamsObj
-  ) {
-    setQueryParams(newQueryParamsObj);
-    await getUsersFunction(delayed, newQueryParamsObj);
-  }
+  const getUsersListWithCurrentQueryParams = useCallback(
+    async (delayed, newQueryParamsObj) => {
+      setQueryParams(newQueryParamsObj);
+      await getUsersFunction(delayed, newQueryParamsObj);
+    },
+    [setQueryParams, getUsersFunction]
+  );
 
   const clearQueryParams = useCallback(async () => {
     const clearedQueryParamsObj = {
@@ -44,69 +44,61 @@ const UsersList = ({
     await getUsersListWithCurrentQueryParams(false, clearedQueryParamsObj);
   }, [queryParams, getUsersListWithCurrentQueryParams]);
 
-  const setPage = async (page, delayed = false) => {
-    const newQueryParamsObj = { ...queryParams, page };
-    await getUsersListWithCurrentQueryParams(delayed, newQueryParamsObj);
-  };
+  const navigateLinkLayout = useMemo(
+    () => ({
+      mainPath: userPaths.mainPath,
+      entityParamNamesInnerPathsBasedOn: ['username'],
+    }),
+    []
+  );
+
+  const setPage = useCallback(
+    async (page, delayed) => {
+      await getUsersListWithCurrentQueryParams(delayed, {
+        ...queryParams,
+        page,
+      });
+    },
+    [queryParams, getUsersListWithCurrentQueryParams]
+  );
 
   useEffect(() => {
     getUsersListWithCurrentQueryParams(false, queryParams);
   }, []);
 
   return (
-    <article
-      data-testid='users-table-wrapper'
-      className={listStyles['users-table-wrapper']}
-    >
+    <>
       <SearchPanel
+        clearFieldsFunction={clearQueryParams}
+        fetchFunction={getUsersListWithCurrentQueryParams}
         paramsMap={['username', 'firstName', 'lastName', 'email']}
         queryParams={queryParams}
-        setQueryParams={setQueryParams}
-        fetchFunction={getUsersListWithCurrentQueryParams}
-        clearFieldsFunction={clearQueryParams}
       />
-      <table
-        data-testid='users-table'
-        className={`${listStyles['users-table']} ${
-          usersLoading ? listStyles.loading : ''
-        }`}
-      >
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Full name</th>
-            <th>Email</th>
-            {actionsArr.map((action) => (
-              <th key={action.header}>Action</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {usersArr.map((user) => (
-            <UsersItem
-              key={user._id}
-              user={user}
-              groupId={groupId}
-              actionsArr={actionsArr}
-              actualizeGroupUsersList={() =>
-                getUsersListWithCurrentQueryParams(false, {
-                  ...queryParams,
-                  page: 1,
-                })
-              }
-            />
-          ))}
-        </tbody>
-        <tfoot></tfoot>
-      </table>
+      <Table
+        actionsArray={actionsArr}
+        entitiesArray={usersArr}
+        entitiesLoading={usersLoading}
+        entityParamsToShow={['username', 'firstName', 'lastName', 'email']}
+        navigateLinkLayout={navigateLinkLayout}
+        thArray={['Username', 'First name', 'Last name', 'email']}
+        actualizeList={async () => await setPage(1, false)}
+      />
       <PaginationLine
         count={usersCount}
-        page={queryParams.page}
         limit={queryParams.limit}
+        page={queryParams.page}
         setPage={setPage}
       />
-    </article>
+    </>
   );
+};
+
+UsersList.propTypes = {
+  usersArr: PropTypes.array,
+  usersCount: PropTypes.number,
+  getUsersFunction: PropTypes.func,
+  usersLoading: PropTypes.bool,
+  actionsArr: PropTypes.array,
 };
 
 export default UsersList;

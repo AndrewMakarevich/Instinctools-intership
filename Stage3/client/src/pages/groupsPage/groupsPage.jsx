@@ -8,8 +8,8 @@ const GroupsPage = () => {
   const dispatch = useDispatch();
   const groupReducer = useSelector((store) => store.groupReducer);
 
-  const getGroups = useCallback(async (filterObj, page, limit) => {
-    await dispatch(getGroupsThunk({ filterObj, page, limit }));
+  const getGroups = useCallback(async (filterObject, page, limit) => {
+    await dispatch(getGroupsThunk({ filterObject, page, limit }));
   });
 
   const [fetchGroups, fetchGroupsLoading, delayedFetchGroupsLoading] =

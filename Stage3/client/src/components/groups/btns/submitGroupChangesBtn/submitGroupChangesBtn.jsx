@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import useFetching from '../../../../hooks/useFetching';
 import GroupService from '../../../../service/groupService';
 import MyButton from '../../../../UI/myButton/myButton';
@@ -53,6 +54,13 @@ const SubmitGroupChangesBtn = ({
       Submit changes
     </MyButton>
   );
+};
+
+SubmitGroupChangesBtn.propTypes = {
+  groupId: PropTypes.string,
+  initialParams: PropTypes.object,
+  paramsToEditObj: PropTypes.object,
+  actualizeGroupInfo: PropTypes.func,
 };
 
 export default SubmitGroupChangesBtn;
