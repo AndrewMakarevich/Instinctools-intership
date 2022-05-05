@@ -38,9 +38,6 @@ class GroupController {
       const groupsParamValueToFind = req.params.paramValue;
       const groupsParamNameToFind = req.query.paramName;
 
-      console.log(groupsParamNameToFind);
-      console.log(groupsParamValueToFind);
-
       const response = await GroupService.getGroup(
         groupsParamNameToFind,
         groupsParamValueToFind
@@ -212,7 +209,7 @@ class UserGroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 
@@ -229,7 +226,7 @@ class UserGroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 
@@ -246,22 +243,26 @@ class UserGroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 
   static async getGroupsUserNotParticipateIn(req, res, next) {
-    const { userId } = req.params;
-    const { filterObject, page, limit } = req.query;
+    try {
+      const { userId } = req.params;
+      const { filterObject, page, limit } = req.query;
 
-    const response = await UserGroupService.getGroupsUserNotParticipateIn(
-      userId,
-      filterObject,
-      page,
-      limit
-    );
+      const response = await UserGroupService.getGroupsUserNotParticipateIn(
+        userId,
+        filterObject,
+        page,
+        limit
+      );
 
-    return res.json(response);
+      return res.json(response);
+    } catch (e) {
+      return next(e);
+    }
   }
 
   static async addUserToGroup(req, res, next) {
@@ -322,7 +323,7 @@ async function checkForTheDuplication(Model, document, fieldsToCheck) {
       );
     }
   }
-
+  const checkForDuplicates = [];
   for (const fieldVal of fieldsToCheck) {
     if (!Model.schema.obj[fieldVal]) {
       continue;
@@ -330,12 +331,14 @@ async function checkForTheDuplication(Model, document, fieldsToCheck) {
 
     if (Array.isArray(document)) {
       for (const docVal of document) {
-        await findDuplicate(docVal, fieldVal);
+        checkForDuplicates.push(findDuplicate(docVal, fieldVal));
       }
+      continue;
     }
 
-    await findDuplicate(document, fieldVal);
+    checkForDuplicates.push(findDuplicate(document, fieldVal));
   }
+  await Promise.all(checkForDuplicates);
 }
 
 function expandMongooseMethods() {
@@ -734,10 +737,10 @@ class UserGroupService {
     const parsedFilterObj = createModelSearchQuery(filterObject);
     const skipValue = (page - 1) * limit;
 
-    //convert an array of user-group connections to the array of groups ids, wich have connection with the user
-    userGroupsConnections = userGroupsConnections.map((connection) => {
-      return String(connection.groupId);
-    });
+    // convert an array of user-group connections to the array of groups ids, wich have connection with the user
+    userGroupsConnections = userGroupsConnections.map((connection) =>
+      String(connection.groupId)
+    );
 
     const userGroups = await GroupModel.find({
       _id: { $in: [...userGroupsConnections] },
@@ -768,9 +771,9 @@ class UserGroupService {
     const parsedFilterObject = createModelSearchQuery(filterObject);
     const skipValue = (page - 1) * limit;
 
-    userGroupConnections = userGroupConnections.map((connection) => {
-      return String(connection.userId);
-    });
+    userGroupConnections = userGroupConnections.map((connection) =>
+      String(connection.userId)
+    );
 
     const users = await UserModel.find({
       _id: { $in: [...userGroupConnections] },
@@ -828,7 +831,7 @@ class UserGroupService {
   ) {
     await checkUser(userId, "User with such id doesn't exists");
 
-    let userGroupConnections = await UsersGroupsModel.find({
+    const userGroupConnections = await UsersGroupsModel.find({
       userId,
     });
 
@@ -860,7 +863,6 @@ class UserGroupService {
   }
 
   static async addUserToGroup(userId, groupId) {
-    console.log(userId, groupId);
     const userAndGroup = await checkUserAndGroup(
       userId,
       groupId,

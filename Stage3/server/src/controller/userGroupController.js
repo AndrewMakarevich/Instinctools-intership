@@ -14,7 +14,7 @@ class UserGroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 
@@ -31,7 +31,7 @@ class UserGroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 
@@ -48,22 +48,26 @@ class UserGroupController {
 
       return res.json(response);
     } catch (e) {
-      next(e);
+      return next(e);
     }
   }
 
   static async getGroupsUserNotParticipateIn(req, res, next) {
-    const { userId } = req.params;
-    const { filterObject, page, limit } = req.query;
+    try {
+      const { userId } = req.params;
+      const { filterObject, page, limit } = req.query;
 
-    const response = await UserGroupService.getGroupsUserNotParticipateIn(
-      userId,
-      filterObject,
-      page,
-      limit
-    );
+      const response = await UserGroupService.getGroupsUserNotParticipateIn(
+        userId,
+        filterObject,
+        page,
+        limit
+      );
 
-    return res.json(response);
+      return res.json(response);
+    } catch (e) {
+      return next(e);
+    }
   }
 
   static async addUserToGroup(req, res, next) {

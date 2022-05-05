@@ -29,7 +29,7 @@ class UserGroupService {
     userId,
     filterObject,
     page,
-    limit
+    limit,
   ) {
     const response = await $host.get(
       `user-group/get-groups-user-not-participate/${userId}`,
@@ -39,7 +39,7 @@ class UserGroupService {
           page,
           limit,
         },
-      }
+      },
     );
 
     return response;

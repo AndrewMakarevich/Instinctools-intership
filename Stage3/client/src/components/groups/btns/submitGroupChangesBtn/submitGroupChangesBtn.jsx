@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useFetching from '../../../../hooks/useFetching';
@@ -15,10 +16,9 @@ const SubmitGroupChangesBtn = ({
 }) => {
   const navigate = useNavigate();
   const { executeCallback: editGroup, isLoading: groupInfoIsLoading } =
-    useFetching(
-      async (groupId, paramsObject) =>
-        await GroupService.editGroup(groupId, paramsObject)
-    );
+    useFetching(async (groupIdVal, paramsObject) => {
+      await GroupService.editGroup(groupIdVal, paramsObject);
+    });
 
   const submitGroupChanges = async (e) => {
     try {
@@ -36,12 +36,12 @@ const SubmitGroupChangesBtn = ({
       await editGroup(undefined, groupId, paramsObject);
 
       if (paramsObject.groupName) {
-        navigate(groupPaths.mainPath + '/' + paramsObject.groupName);
+        navigate(`${groupPaths.mainPath}/${paramsObject.groupName}`);
       } else {
         await actualizeGroupInfo();
       }
-    } catch (e) {
-      alert(e);
+    } catch (error) {
+      alert(error);
     }
   };
   return (

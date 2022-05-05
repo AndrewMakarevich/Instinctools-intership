@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import UsersList from '../../components/users/usersList/usersList';
 import useCombineFetching from '../../hooks/useCombineFetching';
@@ -26,7 +26,6 @@ const UsersPage = () => {
 
   return (
     <article data-testid='users-list-wrapper'>
-      Users page
       <UsersList
         actionsArr={[]}
         getUsersFunction={getUsersWithCurrentQueryParams}

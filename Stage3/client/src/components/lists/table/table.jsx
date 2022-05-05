@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import TableRow from './tableRow';
 
@@ -18,7 +18,7 @@ const Table = ({
       let link = navigateLinkLayout.mainPath;
       navigateLinkLayout.entityParamNamesInnerPathsBasedOn.forEach(
         (paramName) => {
-          link = link + '/' + entity[paramName];
+          link = `${link}/${entity[paramName]}`;
         }
       );
 
@@ -34,8 +34,8 @@ const Table = ({
     >
       <table
         data-testid='table'
-        className={`${tableStyles['table']} ${
-          entitiesLoading ? tableStyles['loading'] : ''
+        className={`${tableStyles.table} ${
+          entitiesLoading ? tableStyles.loading : ''
         }`}
       >
         <thead>
@@ -60,7 +60,7 @@ const Table = ({
             />
           ))}
         </tbody>
-        <tfoot></tfoot>
+        <tfoot />
       </table>
     </article>
   );

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import EditGroupForm from '../../components/groups/forms/editGroupForm/editGroupForm';
@@ -23,7 +23,7 @@ const GroupPage = () => {
   } = useFetching(fetchGroup);
 
   useEffect(() => {
-    getGroupByGroupName().catch((e) => alert(e));
+    getGroupByGroupName();
   }, [groupname]);
 
   if (groupIsLoading) {
@@ -51,7 +51,8 @@ const GroupPage = () => {
       {groupReducer.group ? (
         <section className={pageStyles['edit-group-section']}>
           <p className={pageStyles['edit-user-section-header']}>
-            {groupname} group page
+            {groupname}
+            group page
           </p>
           <EditGroupForm
             groupObj={groupReducer.group}
@@ -60,7 +61,7 @@ const GroupPage = () => {
           <GroupUsersModal groupId={groupReducer.group._id} />
         </section>
       ) : (
-        <p>Can't find group with such groupname</p>
+        <p>Can&apos;t find group with such groupname</p>
       )}
     </article>
   );

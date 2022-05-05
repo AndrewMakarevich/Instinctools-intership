@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import SearchIcon from '../../assets/icons/searchIcon/searchIcon';
 import inputStyles from './searchInput.module.css';

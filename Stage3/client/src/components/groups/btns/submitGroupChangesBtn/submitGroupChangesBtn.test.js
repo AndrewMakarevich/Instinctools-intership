@@ -1,3 +1,4 @@
+import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +38,7 @@ describe('Correct submit changes button', () => {
     const actualizeGroupInfo = jest.fn();
     renderWithRouter(
       <SubmitGroupChangesBtn
-        groupId={0}
+        groupId='0'
         initialParams={{
           groupName: 'FirstGroup',
           groupTitle: "That's my first group",
@@ -47,9 +48,7 @@ describe('Correct submit changes button', () => {
       />
     );
     parseDataToEdit.mockReturnValue({ groupName: 'SecGroup' });
-
     await user.click(screen.getByTestId('submit-group-changes-btn'));
-
     expect(parseDataToEdit.mock.calls.length).toBe(1);
     expect(GroupService.editGroup.mock.calls.length).toBe(1);
     expect(useNavigate().mock.calls.length).toBe(1);
@@ -63,7 +62,7 @@ describe('Correct submit changes button', () => {
     const actualizeGroupInfo = jest.fn();
     renderWithRouter(
       <SubmitGroupChangesBtn
-        groupId={0}
+        groupId='0'
         initialParams={{
           groupName: 'FirstGroup',
           groupTitle: "That's my first group",
@@ -75,11 +74,8 @@ describe('Correct submit changes button', () => {
         actualizeGroupInfo={actualizeGroupInfo}
       />
     );
-
     parseDataToEdit.mockReturnValue({ groupTitle: 'Thats-changed' });
-
     await user.click(screen.getByTestId('submit-group-changes-btn'));
-
     expect(parseDataToEdit.mock.calls.length).toBe(1);
     expect(GroupService.editGroup.mock.calls.length).toBe(1);
     expect(useNavigate().mock.calls.length).toBe(0);
@@ -90,7 +86,7 @@ describe('Correct submit changes button', () => {
     const actualizeGroupInfo = jest.fn();
     renderWithRouter(
       <SubmitGroupChangesBtn
-        groupId={0}
+        groupId='0'
         initialParams={{
           groupName: 'FirstGroup',
           groupTitle: "That's my first group",
@@ -102,9 +98,7 @@ describe('Correct submit changes button', () => {
         actualizeGroupInfo={actualizeGroupInfo}
       />
     );
-
     parseDataToEdit.mockReturnValue({});
-
     await user.click(screen.getByTestId('submit-group-changes-btn'));
     expect(alert.mock.calls.length).toBe(1);
   });

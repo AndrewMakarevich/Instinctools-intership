@@ -1,3 +1,4 @@
+import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithReduxProvider } from '../../../../test/helpers/renderWith';
@@ -15,9 +16,8 @@ describe('Correct group users modal', () => {
     expect(
       screen.getByTestId('open-group-users-modal-btn')
     ).toBeInTheDocument();
-
     await user.click(screen.getByTestId('open-group-users-modal-btn'));
     expect(screen.getByTestId('modal-window')).toBeInTheDocument();
-    expect(screen.getByTestId('group-users-table')).toBeInTheDocument();
+    expect(screen.getByTestId('table')).toBeInTheDocument();
   });
 });

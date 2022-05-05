@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MyButton from '../../../UI/myButton/myButton';
@@ -20,13 +20,13 @@ const TableRow = ({
     try {
       setActionIsLoading(true);
       await action.clickHandler(entity._id, actualizeEntitiesList);
-    } catch (e) {
-      if (e.isAxiosError) {
-        alert(e.response.data.message);
+    } catch (error) {
+      if (error.isAxiosError) {
+        alert(error.response.data.message);
         return;
       }
 
-      alert(e.message);
+      alert(error.message);
     } finally {
       setActionIsLoading(false);
     }
@@ -47,6 +47,7 @@ const TableRow = ({
             </td>
           );
         }
+        return null;
       })}
 
       {actionsArray.map((action) => (
@@ -55,7 +56,9 @@ const TableRow = ({
             data-testid='group-row-action-btn'
             className={tableStyles['action-cell-btn']}
             disabled={actionIsLoading}
-            onClick={async (e) => await actionHandler(e, action)}
+            onClick={async (e) => {
+              await actionHandler(e, action);
+            }}
           >
             {action.header}
           </MyButton>

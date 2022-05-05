@@ -1,3 +1,4 @@
+import React from 'react';
 import publicRoutes from '../router/routes';
 import MyLink from '../../UI/myLink/myLink';
 

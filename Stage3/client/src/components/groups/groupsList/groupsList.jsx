@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import Table from '../../lists/table/table';
 import { groupPaths } from '../../router/routes';
@@ -31,7 +31,7 @@ const GroupsList = ({
 
   const clearQueryParams = useCallback(async () => {
     const clearedQueryParamsObj = {
-      ...queryParams,
+      ...groupQueryParams,
       filterObject: {
         groupName: '',
         groupTitle: '',
@@ -63,7 +63,7 @@ const GroupsList = ({
   );
 
   return (
-    <>
+    <article data-testid='groups-list-panel'>
       <SearchPanel
         clearFieldsFunction={clearQueryParams}
         paramsMap={['groupName', 'groupTitle']}
@@ -77,7 +77,9 @@ const GroupsList = ({
         entityParamsToShow={['groupName', 'groupTitle']}
         navigateLinkLayout={navigateLinkLayout}
         thArray={['Group name', 'GroupTitle']}
-        actualizeList={async () => await setPage(1, false)}
+        actualizeList={async () => {
+          await setPage(1, false);
+        }}
       />
       <PaginationLine
         count={groupsCount}
@@ -85,7 +87,7 @@ const GroupsList = ({
         page={groupQueryParams.page}
         setPage={setPage}
       />
-    </>
+    </article>
   );
 };
 

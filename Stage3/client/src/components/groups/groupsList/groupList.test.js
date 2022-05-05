@@ -1,14 +1,12 @@
-import { act, render, screen } from '@testing-library/react';
-import UserEvent from '@testing-library/user-event';
-import axios from 'axios';
+import React from 'react';
+import { act, screen } from '@testing-library/react';
 import { renderWithReduxProvider } from '../../../test/helpers/renderWith';
-import GroupList from './groupList';
+import GroupsList from './groupsList';
 import GroupService from '../../../service/groupService';
 import getGroupsListResponse from '../../../test/mockData/groups';
 
 let response;
 
-const user = UserEvent.setup();
 jest.mock('../../../service/groupService');
 
 beforeEach(() => {
@@ -21,18 +19,30 @@ afterEach(() => {
 describe("Correct Group's list", () => {
   test('render', async () => {
     await act(async () => {
-      renderWithReduxProvider(<GroupList />, ['/groups']);
+      renderWithReduxProvider(
+        <GroupsList
+          actionsArr={[]}
+          groupsArr={[]}
+          getGroupsFunction={() => {}}
+        />,
+        ['/groups']
+      );
     });
-
-    const wrapper = screen.getByTestId('groups-table-wrapper');
+    const wrapper = screen.getByTestId('groups-list-panel');
     expect(wrapper).toBeInTheDocument();
   });
 
   test('rendering after recieve group list data', async () => {
     GroupService.getGroups.mockReturnValue(response);
-    renderWithReduxProvider(<GroupList />, ['/groups']);
-
-    const groupsRows = await screen.findAllByTestId('group-row');
+    renderWithReduxProvider(
+      <GroupsList
+        actionsArr={[]}
+        groupsArr={getGroupsListResponse.data.rows}
+        getGroupsFunction={() => {}}
+      />,
+      ['/groups']
+    );
+    const groupsRows = await screen.findAllByTestId('table-row');
     expect(groupsRows.length).toBe(3);
   });
 });

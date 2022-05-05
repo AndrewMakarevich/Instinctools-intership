@@ -19,7 +19,7 @@ const useFetching = (callback) => {
         if (e.isAxiosError) {
           throw Error(e.response.data.message);
         } else {
-          throw Error(e.message);
+          throw Error(e);
         }
       } finally {
         setIsLoading(false);

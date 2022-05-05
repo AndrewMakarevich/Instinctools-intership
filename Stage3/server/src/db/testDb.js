@@ -18,11 +18,18 @@ async function GetMongoMemoryServer() {
 
   async function cleanDataBase() {
     const collections = await mongoose.connection.collections;
-    for (const collectionKey in collections) {
-      if (Object.prototype.hasOwnProperty.call(collections, collectionKey)) {
-        await collections[collectionKey].deleteMany();
-      }
-    }
+    const deleteCollections = [];
+
+    Object.keys(collections).forEach((collectionKey) => {
+      deleteCollections.push(collections[collectionKey].deleteMany());
+    });
+
+    await Promise.all(deleteCollections);
+    // for (const collectionKey in collections) {
+    //   if (Object.prototype.hasOwnProperty.call(collections, collectionKey)) {
+    //     await collections[collectionKey].deleteMany();
+    //   }
+    // }
   }
 
   return {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   getGroupUsersThunk,
@@ -27,15 +27,16 @@ const GroupUsersModal = ({ groupId }) => {
     [groupId]
   );
 
-  const notGroupMembersActionsArray = useMemo(() => {
-    return [
+  const notGroupMembersActionsArray = useMemo(
+    () => [
       {
         header: 'add',
         clickHandler: (userId, actualizeUsersListFunction) =>
           addUserToTheGroup(userId, groupId, actualizeUsersListFunction),
       },
-    ];
-  }, [groupId]);
+    ],
+    [groupId]
+  );
 
   return (
     <>

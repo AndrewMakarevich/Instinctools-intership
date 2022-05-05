@@ -1,4 +1,5 @@
-import { act, screen } from '@testing-library/react';
+import React from 'react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useNavigate } from 'react-router-dom';
 import { renderWithRouter } from '../../../../test/helpers/renderWith';
@@ -9,12 +10,10 @@ import { userPaths } from '../../../router/routes';
 const user = userEvent.setup();
 
 const mockedFunction = jest.fn();
-jest.mock('react-router-dom', () => {
-  return {
-    ...jest.requireActual('react-router-dom'),
-    useNavigate: () => mockedFunction,
-  };
-});
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockedFunction,
+}));
 
 jest.mock('../../../../service/userService');
 global.alert = jest.fn();
@@ -26,7 +25,6 @@ afterEach(() => {
 describe('Correct submit yser changes btn', () => {
   test('render', () => {
     renderWithRouter(<SubmitUserChangesBtn />);
-
     expect(screen.getByTestId('submit-user-changes-btn')).toBeInTheDocument();
   });
 
@@ -49,7 +47,6 @@ describe('Correct submit yser changes btn', () => {
         }}
       />
     );
-
     await user.click(screen.getByTestId('submit-user-changes-btn'));
     expect(UserService.editUser.mock.calls.length).toBe(1);
     expect(useNavigate().mock.calls[0][0]).toBe(
@@ -77,7 +74,6 @@ describe('Correct submit yser changes btn', () => {
         }}
       />
     );
-
     await user.click(screen.getByTestId('submit-user-changes-btn'));
     expect(UserService.editUser.mock.calls.length).toBe(1);
     expect(useNavigate().mock.calls.length).toBe(0);
@@ -103,7 +99,6 @@ describe('Correct submit yser changes btn', () => {
         }}
       />
     );
-
     await user.click(screen.getByTestId('submit-user-changes-btn'));
     expect(alert.mock.calls.length).toBe(1);
     expect(alert.mock.calls[0][0]).toBe('Nothing to change');

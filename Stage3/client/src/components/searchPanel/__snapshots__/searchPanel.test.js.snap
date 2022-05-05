@@ -72,6 +72,7 @@ exports[`Correct search panel render 1`] = `
   <button
     class="my-button "
     disabled=""
+    type="button"
   >
     Clear search inputs
   </button>

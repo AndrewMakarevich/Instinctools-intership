@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import GroupsList from '../../components/groups/groupsList/groupsList';
 import useCombineFetching from '../../hooks/useCombineFetching';
@@ -29,7 +29,6 @@ const GroupsPage = () => {
 
   return (
     <article data-testid='groups-list-wrapper'>
-      Groups page
       <GroupsList
         actionsArr={[]}
         groupsArr={groupReducer.groups}

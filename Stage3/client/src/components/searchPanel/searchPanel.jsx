@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import MyButton from '../../UI/myButton/myButton';
 import SearchInput from '../../UI/searchInput/searchInput';
@@ -10,8 +11,7 @@ const SearchPanel = ({
   fetchFunction,
   clearFieldsFunction,
 }) => {
-  const filterObjectIsEmpty = () =>
-    !Object.values(queryParams.filterObject).some((value) => value !== '');
+  const filterObjectIsEmpty = () => !Object.values(queryParams.filterObject).some((value) => value !== '');
 
   const setParamAndSendRequest = async (e, param) => {
     const newQueryParamsObj = {
@@ -33,7 +33,7 @@ const SearchPanel = ({
             key={param}
             placeholder={`Search by ${param}`}
             value={queryParams.filterObject[param]}
-            onChange={async (e) => await setParamAndSendRequest(e, param)}
+            onChange={async (e) => { await setParamAndSendRequest(e, param); }}
           />
         ))}
       </div>

@@ -19,7 +19,7 @@ async function checkForTheDuplication(Model, document, fieldsToCheck) {
       );
     }
   }
-
+  const checkForDuplicates = [];
   for (const fieldVal of fieldsToCheck) {
     if (!Model.schema.obj[fieldVal]) {
       continue;
@@ -27,12 +27,14 @@ async function checkForTheDuplication(Model, document, fieldsToCheck) {
 
     if (Array.isArray(document)) {
       for (const docVal of document) {
-        await findDuplicate(docVal, fieldVal);
+        checkForDuplicates.push(findDuplicate(docVal, fieldVal));
       }
+      continue;
     }
 
-    await findDuplicate(document, fieldVal);
+    checkForDuplicates.push(findDuplicate(document, fieldVal));
   }
+  await Promise.all(checkForDuplicates);
 }
 
 function expandMongooseMethods() {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { userPaths } from '../../router/routes';
 import Table from '../../lists/table/table';
@@ -81,7 +81,9 @@ const UsersList = ({
         entityParamsToShow={['username', 'firstName', 'lastName', 'email']}
         navigateLinkLayout={navigateLinkLayout}
         thArray={['Username', 'First name', 'Last name', 'email']}
-        actualizeList={async () => await setPage(1, false)}
+        actualizeList={async () => {
+          await setPage(1, false);
+        }}
       />
       <PaginationLine
         count={usersCount}

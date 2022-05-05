@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { screen } from '@testing-library/react';
 import { renderWithRouter } from '../../../../test/helpers/renderWith';
 import EditUserForm from './editUserForm';
 
@@ -12,7 +13,7 @@ const userObj = {
 describe('Correct edit user form', () => {
   test('render', () => {
     renderWithRouter(<EditUserForm userObj={userObj} />);
-    expect(screen.getByTestId('edit-user-form')).toBeInTheDocument();
-    expect(screen.getByTestId('edit-user-form')).toMatchSnapshot();
+    expect(screen.getByTestId('edit-form')).toBeInTheDocument();
+    expect(screen.getByTestId('edit-form')).toMatchSnapshot();
   });
 });

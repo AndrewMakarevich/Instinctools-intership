@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { act, screen } from '@testing-library/react';
 import UserEvent from '@testing-library/user-event';
 import {
   renderWithRouter,
@@ -41,7 +42,6 @@ afterEach(() => {
 test('Bread crumb renders correctly', async () => {
   renderWithRouter(<BreadCrumb />);
   const breadCrumbComponent = screen.getByTestId('bread-crumb');
-
   expect(breadCrumbComponent).toBeInTheDocument();
   expect(breadCrumbComponent).toMatchSnapshot(
     'Bread crumb: component final version'
@@ -56,9 +56,8 @@ describe("Bread crumb's correct", () => {
         <BreadCrumb />
       </>
     );
-
     // Checking bread crumb behaviour while routing on main public routes: /users and /groups
-    for (let publicRoute of publicRoutes) {
+    for (const publicRoute of publicRoutes) {
       await user.click(screen.getByTestId(`nav-bar-${publicRoute.name}-link`));
       expect(
         screen.getByTestId(`crumb-${publicRoute.name}-link`)
@@ -68,9 +67,14 @@ describe("Bread crumb's correct", () => {
 
   test('state in nested Users route', async () => {
     UserService.getUsers.mockReturnValue(getUsersListResponse);
-    renderWithAppRouter(<BreadCrumb />, [
-      `${publicRoutes[0].path}/AndrewTheFirst`,
-    ]);
+    UserService.getUser.mockReturnValue({
+      data: getUsersListResponse.data.rows[0],
+    });
+    await act(async () => {
+      await renderWithAppRouter(<BreadCrumb />, [
+        `${publicRoutes[0].path}/AndrewTheFirst`,
+      ]);
+    });
 
     await checkBreadCrumbLinks(
       publicRoutes[0].name,
@@ -81,7 +85,11 @@ describe("Bread crumb's correct", () => {
 
   test('state in nested Groups route', async () => {
     GroupService.getGroups.mockReturnValue(getGroupsListResponse);
+    GroupService.getGroup.mockReturnValue({
+      data: getGroupsListResponse.data.rows[0],
+    });
     renderWithAppRouter(<BreadCrumb />, [`${publicRoutes[1].path}/FirstGroup`]);
+
     await checkBreadCrumbLinks(
       publicRoutes[1].name,
       'FirstGroup',

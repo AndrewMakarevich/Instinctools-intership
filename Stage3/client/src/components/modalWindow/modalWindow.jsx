@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import CloseButton from '../../UI/closeButton/closeButton';
@@ -50,13 +50,14 @@ const ModalWindow = ({
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       document.removeEventListener('keydown', focusTrap);
       document.removeEventListener('keyup', focusTrap);
       document.removeEventListener('keyup', closeModalByKeyboard);
-    };
-  }, []);
+    },
+    []
+  );
 
   if (!isOpen) {
     return null;
@@ -87,9 +88,10 @@ const ModalWindow = ({
           {children}
         </div>
         <button
+          type='button'
           ref={lastFocusableElementRef}
           className={modalStyles['empty-btn']}
-        ></button>
+        />
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import AddIcon from '../../assets/icons/addIcon/addIcon';
 import buttonStyles from './addButton.module.css';

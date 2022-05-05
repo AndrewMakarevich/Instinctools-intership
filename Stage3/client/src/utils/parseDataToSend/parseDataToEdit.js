@@ -1,13 +1,14 @@
 const parseDataToEdit = (initialParamsObj, paramsToEditObj) => {
   const groupedObj = {};
-  for (let param in paramsToEditObj) {
+
+  Object.keys(paramsToEditObj).forEach((paramKey) => {
     if (
-      paramsToEditObj[param] &&
-      paramsToEditObj[param] !== initialParamsObj[param]
+      paramsToEditObj[paramKey] &&
+      paramsToEditObj[paramKey] !== initialParamsObj[paramKey]
     ) {
-      groupedObj[param] = paramsToEditObj[param];
+      groupedObj[paramKey] = paramsToEditObj[paramKey];
     }
-  }
+  });
 
   return groupedObj;
 };

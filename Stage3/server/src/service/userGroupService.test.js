@@ -57,7 +57,7 @@ describe('UserGroupService: getting user groups', () => {
       testGroup2._id
     );
 
-    let userGroups = await UserGroupService.getUsersGroups(
+    const userGroups = await UserGroupService.getUsersGroups(
       testUser._id,
       '{"groupName": "Nin"}',
       1,
@@ -88,7 +88,7 @@ describe('UserGroupService: getting user groups', () => {
     await UserGroupService.addUserToGroup(testUser1._id, testGroup._id);
     await UserGroupService.addUserToGroup(testUser2._id, testGroup._id);
 
-    let groupUsers = await UserGroupService.getGroupUsers(
+    const groupUsers = await UserGroupService.getGroupUsers(
       testGroup._id,
       '{"username":"Art"}',
       1,
@@ -130,8 +130,9 @@ describe('UserGroupService: adding user to the group', () => {
   test('Trying to add an existing user to an existing group, when user is already in the group', async () => {
     const testUser = await createTestUser();
     const testGroup = await createTestGroup();
-    const addUserToGroup = async () =>
+    const addUserToGroup = async () => {
       await UserGroupService.addUserToGroup(testUser._id, testGroup._id);
+    };
 
     await addUserToGroup();
     await expect(addUserToGroup()).rejects.toThrow(
@@ -141,8 +142,9 @@ describe('UserGroupService: adding user to the group', () => {
 
   test("Trying to add an unexisting user to the existing group with incorrect user's id", async () => {
     const testGroup = await createTestGroup();
-    const addUserToGroupResponse = async () =>
+    const addUserToGroupResponse = async () => {
       await UserGroupService.addUserToGroup('foo', testGroup._id);
+    };
 
     await expect(addUserToGroupResponse()).rejects.toThrow(
       "Incorrect user's id"
@@ -151,11 +153,12 @@ describe('UserGroupService: adding user to the group', () => {
 
   test("Trying to add an unexisitng user to the existing group with correct user's id", async () => {
     const testGroup = await createTestGroup();
-    const addUserToGroupResponse = async () =>
+    const addUserToGroupResponse = async () => {
       await UserGroupService.addUserToGroup(
         '6242f34aa787da293c733ef4',
         testGroup._id
       );
+    };
 
     await expect(addUserToGroupResponse()).rejects.toThrow(
       "User you want add to the group, doesn't exists"
@@ -164,8 +167,9 @@ describe('UserGroupService: adding user to the group', () => {
 
   test("Trying to add an existing user to the unexisting group with incorrect group's id", async () => {
     const testUser = await createTestUser();
-    const addUserToGroupResponse = async () =>
+    const addUserToGroupResponse = async () => {
       await UserGroupService.addUserToGroup(testUser._id, 'foo');
+    };
 
     await expect(addUserToGroupResponse()).rejects.toThrow(
       "Incorrect group's id"
@@ -174,11 +178,12 @@ describe('UserGroupService: adding user to the group', () => {
 
   test("Trying to add an existing user to the unexisting group with correct group's id", async () => {
     const testUser = await createTestUser();
-    const addUserToGroupResponse = async () =>
+    const addUserToGroupResponse = async () => {
       await UserGroupService.addUserToGroup(
         testUser._id,
         '6241b1b517692d26ffbd18b2'
       );
+    };
 
     await expect(addUserToGroupResponse()).rejects.toThrow(
       "Group in what you want to add the User, doesn't exists"

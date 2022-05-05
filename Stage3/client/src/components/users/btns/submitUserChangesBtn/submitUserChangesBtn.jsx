@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import useFetching from '../../../../hooks/useFetching';
@@ -16,10 +17,9 @@ const SubmitUserChangesBtn = ({
   const navigate = useNavigate();
 
   const { executeCallback: editUser, isLoading: userInfoIsLoading } =
-    useFetching(
-      async (userId, paramsObject) =>
-        await UserService.editUser(userId, paramsObject)
-    );
+    useFetching(async (userIdVal, paramsObject) => {
+      await UserService.editUser(userIdVal, paramsObject);
+    });
 
   const submitUserChanges = async (e) => {
     try {
@@ -37,14 +37,14 @@ const SubmitUserChangesBtn = ({
       UserValidator.validateEmail(paramsObject.email, true);
 
       await editUser(undefined, userId, paramsObject);
-      //if user changed username, reload the page
+      // if user changed username, reload the page
       if (paramsObject.username) {
-        navigate(userPaths.mainPath + '/' + paramsObject.username);
+        navigate(`${userPaths.mainPath}/${paramsObject.username}`);
       } else {
         await actualizeUserInfo();
       }
-    } catch (e) {
-      alert(e);
+    } catch (error) {
+      alert(error);
     }
   };
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import SubmitUserChangesBtn from '../../btns/submitUserChangesBtn/submitUserChangesBtn';
 import EditForm from '../../../forms/editForm/editForm';

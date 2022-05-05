@@ -1,11 +1,13 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { v4 } from 'uuid';
 import PropTypes from 'prop-types';
 import MyInput from '../../UI/myInput/myInput';
 
 import lineStyles from './paginationLine.module.css';
 
-const PaginationLine = ({ count, page, limit, setPage }) => {
+const PaginationLine = ({
+  count, page, limit, setPage,
+}) => {
   const pages = useMemo(() => {
     const pagesArr = [];
     const pagesAmount = Math.ceil(count / limit);
@@ -17,7 +19,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
     return pagesArr;
   }, [count, limit]);
 
-  const paginationLineState = useMemo(() => {
+  const paginationLineStateArr = useMemo(() => {
     let paginationLineState = [];
 
     if (pages.length <= 6) {
@@ -40,9 +42,9 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
       paginationLineState.push(pages[pages.length - 1]);
     }
 
-    paginationLineState = paginationLineState.map((lineItem) => {
-      return { id: v4(), pageNumber: lineItem };
-    });
+    paginationLineState = paginationLineState.map(
+      (lineItem) => ({ id: v4(), pageNumber: lineItem }),
+    );
 
     return paginationLineState;
   }, [page, pages]);
@@ -77,10 +79,10 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
     const typedPage = Number(e.target.value);
 
     if (
-      typedPage >= pages[0] &&
-      typedPage <= pages[pages.length - 1] &&
-      pages.length !== 1 &&
-      typedPage !== page
+      typedPage >= pages[0]
+      && typedPage <= pages[pages.length - 1]
+      && pages.length !== 1
+      && typedPage !== page
     ) {
       setPage(typedPage, true);
     }
@@ -103,7 +105,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
           title='Enter your page here'
           disabled={pages.length === 1}
           onChange={setCustomPage}
-        ></MyInput>
+        />
       </div>
 
       <button
@@ -115,7 +117,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
       >
         {'<'}
       </button>
-      {paginationLineState.map(({ id, pageNumber }) => (
+      {paginationLineStateArr.map(({ id, pageNumber }) => (
         <button
           key={id}
           data-testid='pagination-btn'

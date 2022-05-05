@@ -55,10 +55,10 @@ class UserGroupService {
     const parsedFilterObj = createModelSearchQuery(filterObject);
     const skipValue = (page - 1) * limit;
 
-    //convert an array of user-group connections to the array of groups ids, wich have connection with the user
-    userGroupsConnections = userGroupsConnections.map((connection) => {
-      return String(connection.groupId);
-    });
+    // convert an array of user-group connections to the array of groups ids, wich have connection with the user
+    userGroupsConnections = userGroupsConnections.map((connection) =>
+      String(connection.groupId)
+    );
 
     const userGroups = await GroupModel.find({
       _id: { $in: [...userGroupsConnections] },
@@ -89,9 +89,9 @@ class UserGroupService {
     const parsedFilterObject = createModelSearchQuery(filterObject);
     const skipValue = (page - 1) * limit;
 
-    userGroupConnections = userGroupConnections.map((connection) => {
-      return String(connection.userId);
-    });
+    userGroupConnections = userGroupConnections.map((connection) =>
+      String(connection.userId)
+    );
 
     const users = await UserModel.find({
       _id: { $in: [...userGroupConnections] },
@@ -149,7 +149,7 @@ class UserGroupService {
   ) {
     await checkUser(userId, "User with such id doesn't exists");
 
-    let userGroupConnections = await UsersGroupsModel.find({
+    const userGroupConnections = await UsersGroupsModel.find({
       userId,
     });
 
@@ -181,7 +181,6 @@ class UserGroupService {
   }
 
   static async addUserToGroup(userId, groupId) {
-    console.log(userId, groupId);
     const userAndGroup = await checkUserAndGroup(
       userId,
       groupId,

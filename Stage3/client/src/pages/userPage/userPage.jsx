@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import EditUserForm from '../../components/users/forms/editUserForm/editUserForm';
@@ -23,7 +23,7 @@ const UserPage = () => {
   } = useFetching(fetchUser);
 
   useEffect(() => {
-    getUserByUsername().catch((e) => alert(e));
+    getUserByUsername();
   }, [username]);
 
   if (userIsLoading) {
@@ -37,7 +37,10 @@ const UserPage = () => {
   if (userError) {
     return (
       <article>
-        <p>Error: {userError}</p>
+        <p>
+          Error:
+          {userError}
+        </p>
       </article>
     );
   }
@@ -47,7 +50,8 @@ const UserPage = () => {
       {userReducer.user ? (
         <section className={pageStyles['edit-user-section']}>
           <p className={pageStyles['edit-user-section-header']}>
-            {username} user page
+            {username}
+            user page
           </p>
           <EditUserForm
             userObj={userReducer.user}

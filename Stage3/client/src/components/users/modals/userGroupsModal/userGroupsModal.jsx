@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import MyButton from '../../../../UI/myButton/myButton';
 import ModalWindow from '../../../modalWindow/modalWindow';
@@ -20,8 +20,9 @@ const UserGroupsModal = ({ userId }) => {
     () => [
       {
         header: 'leave',
-        clickHandler: (groupId, actualizeGroupListFunction) =>
-          deleteUserFromGroup(userId, groupId, actualizeGroupListFunction),
+        clickHandler: (groupId, actualizeGroupListFunction) => {
+          deleteUserFromGroup(userId, groupId, actualizeGroupListFunction);
+        },
       },
     ],
     [userId]

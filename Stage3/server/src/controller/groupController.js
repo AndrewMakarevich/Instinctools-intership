@@ -6,9 +6,6 @@ class GroupController {
       const groupsParamValueToFind = req.params.paramValue;
       const groupsParamNameToFind = req.query.paramName;
 
-      console.log(groupsParamNameToFind);
-      console.log(groupsParamValueToFind);
-
       const response = await GroupService.getGroup(
         groupsParamNameToFind,
         groupsParamValueToFind
