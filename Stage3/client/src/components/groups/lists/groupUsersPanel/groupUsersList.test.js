@@ -33,7 +33,7 @@ const renderGroupUsersPanel = async (actionsArr) => {
         thunkFunction={thunkFunction}
         groupUsersStateArrName='groupUsers'
         actionsArr={actionsArr}
-      />
+      />,
     );
   });
 
@@ -60,7 +60,7 @@ describe('Correct group users panel', () => {
     const rows = await screen.findAllByTestId('table-row');
     await user.click(rows[0]);
     expect(useNavigate().mock.calls[0][0]).toBe(
-      `${userPaths.mainPath}/${getUsersListResponse.data.rows[0].username}`
+      `${userPaths.mainPath.path}/${getUsersListResponse.data.rows[0].username}`,
     );
   });
 

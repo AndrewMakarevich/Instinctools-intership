@@ -8,7 +8,7 @@ class GroupValidator {
       null,
       groupName,
       throwError,
-      "Group name doesn't match to the required patern"
+      "Group name doesn't match to the required patern",
     );
   }
 
@@ -19,7 +19,7 @@ class GroupValidator {
       null,
       groupTitle,
       throwError,
-      "Group Title doesn't match to the required patern"
+      "Group Title doesn't match to the required patern",
     );
   }
 }

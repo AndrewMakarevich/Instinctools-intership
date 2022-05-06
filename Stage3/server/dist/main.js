@@ -1046,11 +1046,7 @@ function createModelSearchQuery(obj) {
   const finalObject = {};
 
   function fillFinalObject(mockObj, paramName = '') {
-    for (const objKey in mockObj) {
-      if (!Object.prototype.hasOwnProperty.call(mockObj, objKey)) {
-        continue;
-      }
-
+    Object.keys(mockObj).forEach((objKey) => {
       if (typeof mockObj[objKey] === 'object') {
         const newParamName = paramName.length
           ? `${paramName}.${objKey}`
@@ -1084,7 +1080,7 @@ function createModelSearchQuery(obj) {
           };
         }
       }
-    }
+    });
   }
 
   fillFinalObject(parsedObj);

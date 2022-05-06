@@ -17,7 +17,7 @@ const UserGroupsList = ({
     async (filterObj, pageVal, limitVal) => {
       await dispatch(thunkFunction(userId, filterObj, pageVal, limitVal));
     },
-    [userId]
+    [userId],
   );
 
   const [
@@ -32,10 +32,10 @@ const UserGroupsList = ({
         delayed,
         newQueryParamsObj.filterObject,
         newQueryParamsObj.page,
-        newQueryParamsObj.limit
+        newQueryParamsObj.limit,
       );
     },
-    [fetchUserGroups]
+    [fetchUserGroups],
   );
 
   return (

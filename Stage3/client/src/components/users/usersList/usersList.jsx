@@ -10,7 +10,7 @@ const UsersList = ({
   usersCount,
   getUsersFunction,
   usersLoading,
-  actionsArr,
+  actionsArr = [],
 }) => {
   const [queryParams, setQueryParams] = useState({
     filterObject: {
@@ -28,7 +28,7 @@ const UsersList = ({
       setQueryParams(newQueryParamsObj);
       await getUsersFunction(delayed, newQueryParamsObj);
     },
-    [setQueryParams, getUsersFunction]
+    [setQueryParams, getUsersFunction],
   );
 
   const clearQueryParams = useCallback(async () => {
@@ -46,10 +46,10 @@ const UsersList = ({
 
   const navigateLinkLayout = useMemo(
     () => ({
-      mainPath: userPaths.mainPath,
-      entityParamNamesInnerPathsBasedOn: ['username'],
+      mainPath: userPaths.mainPath.path,
+      entityParamNameInnerPathBasedOn: 'username',
     }),
-    []
+    [],
   );
 
   const setPage = useCallback(
@@ -59,7 +59,7 @@ const UsersList = ({
         page,
       });
     },
-    [queryParams, getUsersListWithCurrentQueryParams]
+    [queryParams, getUsersListWithCurrentQueryParams],
   );
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const UsersList = ({
   }, []);
 
   return (
-    <>
+    <article data-testid='users-list-panel'>
       <SearchPanel
         clearFieldsFunction={clearQueryParams}
         fetchFunction={getUsersListWithCurrentQueryParams}
@@ -91,7 +91,7 @@ const UsersList = ({
         page={queryParams.page}
         setPage={setPage}
       />
-    </>
+    </article>
   );
 };
 

@@ -6,7 +6,7 @@ import { renderWithRouter } from '../../../../test/helpers/renderWith';
 import SubmitGroupChangesBtn from './submitGroupChangesBtn';
 import parseDataToEdit from '../../../../utils/parseDataToSend/parseDataToEdit';
 import GroupService from '../../../../service/groupService';
-import publicRoutes from '../../../router/routes';
+import { groupPaths } from '../../../router/routes';
 
 const user = userEvent.setup();
 
@@ -45,7 +45,7 @@ describe('Correct submit changes button', () => {
         }}
         paramsToEditObj={{ groupName: 'SecGroup' }}
         actualizeGroupInfo={actualizeGroupInfo}
-      />
+      />,
     );
     parseDataToEdit.mockReturnValue({ groupName: 'SecGroup' });
     await user.click(screen.getByTestId('submit-group-changes-btn'));
@@ -53,7 +53,7 @@ describe('Correct submit changes button', () => {
     expect(GroupService.editGroup.mock.calls.length).toBe(1);
     expect(useNavigate().mock.calls.length).toBe(1);
     expect(useNavigate().mock.calls[0][0]).toBe(
-      `${publicRoutes[1].path}/SecGroup`
+      `${groupPaths.mainPath.path}/SecGroup`,
     );
     expect(actualizeGroupInfo.mock.calls.length).toBe(0);
   });
@@ -72,7 +72,7 @@ describe('Correct submit changes button', () => {
           groupTitle: 'Thats-changed',
         }}
         actualizeGroupInfo={actualizeGroupInfo}
-      />
+      />,
     );
     parseDataToEdit.mockReturnValue({ groupTitle: 'Thats-changed' });
     await user.click(screen.getByTestId('submit-group-changes-btn'));
@@ -96,7 +96,7 @@ describe('Correct submit changes button', () => {
           groupTitle: 'Thats-changed',
         }}
         actualizeGroupInfo={actualizeGroupInfo}
-      />
+      />,
     );
     parseDataToEdit.mockReturnValue({});
     await user.click(screen.getByTestId('submit-group-changes-btn'));

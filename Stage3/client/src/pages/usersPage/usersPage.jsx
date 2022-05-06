@@ -20,7 +20,7 @@ const UsersPage = () => {
       delayed,
       newQueryParamsObj.filterObject,
       newQueryParamsObj.page,
-      newQueryParamsObj.limit
+      newQueryParamsObj.limit,
     );
   };
 

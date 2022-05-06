@@ -8,7 +8,7 @@ class UserValidator {
       null,
       username,
       throwError,
-      "Username doesn't match to the specified pattern"
+      "Username doesn't match to the specified pattern",
     );
   }
 
@@ -19,7 +19,7 @@ class UserValidator {
       20,
       firstName,
       throwError,
-      "First name doesn't match to the specified pattern"
+      "First name doesn't match to the specified pattern",
     );
   }
 
@@ -30,7 +30,7 @@ class UserValidator {
       20,
       lastName,
       throwError,
-      "Last name doesn't match to the specified pattern"
+      "Last name doesn't match to the specified pattern",
     );
   }
 
@@ -41,7 +41,7 @@ class UserValidator {
       null,
       email,
       throwError,
-      "Email doesn't match to the specified pattern"
+      "Email doesn't match to the specified pattern",
     );
   }
 }

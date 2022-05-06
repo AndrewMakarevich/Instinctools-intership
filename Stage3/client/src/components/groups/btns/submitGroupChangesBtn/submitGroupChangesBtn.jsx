@@ -36,7 +36,7 @@ const SubmitGroupChangesBtn = ({
       await editGroup(undefined, groupId, paramsObject);
 
       if (paramsObject.groupName) {
-        navigate(`${groupPaths.mainPath}/${paramsObject.groupName}`);
+        navigate(`${groupPaths.mainPath.path}/${paramsObject.groupName}`);
       } else {
         await actualizeGroupInfo();
       }

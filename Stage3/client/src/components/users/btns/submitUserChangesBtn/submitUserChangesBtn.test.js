@@ -45,12 +45,12 @@ describe('Correct submit yser changes btn', () => {
           lastName: '',
           email: '',
         }}
-      />
+      />,
     );
     await user.click(screen.getByTestId('submit-user-changes-btn'));
     expect(UserService.editUser.mock.calls.length).toBe(1);
     expect(useNavigate().mock.calls[0][0]).toBe(
-      `${userPaths.mainPath}/AndrewTheSecond`
+      `${userPaths.mainPath.path}/AndrewTheSecond`,
     );
     expect(actualizeUserInfo.mock.calls.length).toBe(0);
   });
@@ -72,7 +72,7 @@ describe('Correct submit yser changes btn', () => {
           lastName: '',
           email: '',
         }}
-      />
+      />,
     );
     await user.click(screen.getByTestId('submit-user-changes-btn'));
     expect(UserService.editUser.mock.calls.length).toBe(1);
@@ -97,7 +97,7 @@ describe('Correct submit yser changes btn', () => {
           lastName: '',
           email: '',
         }}
-      />
+      />,
     );
     await user.click(screen.getByTestId('submit-user-changes-btn'));
     expect(alert.mock.calls.length).toBe(1);

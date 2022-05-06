@@ -4,7 +4,7 @@ function validateText(
   maxLength,
   valueToValidate,
   throwError,
-  errorMessage
+  errorMessage,
 ) {
   if (valueToValidate === undefined) {
     return true;

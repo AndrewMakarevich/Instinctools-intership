@@ -15,16 +15,13 @@ const Table = ({
 }) => {
   const getNavigateLink = useCallback(
     (entity) => {
-      let link = navigateLinkLayout.mainPath;
-      navigateLinkLayout.entityParamNamesInnerPathsBasedOn.forEach(
-        (paramName) => {
-          link = `${link}/${entity[paramName]}`;
-        }
-      );
+      const link = `${navigateLinkLayout.mainPath}/${
+        entity[navigateLinkLayout.entityParamNameInnerPathBasedOn]
+      }`;
 
       return link;
     },
-    [navigateLinkLayout]
+    [navigateLinkLayout],
   );
 
   return (
@@ -43,9 +40,7 @@ const Table = ({
             {thArray.map((th) => (
               <th key={th}>{th}</th>
             ))}
-            {actionsArray.map((action) => (
-              <th key={action.header}>Action</th>
-            ))}
+            {Boolean(actionsArray.length) && <th>Action</th>}
           </tr>
         </thead>
         <tbody>

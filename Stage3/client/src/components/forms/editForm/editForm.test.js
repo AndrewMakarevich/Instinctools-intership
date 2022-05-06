@@ -21,6 +21,19 @@ const fullfilledUserObj = {
 
 describe('Correct edit form', () => {
   test('render', async () => {
+    render(
+      <EditForm
+        essenceName='User'
+        initialParamValues={emptyUserObj}
+        newParamValues={fullfilledUserObj}
+        setNewParamValues={() => {}}
+      />,
+    );
+    expect(screen.getByTestId('edit-form')).toBeInTheDocument();
+    expect(screen.getAllByTestId('my-label-input').length).toBe(4);
+  });
+
+  test('clear changes button working', async () => {
     const setNewParams = jest.fn();
     render(
       <EditForm
@@ -28,10 +41,8 @@ describe('Correct edit form', () => {
         initialParamValues={emptyUserObj}
         newParamValues={fullfilledUserObj}
         setNewParamValues={setNewParams}
-      />
+      />,
     );
-    expect(screen.getByTestId('edit-form')).toBeInTheDocument();
-    expect(screen.getAllByTestId('my-label-input').length).toBe(4);
     await user.click(screen.getByTestId('clear-changes-btn'));
     expect(setNewParams.mock.calls[0][0]).toEqual(emptyUserObj);
   });

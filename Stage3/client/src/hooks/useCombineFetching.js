@@ -24,7 +24,7 @@ const useCombineFetching = (callback) => {
 
       fetchCallback(undefined, ...params);
     },
-    [callback]
+    [callback],
   );
 
   return [

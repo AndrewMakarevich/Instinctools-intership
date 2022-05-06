@@ -25,7 +25,7 @@ const UserGroupsModal = ({ userId }) => {
         },
       },
     ],
-    [userId]
+    [userId],
   );
 
   const groupsNotPartOfActionsArray = useMemo(
@@ -37,7 +37,7 @@ const UserGroupsModal = ({ userId }) => {
         },
       },
     ],
-    [userId]
+    [userId],
   );
 
   return (

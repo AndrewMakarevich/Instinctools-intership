@@ -4,5 +4,6 @@
   "arrowParens": "always",
   "max-len": ["error", 100, 2],
   "tabWidth": 2,
-  "useTabs": false
+  "useTabs": false,
+  "trailingComma": "all"
 }

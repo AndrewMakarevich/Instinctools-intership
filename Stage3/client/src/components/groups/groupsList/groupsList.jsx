@@ -26,7 +26,7 @@ const GroupsList = ({
       setGroupQueryParams(newQueryParamsObj);
       await getGroupsFunction(delayed, newQueryParamsObj);
     },
-    [setGroupQueryParams, getGroupsFunction]
+    [setGroupQueryParams, getGroupsFunction],
   );
 
   const clearQueryParams = useCallback(async () => {
@@ -47,7 +47,7 @@ const GroupsList = ({
         page,
       });
     },
-    [groupQueryParams, getGroupsWithCurrentQueryParams]
+    [groupQueryParams, getGroupsWithCurrentQueryParams],
   );
 
   useEffect(() => {
@@ -56,10 +56,10 @@ const GroupsList = ({
 
   const navigateLinkLayout = useMemo(
     () => ({
-      mainPath: groupPaths.mainPath,
-      entityParamNamesInnerPathsBasedOn: ['groupName'],
+      mainPath: groupPaths.mainPath.path,
+      entityParamNameInnerPathBasedOn: 'groupName',
     }),
-    []
+    [],
   );
 
   return (

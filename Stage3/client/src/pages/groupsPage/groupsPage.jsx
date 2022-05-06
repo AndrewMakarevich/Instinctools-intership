@@ -17,13 +17,13 @@ const GroupsPage = () => {
 
   const getGroupsWithCurrentQueryParams = async (
     delayed,
-    newQueryParamsObj
+    newQueryParamsObj,
   ) => {
     await fetchGroups(
       delayed,
       newQueryParamsObj.filterObject,
       newQueryParamsObj.page,
-      newQueryParamsObj.limit
+      newQueryParamsObj.limit,
     );
   };
 

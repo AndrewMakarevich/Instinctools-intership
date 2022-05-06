@@ -50,20 +50,23 @@ const TableRow = ({
         return null;
       })}
 
-      {actionsArray.map((action) => (
-        <td className={tableStyles['table-cell']} key={action.header}>
-          <MyButton
-            data-testid='group-row-action-btn'
-            className={tableStyles['action-cell-btn']}
-            disabled={actionIsLoading}
-            onClick={async (e) => {
-              await actionHandler(e, action);
-            }}
-          >
-            {action.header}
-          </MyButton>
+      {Boolean(actionsArray.length) && (
+        <td className={tableStyles['table-cell']}>
+          {actionsArray.map((action) => (
+            <MyButton
+              key={action.header}
+              data-testid='group-row-action-btn'
+              className={tableStyles['action-cell-btn']}
+              disabled={actionIsLoading}
+              onClick={async (e) => {
+                await actionHandler(e, action);
+              }}
+            >
+              {action.header}
+            </MyButton>
+          ))}
         </td>
-      ))}
+      )}
     </tr>
   );
 };

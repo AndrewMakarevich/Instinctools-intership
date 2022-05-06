@@ -5,9 +5,7 @@ import MyInput from '../../UI/myInput/myInput';
 
 import lineStyles from './paginationLine.module.css';
 
-const PaginationLine = ({
-  count, page, limit, setPage,
-}) => {
+const PaginationLine = ({ count, page, limit, setPage }) => {
   const pages = useMemo(() => {
     const pagesArr = [];
     const pagesAmount = Math.ceil(count / limit);
@@ -42,9 +40,10 @@ const PaginationLine = ({
       paginationLineState.push(pages[pages.length - 1]);
     }
 
-    paginationLineState = paginationLineState.map(
-      (lineItem) => ({ id: v4(), pageNumber: lineItem }),
-    );
+    paginationLineState = paginationLineState.map((lineItem) => ({
+      id: v4(),
+      pageNumber: lineItem,
+    }));
 
     return paginationLineState;
   }, [page, pages]);
@@ -79,10 +78,10 @@ const PaginationLine = ({
     const typedPage = Number(e.target.value);
 
     if (
-      typedPage >= pages[0]
-      && typedPage <= pages[pages.length - 1]
-      && pages.length !== 1
-      && typedPage !== page
+      typedPage >= pages[0] &&
+      typedPage <= pages[pages.length - 1] &&
+      pages.length !== 1 &&
+      typedPage !== page
     ) {
       setPage(typedPage, true);
     }

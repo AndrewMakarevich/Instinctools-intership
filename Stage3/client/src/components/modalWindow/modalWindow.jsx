@@ -56,7 +56,7 @@ const ModalWindow = ({
       document.removeEventListener('keyup', focusTrap);
       document.removeEventListener('keyup', closeModalByKeyboard);
     },
-    []
+    [],
   );
 
   if (!isOpen) {

@@ -36,8 +36,8 @@ const EditGroupForm = ({ groupObj, actualizeGroupInfo }) => {
 };
 
 EditGroupForm.propTypes = {
-  groupObj: PropTypes.object,
-  actualizeGroupInfo: PropTypes.func,
+  groupObj: PropTypes.object.isRequired,
+  actualizeGroupInfo: PropTypes.func.isRequired,
 };
 
 export default EditGroupForm;

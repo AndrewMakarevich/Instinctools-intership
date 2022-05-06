@@ -4,7 +4,7 @@
   "description": "Stage 3 instinctools test task",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --verbose",
+    "test": "jest --detectOpenHandles --verbose --coverage",
     "dev": "webpack --mode development --watch",
     "start": "nodemon ./dist/main.js"
   },

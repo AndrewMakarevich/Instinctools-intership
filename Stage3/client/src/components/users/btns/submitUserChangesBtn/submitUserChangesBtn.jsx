@@ -39,7 +39,7 @@ const SubmitUserChangesBtn = ({
       await editUser(undefined, userId, paramsObject);
       // if user changed username, reload the page
       if (paramsObject.username) {
-        navigate(`${userPaths.mainPath}/${paramsObject.username}`);
+        navigate(`${userPaths.mainPath.path}/${paramsObject.username}`);
       } else {
         await actualizeUserInfo();
       }

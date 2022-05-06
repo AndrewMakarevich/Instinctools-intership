@@ -1,34 +1,23 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import publicRoutes from './routes';
+import GroupPage from '../../pages/groupPage/groupPage';
+import GroupsPage from '../../pages/groupsPage/groupsPage';
+import UserPage from '../../pages/userPage/userPage';
+import UsersPage from '../../pages/usersPage/usersPage';
 
-const AppRouter = () => {
-  function createRoutes(id, path, Element, subRoutes) {
-    if (!subRoutes || !subRoutes.length) {
-      return <Route key={id} path={path} element={<Element />} />;
-    }
+const AppRouter = () => (
+  <Routes>
+    <Route path='/*' element={<Navigate to='/users' />} />
 
-    return (
-      <Route key={id} path={path} element={<Element />}>
-        {subRoutes.map((subRoute) => createRoutes(
-          subRoute.id,
-          subRoute.path,
-          subRoute.Element,
-          subRoute.subRoutes,
-        ))}
-      </Route>
-    );
-  }
+    <Route path='/users'>
+      <Route index element={<UsersPage />} />
+      <Route path=':username' element={<UserPage />} />
+    </Route>
 
-  return (
-    <Routes>
-      <Route path='/*' element={<Navigate to='/users' />} />
-      {publicRoutes
-        && publicRoutes.map(({
-          id, path, Element, subRoutes,
-        }) => createRoutes(id, path, Element, subRoutes))}
-    </Routes>
-  );
-};
-
+    <Route path='/groups'>
+      <Route index element={<GroupsPage />} />
+      <Route path=':groupname' element={<GroupPage />} />
+    </Route>
+  </Routes>
+);
 export default AppRouter;

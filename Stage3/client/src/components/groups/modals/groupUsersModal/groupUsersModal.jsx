@@ -24,7 +24,7 @@ const GroupUsersModal = ({ groupId }) => {
           deleteUserFromGroup(userId, groupId, actualizeUsersListFunction),
       },
     ],
-    [groupId]
+    [groupId],
   );
 
   const notGroupMembersActionsArray = useMemo(
@@ -35,7 +35,7 @@ const GroupUsersModal = ({ groupId }) => {
           addUserToTheGroup(userId, groupId, actualizeUsersListFunction),
       },
     ],
-    [groupId]
+    [groupId],
   );
 
   return (

@@ -7,11 +7,11 @@ import {
 } from '../../test/helpers/renderWith';
 import BreadCrumb from './breadCrumb';
 import NavBar from '../navBar/navBar';
-import publicRoutes from '../router/routes';
 import UserService from '../../service/userService';
 import GroupService from '../../service/groupService';
 import getGroupsListResponse from '../../test/mockData/groups';
 import getUsersListResponse from '../../test/mockData/users';
+import { groupPaths, userPaths } from '../router/routes';
 
 jest.mock('../../service/userService');
 jest.mock('../../service/groupService');
@@ -21,11 +21,11 @@ const user = UserEvent.setup();
 async function checkBreadCrumbLinks(
   routeName,
   nestedRouteName,
-  expectedElementTestId
+  expectedElementTestId,
 ) {
   expect(screen.getByTestId(`crumb-${routeName}-link`)).toBeInTheDocument();
   expect(
-    screen.getByTestId(`crumb-${nestedRouteName}-link`)
+    screen.getByTestId(`crumb-${nestedRouteName}-link`),
   ).toBeInTheDocument();
 
   await user.click(screen.getByTestId(`crumb-${routeName}-link`));
@@ -44,7 +44,7 @@ test('Bread crumb renders correctly', async () => {
   const breadCrumbComponent = screen.getByTestId('bread-crumb');
   expect(breadCrumbComponent).toBeInTheDocument();
   expect(breadCrumbComponent).toMatchSnapshot(
-    'Bread crumb: component final version'
+    'Bread crumb: component final version',
   );
 });
 
@@ -54,15 +54,22 @@ describe("Bread crumb's correct", () => {
       <>
         <NavBar />
         <BreadCrumb />
-      </>
+      </>,
     );
     // Checking bread crumb behaviour while routing on main public routes: /users and /groups
-    for (const publicRoute of publicRoutes) {
-      await user.click(screen.getByTestId(`nav-bar-${publicRoute.name}-link`));
-      expect(
-        screen.getByTestId(`crumb-${publicRoute.name}-link`)
-      ).toBeInTheDocument();
-    }
+    await user.click(
+      screen.getByTestId(`nav-bar-${groupPaths.mainPath.name}-link`),
+    );
+    expect(
+      screen.getByTestId(`crumb-${groupPaths.mainPath.name}-link`),
+    ).toBeInTheDocument();
+
+    await user.click(
+      screen.getByTestId(`nav-bar-${userPaths.mainPath.name}-link`),
+    );
+    expect(
+      screen.getByTestId(`crumb-${userPaths.mainPath.name}-link`),
+    ).toBeInTheDocument();
   });
 
   test('state in nested Users route', async () => {
@@ -72,15 +79,11 @@ describe("Bread crumb's correct", () => {
     });
     await act(async () => {
       await renderWithAppRouter(<BreadCrumb />, [
-        `${publicRoutes[0].path}/AndrewTheFirst`,
+        `${userPaths.mainPath.path}/AndrewTheFirst`,
       ]);
     });
 
-    await checkBreadCrumbLinks(
-      publicRoutes[0].name,
-      'AndrewTheFirst',
-      'users-list-wrapper'
-    );
+    await checkBreadCrumbLinks('Users', 'AndrewTheFirst', 'users-list-wrapper');
   });
 
   test('state in nested Groups route', async () => {
@@ -88,12 +91,10 @@ describe("Bread crumb's correct", () => {
     GroupService.getGroup.mockReturnValue({
       data: getGroupsListResponse.data.rows[0],
     });
-    renderWithAppRouter(<BreadCrumb />, [`${publicRoutes[1].path}/FirstGroup`]);
+    renderWithAppRouter(<BreadCrumb />, [
+      `${groupPaths.mainPath.path}/FirstGroup`,
+    ]);
 
-    await checkBreadCrumbLinks(
-      publicRoutes[1].name,
-      'FirstGroup',
-      'groups-list-wrapper'
-    );
+    await checkBreadCrumbLinks('Groups', 'FirstGroup', 'groups-list-wrapper');
   });
 });

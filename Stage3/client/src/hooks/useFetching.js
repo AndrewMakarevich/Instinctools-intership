@@ -25,7 +25,7 @@ const useFetching = (callback) => {
         setIsLoading(false);
       }
     },
-    [callback]
+    [callback],
   );
 
   return { executeCallback, isLoading, error };
