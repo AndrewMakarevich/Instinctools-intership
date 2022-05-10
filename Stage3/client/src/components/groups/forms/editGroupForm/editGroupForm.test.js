@@ -8,11 +8,12 @@ describe("Edit group form's correct", () => {
     renderWithRouter(
       <EditGroupForm
         groupObj={{ groupName: 'FirstGroup', groupTitle: 'First' }}
-      />
+        actualizeGroupInfo={() => {}}
+      />,
     );
     expect(screen.getByTestId('edit-form')).toBeInTheDocument();
     expect(screen.getAllByTestId('my-label-input').length).toBe(2);
     expect(screen.getByText('Clear changes')).toBeInTheDocument();
-    expect(screen.getByTestId('submit-group-changes-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('submit-changes-btn')).toBeInTheDocument();
   });
 });

@@ -23,7 +23,7 @@ const SearchPanel = ({
       },
       page: 1,
     };
-    await fetchFunction(newQueryParamsObj, e.target);
+    await fetchFunction(newQueryParamsObj, e);
   };
 
   return (

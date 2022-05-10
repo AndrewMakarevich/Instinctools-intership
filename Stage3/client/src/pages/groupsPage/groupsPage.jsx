@@ -15,11 +15,11 @@ const GroupsPage = () => {
   const [fetchGroups, fetchGroupsLoading, delayedFetchGroupsLoading] =
     useCombineFetching(getGroups);
 
-  const getGroupsWithCurrentQueryParams = async (newQueryParamsObj, target) => {
+  const getGroupsWithCurrentQueryParams = async (newQueryParamsObj, event) => {
     if (
-      !target ||
-      target instanceof HTMLButtonElement ||
-      target instanceof HTMLSelectElement
+      !event ||
+      event.target instanceof HTMLButtonElement ||
+      event.target instanceof HTMLSelectElement
     ) {
       await fetchGroups(
         false,

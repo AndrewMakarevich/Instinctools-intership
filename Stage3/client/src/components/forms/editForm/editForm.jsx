@@ -60,6 +60,7 @@ const EditForm = ({
           Clear changes
         </MyButton>
         <MyButton
+          data-testid='submit-changes-btn'
           disabled={changesLoading}
           type='submit'
           onClick={(e) => {

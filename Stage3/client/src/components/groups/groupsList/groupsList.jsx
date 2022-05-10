@@ -23,9 +23,9 @@ const GroupsList = ({
   });
 
   const getGroupsWithCurrentQueryParams = useCallback(
-    async (newQueryParamsObj, target) => {
+    async (newQueryParamsObj, event) => {
       setGroupQueryParams(newQueryParamsObj);
-      await getGroupsFunction(newQueryParamsObj, target);
+      await getGroupsFunction(newQueryParamsObj, event);
     },
     [setGroupQueryParams, getGroupsFunction],
   );
@@ -42,13 +42,13 @@ const GroupsList = ({
   }, [groupQueryParams, getGroupsWithCurrentQueryParams]);
 
   const setPage = useCallback(
-    async (page, target) => {
+    async (page, event) => {
       await getGroupsWithCurrentQueryParams(
         {
           ...groupQueryParams,
           page,
         },
-        target,
+        event,
       );
     },
     [groupQueryParams, getGroupsWithCurrentQueryParams],

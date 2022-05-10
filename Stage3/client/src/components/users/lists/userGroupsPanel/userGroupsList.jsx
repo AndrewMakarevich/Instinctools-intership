@@ -28,11 +28,11 @@ const UserGroupsList = ({
   ] = useCombineFetching(getUserGroups);
 
   const getUserGroupsWithCurrentQueryParams = useCallback(
-    async (newQueryParamsObj, target) => {
+    async (newQueryParamsObj, event) => {
       if (
-        !target ||
-        target instanceof HTMLButtonElement ||
-        target instanceof HTMLSelectElement
+        !event ||
+        event.target instanceof HTMLButtonElement ||
+        event.target instanceof HTMLSelectElement
       ) {
         await fetchUserGroups(
           false,

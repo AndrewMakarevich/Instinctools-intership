@@ -73,7 +73,7 @@ exports[`Correct edit user form render 1`] = `
     </button>
     <button
       class="my-button "
-      data-testid="submit-user-changes-btn"
+      data-testid="submit-changes-btn"
       type="submit"
     >
       Submit changes

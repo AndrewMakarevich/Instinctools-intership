@@ -45,12 +45,6 @@
   color: var(--extra-light);
 }
 
-@media (max-width: 768px) {
-  .action-group-cell-btn {
-    font-size: 0.5rem;
-  }
-}
-
 @keyframes appear {
   0% {
     opacity: 0;
@@ -62,13 +56,16 @@
 }
 
 @media (max-width: 768px) {
-  .groups-table {
+  .table {
     font-size: 0.7rem;
+  }
+  .action-cell-btn {
+    font-size: 0.5rem;
   }
 }
 
 @media (max-width: 425px) {
-  .groups-table {
+  .table {
     font-size: 0.5rem;
   }
 }

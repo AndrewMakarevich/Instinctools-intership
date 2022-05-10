@@ -15,11 +15,11 @@ const UsersPage = () => {
   const [fetchUsers, usersFetchLoading, usersDelayFetchLoading] =
     useCombineFetching(getUsers);
 
-  const getUsersWithCurrentQueryParams = async (newQueryParamsObj, target) => {
+  const getUsersWithCurrentQueryParams = async (newQueryParamsObj, event) => {
     if (
-      !target ||
-      target instanceof HTMLButtonElement ||
-      target instanceof HTMLSelectElement
+      !event ||
+      event.target instanceof HTMLButtonElement ||
+      event.target instanceof HTMLSelectElement
     ) {
       await fetchUsers(
         false,

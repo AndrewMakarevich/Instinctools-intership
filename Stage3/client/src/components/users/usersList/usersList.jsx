@@ -25,9 +25,9 @@ const UsersList = ({
   });
 
   const getUsersListWithCurrentQueryParams = useCallback(
-    async (newQueryParamsObj, target) => {
+    async (newQueryParamsObj, event) => {
       setQueryParams(newQueryParamsObj);
-      await getUsersFunction(newQueryParamsObj, target);
+      await getUsersFunction(newQueryParamsObj, event);
     },
     [setQueryParams, getUsersFunction],
   );
@@ -54,13 +54,13 @@ const UsersList = ({
   );
 
   const setPage = useCallback(
-    async (page, target) => {
+    async (page, event) => {
       await getUsersListWithCurrentQueryParams(
         {
           ...queryParams,
           page,
         },
-        target,
+        event,
       );
     },
     [queryParams, getUsersListWithCurrentQueryParams],
@@ -72,8 +72,6 @@ const UsersList = ({
       getUsersListWithCurrentQueryParams({ ...queryParams, limit });
     }
   }, [limit]);
-
-  useEffect(() => {}, []);
 
   return (
     <article data-testid='users-list-panel'>
@@ -90,9 +88,6 @@ const UsersList = ({
         entityParamsToShow={['username', 'firstName', 'lastName', 'email']}
         navigateLinkLayout={navigateLinkLayout}
         thArray={['Username', 'First name', 'Last name', 'email']}
-        actualizeList={async () => {
-          await setPage(1, false);
-        }}
       />
       <PaginationLine
         count={usersCount}

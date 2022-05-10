@@ -54,11 +54,11 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
     }
 
     if (page > 1) {
-      setPage(page - 1, e.target);
+      setPage(page - 1, e);
       return;
     }
 
-    setPage(pages[pages.length - 1], e.target);
+    setPage(pages[pages.length - 1], e);
   };
 
   const setNextPage = (e) => {
@@ -67,11 +67,11 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
     }
 
     if (page < pages.length) {
-      setPage(page + 1, e.target);
+      setPage(page + 1, e);
       return;
     }
 
-    setPage(pages[0], e.target);
+    setPage(pages[0], e);
   };
 
   const setCustomPage = (e) => {
@@ -83,7 +83,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
       pages.length !== 1 &&
       typedPage !== page
     ) {
-      setPage(typedPage, e.target);
+      setPage(typedPage, e);
     }
   };
 
@@ -126,7 +126,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
           }`}
           onClick={(e) => {
             if (Number(pageNumber) && pageNumber !== page) {
-              setPage(pageNumber, e.target);
+              setPage(pageNumber, e);
             }
           }}
         >
