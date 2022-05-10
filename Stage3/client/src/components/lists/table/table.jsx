@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import TableRow from './tableRow';
 
@@ -11,8 +11,9 @@ const Table = ({
   entitiesArray,
   entitiesLoading,
   navigateLinkLayout,
-  actualizeList,
 }) => {
+  const [actionLoading, setActionLoading] = useState(false);
+
   const getNavigateLink = useCallback(
     (entity) => {
       const link = `${navigateLinkLayout.mainPath}/${
@@ -51,7 +52,8 @@ const Table = ({
               entityParamsToShow={entityParamsToShow}
               actionsArray={actionsArray}
               navigateLink={getNavigateLink(entity)}
-              actualizeEntitiesList={actualizeList}
+              actionLoading={actionLoading}
+              setActionLoading={setActionLoading}
             />
           ))}
         </tbody>
@@ -68,7 +70,6 @@ Table.propTypes = {
   entitiesArray: PropTypes.array,
   entitiesLoading: PropTypes.bool,
   navigateLinkLayout: PropTypes.object,
-  actualizeList: PropTypes.func,
 };
 
 export default Table;

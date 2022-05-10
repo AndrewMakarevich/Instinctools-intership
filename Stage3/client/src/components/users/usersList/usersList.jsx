@@ -11,6 +11,7 @@ const UsersList = ({
   getUsersFunction,
   usersLoading,
   actionsArr = [],
+  limit = 10,
 }) => {
   const [queryParams, setQueryParams] = useState({
     filterObject: {
@@ -24,9 +25,9 @@ const UsersList = ({
   });
 
   const getUsersListWithCurrentQueryParams = useCallback(
-    async (delayed, newQueryParamsObj) => {
+    async (newQueryParamsObj, target) => {
       setQueryParams(newQueryParamsObj);
-      await getUsersFunction(delayed, newQueryParamsObj);
+      await getUsersFunction(newQueryParamsObj, target);
     },
     [setQueryParams, getUsersFunction],
   );
@@ -41,7 +42,7 @@ const UsersList = ({
         email: '',
       },
     };
-    await getUsersListWithCurrentQueryParams(false, clearedQueryParamsObj);
+    await getUsersListWithCurrentQueryParams(clearedQueryParamsObj);
   }, [queryParams, getUsersListWithCurrentQueryParams]);
 
   const navigateLinkLayout = useMemo(
@@ -53,18 +54,26 @@ const UsersList = ({
   );
 
   const setPage = useCallback(
-    async (page, delayed) => {
-      await getUsersListWithCurrentQueryParams(delayed, {
-        ...queryParams,
-        page,
-      });
+    async (page, target) => {
+      await getUsersListWithCurrentQueryParams(
+        {
+          ...queryParams,
+          page,
+        },
+        target,
+      );
     },
     [queryParams, getUsersListWithCurrentQueryParams],
   );
 
   useEffect(() => {
-    getUsersListWithCurrentQueryParams(false, queryParams);
-  }, []);
+    if (limit) {
+      setQueryParams({ ...queryParams, limit });
+      getUsersListWithCurrentQueryParams({ ...queryParams, limit });
+    }
+  }, [limit]);
+
+  useEffect(() => {}, []);
 
   return (
     <article data-testid='users-list-panel'>
@@ -101,6 +110,7 @@ UsersList.propTypes = {
   getUsersFunction: PropTypes.func,
   usersLoading: PropTypes.bool,
   actionsArr: PropTypes.array,
+  limit: PropTypes.number,
 };
 
 export default UsersList;

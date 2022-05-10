@@ -1,27 +1,47 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import UserGroupService from '../../../../service/userGroupService';
+
 import {
   getGroupUsersThunk,
   getNotGroupMembersThunk,
 } from '../../../../store/reducers/userGroupReducer/actionCreator';
 import MyButton from '../../../../UI/myButton/myButton';
-import addUserToTheGroup from '../../../../utils/userGroup/addUserToTheGroup';
-import deleteUserFromGroup from '../../../../utils/userGroup/deleteUserFromTheGroup';
 import ModalWindow from '../../../modalWindow/modalWindow';
 import GroupUsersList from '../../lists/groupUsersPanel/groupUsersList';
 
 import modalStyles from './groupUsersModal.module.css';
 
 const GroupUsersModal = ({ groupId }) => {
+  const dispatch = useDispatch();
+
   const [groupUsersIsOpen, setGroupUsersIsOpen] = useState(false);
   const [deleteState, setDeleteState] = useState(true);
+
+  const groupUsersListLimitValue = 10;
+  const notGroupMembersListLimit = 10;
 
   const groupUsersActionsArray = useMemo(
     () => [
       {
         header: 'delete',
-        clickHandler: (userId, actualizeUsersListFunction) =>
-          deleteUserFromGroup(userId, groupId, actualizeUsersListFunction),
+        clickHandler: async (user) => {
+          try {
+            if (
+              window.confirm(
+                'Are you sure you want to delete user from this group?',
+              )
+            ) {
+              await UserGroupService.deleteUserFromTheGroup(user._id, groupId);
+              await dispatch(
+                getGroupUsersThunk(groupId, {}, 1, groupUsersListLimitValue),
+              );
+            }
+          } catch (e) {
+            alert(e.isAxiosResponse ? e.response.data.message : e.message);
+          }
+        },
       },
     ],
     [groupId],
@@ -31,8 +51,25 @@ const GroupUsersModal = ({ groupId }) => {
     () => [
       {
         header: 'add',
-        clickHandler: (userId, actualizeUsersListFunction) =>
-          addUserToTheGroup(userId, groupId, actualizeUsersListFunction),
+        clickHandler: async (user) => {
+          try {
+            if (
+              window.confirm('Are you sure you want to add user to this group?')
+            ) {
+              await UserGroupService.addUserToTheGroup(user._id, groupId);
+              await dispatch(
+                getNotGroupMembersThunk(
+                  groupId,
+                  {},
+                  1,
+                  notGroupMembersListLimit,
+                ),
+              );
+            }
+          } catch (e) {
+            alert(e.isAxiosResponse ? e.response.data.message : e.message);
+          }
+        },
       },
     ],
     [groupId],
@@ -59,6 +96,7 @@ const GroupUsersModal = ({ groupId }) => {
             groupUsersStateArrName='groupUsers'
             thunkFunction={getGroupUsersThunk}
             actionsArr={groupUsersActionsArray}
+            limit={groupUsersListLimitValue}
           />
         ) : (
           <GroupUsersList
@@ -67,6 +105,7 @@ const GroupUsersModal = ({ groupId }) => {
             groupUsersStateArrName='notGroupMembers'
             thunkFunction={getNotGroupMembersThunk}
             actionsArr={notGroupMembersActionsArray}
+            limit={notGroupMembersListLimit}
           />
         )}
         <MyButton onClick={() => setDeleteState(!deleteState)}>

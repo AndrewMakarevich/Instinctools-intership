@@ -11,7 +11,8 @@ const SearchPanel = ({
   fetchFunction,
   clearFieldsFunction,
 }) => {
-  const filterObjectIsEmpty = () => !Object.values(queryParams.filterObject).some((value) => value !== '');
+  const filterObjectIsEmpty = () =>
+    !Object.values(queryParams.filterObject).some((value) => value !== '');
 
   const setParamAndSendRequest = async (e, param) => {
     const newQueryParamsObj = {
@@ -22,7 +23,7 @@ const SearchPanel = ({
       },
       page: 1,
     };
-    await fetchFunction(true, newQueryParamsObj);
+    await fetchFunction(newQueryParamsObj, e.target);
   };
 
   return (
@@ -33,7 +34,9 @@ const SearchPanel = ({
             key={param}
             placeholder={`Search by ${param}`}
             value={queryParams.filterObject[param]}
-            onChange={async (e) => { await setParamAndSendRequest(e, param); }}
+            onChange={async (e) => {
+              await setParamAndSendRequest(e, param);
+            }}
           />
         ))}
       </div>

@@ -15,13 +15,26 @@ const UsersPage = () => {
   const [fetchUsers, usersFetchLoading, usersDelayFetchLoading] =
     useCombineFetching(getUsers);
 
-  const getUsersWithCurrentQueryParams = async (delayed, newQueryParamsObj) => {
-    await fetchUsers(
-      delayed,
-      newQueryParamsObj.filterObject,
-      newQueryParamsObj.page,
-      newQueryParamsObj.limit,
-    );
+  const getUsersWithCurrentQueryParams = async (newQueryParamsObj, target) => {
+    if (
+      !target ||
+      target instanceof HTMLButtonElement ||
+      target instanceof HTMLSelectElement
+    ) {
+      await fetchUsers(
+        false,
+        newQueryParamsObj.filterObject,
+        newQueryParamsObj.page,
+        newQueryParamsObj.limit,
+      );
+    } else {
+      await fetchUsers(
+        true,
+        newQueryParamsObj.filterObject,
+        newQueryParamsObj.page,
+        newQueryParamsObj.limit,
+      );
+    }
   };
 
   return (
@@ -32,6 +45,7 @@ const UsersPage = () => {
         usersArr={userReducer.users}
         usersCount={userReducer.count}
         usersLoading={usersFetchLoading || usersDelayFetchLoading}
+        limit={5}
       />
     </article>
   );

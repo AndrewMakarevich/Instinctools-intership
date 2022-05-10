@@ -9,13 +9,14 @@ const GroupUsersList = ({
   groupUsersStateArrName,
   thunkFunction,
   actionsArr,
+  limit = 10,
 }) => {
   const dispatch = useDispatch();
   const userGroupReducer = useSelector((store) => store.userGroupReducer);
 
   const getGroupUsers = useCallback(
-    async (filterObject, page, limit) => {
-      await dispatch(thunkFunction(groupId, filterObject, page, limit));
+    async (filterObject, page, limitVal) => {
+      await dispatch(thunkFunction(groupId, filterObject, page, limitVal));
     },
     [groupId, thunkFunction],
   );
@@ -27,13 +28,26 @@ const GroupUsersList = ({
   ] = useCombineFetching(getGroupUsers);
 
   const getGroupUsersListWithCurrentQueryParams = useCallback(
-    async (delayed, newQueryParamsObj) => {
-      await fetchGroupUsers(
-        delayed,
-        newQueryParamsObj.filterObject,
-        newQueryParamsObj.page,
-        newQueryParamsObj.limit,
-      );
+    async (newQueryParamsObj, target) => {
+      if (
+        !target ||
+        target instanceof HTMLButtonElement ||
+        target instanceof HTMLSelectElement
+      ) {
+        await fetchGroupUsers(
+          false,
+          newQueryParamsObj.filterObject,
+          newQueryParamsObj.page,
+          newQueryParamsObj.limit,
+        );
+      } else {
+        await fetchGroupUsers(
+          true,
+          newQueryParamsObj.filterObject,
+          newQueryParamsObj.page,
+          newQueryParamsObj.limit,
+        );
+      }
     },
     [fetchGroupUsers],
   );
@@ -45,6 +59,7 @@ const GroupUsersList = ({
       usersArr={userGroupReducer[groupUsersStateArrName]}
       usersCount={userGroupReducer.count}
       usersLoading={fetchGroupUsersLoading || delayedFetchGroupUsersLoading}
+      limit={limit}
     />
   );
 };
@@ -54,6 +69,7 @@ GroupUsersList.propTypes = {
   groupUsersStateArrName: PropTypes.string,
   thunkFunction: PropTypes.func,
   actionsArr: PropTypes.array,
+  limit: PropTypes.number,
 };
 
 export default GroupUsersList;

@@ -10,11 +10,12 @@ const GroupsList = ({
   groupsCount,
   getGroupsFunction,
   groupsLoading,
-  actionsArr,
+  actionsArr = [],
+  limit = 10,
 }) => {
   const [groupQueryParams, setGroupQueryParams] = useState({
     page: 1,
-    limit: 2,
+    limit: 10,
     filterObject: {
       groupName: '',
       groupTitle: '',
@@ -22,9 +23,9 @@ const GroupsList = ({
   });
 
   const getGroupsWithCurrentQueryParams = useCallback(
-    async (delayed, newQueryParamsObj) => {
+    async (newQueryParamsObj, target) => {
       setGroupQueryParams(newQueryParamsObj);
-      await getGroupsFunction(delayed, newQueryParamsObj);
+      await getGroupsFunction(newQueryParamsObj, target);
     },
     [setGroupQueryParams, getGroupsFunction],
   );
@@ -37,22 +38,28 @@ const GroupsList = ({
         groupTitle: '',
       },
     };
-    await getGroupsWithCurrentQueryParams(false, clearedQueryParamsObj);
+    await getGroupsWithCurrentQueryParams(clearedQueryParamsObj);
   }, [groupQueryParams, getGroupsWithCurrentQueryParams]);
 
   const setPage = useCallback(
-    async (page, delayed) => {
-      await getGroupsWithCurrentQueryParams(delayed, {
-        ...groupQueryParams,
-        page,
-      });
+    async (page, target) => {
+      await getGroupsWithCurrentQueryParams(
+        {
+          ...groupQueryParams,
+          page,
+        },
+        target,
+      );
     },
     [groupQueryParams, getGroupsWithCurrentQueryParams],
   );
 
   useEffect(() => {
-    getGroupsWithCurrentQueryParams(false, groupQueryParams);
-  }, []);
+    if (limit) {
+      setGroupQueryParams({ ...groupQueryParams, limit });
+      getGroupsWithCurrentQueryParams({ ...groupQueryParams, limit });
+    }
+  }, [limit]);
 
   const navigateLinkLayout = useMemo(
     () => ({
@@ -77,9 +84,6 @@ const GroupsList = ({
         entityParamsToShow={['groupName', 'groupTitle']}
         navigateLinkLayout={navigateLinkLayout}
         thArray={['Group name', 'GroupTitle']}
-        actualizeList={async () => {
-          await setPage(1, false);
-        }}
       />
       <PaginationLine
         count={groupsCount}
@@ -97,6 +101,7 @@ GroupsList.propTypes = {
   getGroupsFunction: PropTypes.func,
   groupsLoading: PropTypes.bool,
   actionsArr: PropTypes.array,
+  limit: PropTypes.number,
 };
 
 export default GroupsList;

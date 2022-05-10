@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MyButton from '../../../UI/myButton/myButton';
 import MyInputWithLabel from '../../../UI/myInput/myInputWithLabel';
@@ -10,8 +10,19 @@ const EditForm = ({
   initialParamValues,
   newParamValues,
   setNewParamValues,
-  children: submitButton,
+  onSubmit,
 }) => {
+  const [changesLoading, setChangesLoading] = useState(false);
+
+  const submitChanges = async () => {
+    try {
+      setChangesLoading(true);
+      await onSubmit();
+    } finally {
+      setChangesLoading(false);
+    }
+  };
+
   const clearChanges = () => {
     const newParamValuesObj = newParamValues;
 
@@ -23,7 +34,7 @@ const EditForm = ({
   };
 
   return (
-    <form data-testid='edit-form' className={formStyles.form}>
+    <form data-testid='edit-form' className={formStyles.form} dis>
       <div className={formStyles['form-inputs__wrapper']}>
         {Object.keys(newParamValues).map((paramKey) => (
           <MyInputWithLabel
@@ -41,13 +52,23 @@ const EditForm = ({
       </div>
       <div className={formStyles['form-buttons__wrapper']}>
         <MyButton
+          disabled={changesLoading}
           data-testid='clear-changes-btn'
           type='button'
           onClick={clearChanges}
         >
           Clear changes
         </MyButton>
-        {submitButton}
+        <MyButton
+          disabled={changesLoading}
+          type='submit'
+          onClick={(e) => {
+            e.preventDefault();
+            submitChanges();
+          }}
+        >
+          Submit changes
+        </MyButton>
       </div>
     </form>
   );
@@ -58,7 +79,7 @@ EditForm.propTypes = {
   initialParamValues: PropTypes.object,
   newParamValues: PropTypes.object,
   setNewParamValues: PropTypes.func,
-  children: PropTypes.element,
+  onSubmit: PropTypes.func,
 };
 
 export default EditForm;

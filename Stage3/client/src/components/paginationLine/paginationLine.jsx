@@ -48,30 +48,30 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
     return paginationLineState;
   }, [page, pages]);
 
-  const setPrevPage = () => {
+  const setPrevPage = (e) => {
     if (pages.length === 1) {
       return;
     }
 
     if (page > 1) {
-      setPage(page - 1);
+      setPage(page - 1, e.target);
       return;
     }
 
-    setPage(pages[pages.length - 1]);
+    setPage(pages[pages.length - 1], e.target);
   };
 
-  const setNextPage = () => {
+  const setNextPage = (e) => {
     if (pages.length === 1) {
       return;
     }
 
     if (page < pages.length) {
-      setPage(page + 1);
+      setPage(page + 1, e.target);
       return;
     }
 
-    setPage(pages[0]);
+    setPage(pages[0], e.target);
   };
 
   const setCustomPage = (e) => {
@@ -83,7 +83,7 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
       pages.length !== 1 &&
       typedPage !== page
     ) {
-      setPage(typedPage, true);
+      setPage(typedPage, e.target);
     }
   };
 
@@ -124,9 +124,9 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
           className={`${lineStyles['pagination-btn']} ${
             pageNumber === page ? lineStyles.active : ''
           }`}
-          onClick={() => {
+          onClick={(e) => {
             if (Number(pageNumber) && pageNumber !== page) {
-              setPage(pageNumber);
+              setPage(pageNumber, e.target);
             }
           }}
         >

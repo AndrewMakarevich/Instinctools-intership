@@ -9,6 +9,7 @@ const UserGroupsList = ({
   thunkFunction,
   userGroupsStateArrName,
   actionsArr,
+  limit = 10,
 }) => {
   const dispatch = useDispatch();
   const userGroupReducer = useSelector((store) => store.userGroupReducer);
@@ -27,13 +28,26 @@ const UserGroupsList = ({
   ] = useCombineFetching(getUserGroups);
 
   const getUserGroupsWithCurrentQueryParams = useCallback(
-    async (delayed, newQueryParamsObj) => {
-      await fetchUserGroups(
-        delayed,
-        newQueryParamsObj.filterObject,
-        newQueryParamsObj.page,
-        newQueryParamsObj.limit,
-      );
+    async (newQueryParamsObj, target) => {
+      if (
+        !target ||
+        target instanceof HTMLButtonElement ||
+        target instanceof HTMLSelectElement
+      ) {
+        await fetchUserGroups(
+          false,
+          newQueryParamsObj.filterObject,
+          newQueryParamsObj.page,
+          newQueryParamsObj.limit,
+        );
+      } else {
+        await fetchUserGroups(
+          true,
+          newQueryParamsObj.filterObject,
+          newQueryParamsObj.page,
+          newQueryParamsObj.limit,
+        );
+      }
     },
     [fetchUserGroups],
   );
@@ -45,6 +59,7 @@ const UserGroupsList = ({
       groupsCount={userGroupReducer.count}
       getGroupsFunction={getUserGroupsWithCurrentQueryParams}
       groupsLoading={fetchUserGroupsLoading || delayedFetchUserGroupsLoading}
+      limit={limit}
     />
   );
 };
@@ -54,6 +69,7 @@ UserGroupsList.propTypes = {
   thunkFunction: PropTypes.func,
   userGroupsStateArrName: PropTypes.string,
   actionsArr: PropTypes.array,
+  limit: PropTypes.number,
 };
 
 export default UserGroupsList;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import MyButton from '../../../UI/myButton/myButton';
@@ -10,16 +10,16 @@ const TableRow = ({
   entityParamsToShow,
   actionsArray,
   navigateLink,
-  actualizeEntitiesList,
+  actionLoading,
+  setActionLoading,
 }) => {
   const navigate = useNavigate();
-  const [actionIsLoading, setActionIsLoading] = useState(false);
 
   const actionHandler = async (e, action) => {
     e.stopPropagation();
     try {
-      setActionIsLoading(true);
-      await action.clickHandler(entity._id, actualizeEntitiesList);
+      setActionLoading(true);
+      await action.clickHandler(entity);
     } catch (error) {
       if (error.isAxiosError) {
         alert(error.response.data.message);
@@ -28,7 +28,7 @@ const TableRow = ({
 
       alert(error.message);
     } finally {
-      setActionIsLoading(false);
+      setActionLoading(false);
     }
   };
 
@@ -57,7 +57,7 @@ const TableRow = ({
               key={action.header}
               data-testid='group-row-action-btn'
               className={tableStyles['action-cell-btn']}
-              disabled={actionIsLoading}
+              disabled={actionLoading}
               onClick={async (e) => {
                 await actionHandler(e, action);
               }}
@@ -76,7 +76,8 @@ TableRow.propTypes = {
   entityParamsToShow: PropTypes.array,
   actionsArray: PropTypes.array,
   navigateLink: PropTypes.string,
-  actualizeEntitiesList: PropTypes.func,
+  actionLoading: PropTypes.bool,
+  setActionLoading: PropTypes.func,
 };
 
 export default TableRow;
