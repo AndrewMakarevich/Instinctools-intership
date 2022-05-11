@@ -48,14 +48,8 @@ describe('UserGroupService: getting user groups', () => {
     const testGroup1 = await createTestGroup();
     const testGroup2 = await createTestGroup('Ninth-group', 'fooboo');
 
-    const createConnection1 = await UserGroupService.addUserToGroup(
-      testUser._id,
-      testGroup1._id
-    );
-    const createConnection2 = await UserGroupService.addUserToGroup(
-      testUser._id,
-      testGroup2._id
-    );
+    await UserGroupService.addUserToGroup(testUser._id, testGroup1._id);
+    await UserGroupService.addUserToGroup(testUser._id, testGroup2._id);
 
     const userGroups = await UserGroupService.getUsersGroups(
       testUser._id,
@@ -73,7 +67,42 @@ describe('UserGroupService: getting user groups', () => {
       UserGroupService.getUsersGroups('624189fa131989eaef2453e3')
     ).rejects.toThrow("User with such id doesn't exists");
   });
+});
 
+describe('UserGroupService: getting groups user not participate in', () => {
+  test('Trying to get groups, using id of an existing user', async () => {
+    const firstTestGroup = await createTestGroup();
+    const secTestGroup = await createTestGroup('FifthGroup');
+    const thirdTestGroup = await createTestGroup('SixthGroup');
+
+    const testUser = await createTestUser();
+    // first group added
+    await UserGroupService.addUserToGroup(testUser._id, firstTestGroup);
+    // trying to get second page of groups user not participate in, third group expected
+    const groups = await UserGroupService.getGroupsUserNotParticipateIn(
+      testUser._id,
+      '',
+      2,
+      1
+    );
+    const groupsIds = groups.rows.map((group) => group._id);
+    expect(groups.count).toBe(2);
+    expect(groupsIds).toEqual([thirdTestGroup._id]);
+  });
+
+  test('Trying to get groups, using id of an unexisting user', async () => {
+    await expect(
+      UserGroupService.getGroupsUserNotParticipateIn(
+        '624189fa131989eaef2453e3',
+        '',
+        2,
+        1
+      )
+    ).rejects.toThrow("User with such id doesn't exists");
+  });
+});
+
+describe('UserGroupService: getting group users', () => {
   test('Trying to get users of an existing group', async () => {
     const testUser1 = await createTestUser();
     const testUser2 = await createTestUser(
@@ -103,6 +132,50 @@ describe('UserGroupService: getting user groups', () => {
   test('Trying to get users of unexisting group', async () => {
     await expect(
       UserGroupService.getGroupUsers('6241b1b517692d26ffbd18b3')
+    ).rejects.toThrow("Group with such id doesn't exists");
+  });
+});
+
+describe('UserGroupService: getting users, wich are not members of this group', () => {
+  test('Trying to get users, using id of an existing group', async () => {
+    const firstTestUser = await createTestUser(
+      'FirstAndrew',
+      'someName',
+      'somelastName',
+      'andre1@mail.ru'
+    );
+    const secondTestUser = await createTestUser(
+      'SecondAndrew',
+      'someName',
+      'somelastName',
+      'andre2@mail.ru'
+    );
+    const thirdTestUser = await createTestUser(
+      'ThirdAndrew',
+      'someName',
+      'somelastName',
+      'andre3@mail.ru'
+    );
+
+    const testGroup = await createTestGroup();
+
+    await UserGroupService.addUserToGroup(secondTestUser._id, testGroup._id);
+
+    const users = await UserGroupService.getNotGroupMembers(
+      testGroup._id,
+      '',
+      2,
+      1
+    );
+    const usersIds = users.rows.map((user) => user._id);
+
+    expect(users.count).toBe(2);
+    expect(usersIds).toEqual([thirdTestUser._id]);
+  });
+
+  test('Trying to get users, using id of an unexisting group', async () => {
+    await expect(
+      UserGroupService.getNotGroupMembers('6241b1b517692d26ffbd18b3')
     ).rejects.toThrow("Group with such id doesn't exists");
   });
 });

@@ -34,7 +34,7 @@ const EditForm = ({
   };
 
   return (
-    <form data-testid='edit-form' className={formStyles.form} dis>
+    <form data-testid='edit-form' className={formStyles.form}>
       <div className={formStyles['form-inputs__wrapper']}>
         {Object.keys(newParamValues).map((paramKey) => (
           <MyInputWithLabel

@@ -52,8 +52,14 @@ class UserGroupService {
       userId,
     });
 
+    if (!userGroupsConnections.length) {
+      return { count: 0, rows: [] };
+    }
+
     const parsedFilterObj = createModelSearchQuery(filterObject);
-    const skipValue = (page - 1) * limit;
+    const limitValue = limit || 5;
+    const pageValue = page || 1;
+    const skipValue = (pageValue - 1) * limitValue;
 
     // convert an array of user-group connections to the array of groups ids, wich have connection with the user
     userGroupsConnections = userGroupsConnections.map((connection) =>
@@ -64,8 +70,8 @@ class UserGroupService {
       _id: { $in: [...userGroupsConnections] },
       ...parsedFilterObj,
     })
-      .skip(skipValue || 0)
-      .limit(limit || 5);
+      .skip(skipValue)
+      .limit(limitValue);
 
     const userGroupsCount = await GroupModel.count({
       _id: { $in: [...userGroupsConnections] },
@@ -75,6 +81,49 @@ class UserGroupService {
     return { count: userGroupsCount, rows: userGroups };
   }
 
+  static async getGroupsUserNotParticipateIn(
+    userId,
+    filterObject,
+    page,
+    limit
+  ) {
+    await checkUser(userId, "User with such id doesn't exists");
+
+    const userGroupConnections = await UsersGroupsModel.find({
+      userId,
+    });
+
+    const parsedFilterObj = createModelSearchQuery(filterObject);
+    const limitValue = limit || 5;
+    const pageValue = page || 1;
+    const skipValue = (pageValue - 1) * limitValue;
+
+    if (!userGroupConnections.length) {
+      const allGroups = await GroupModel.find({ ...parsedFilterObj })
+        .skip(skipValue)
+        .limit(limitValue);
+      return { count: allGroups.length, rows: allGroups };
+    }
+
+    const userGroupsIds = userGroupConnections.map(
+      (connection) => connection.groupId
+    );
+
+    const groups = await GroupModel.find({
+      _id: { $nin: userGroupsIds },
+      ...parsedFilterObj,
+    })
+      .skip(skipValue)
+      .limit(limitValue);
+
+    const groupsCount = await GroupModel.count({
+      _id: { $nin: userGroupsIds },
+      ...parsedFilterObj,
+    });
+
+    return { count: groupsCount, rows: groups };
+  }
+
   static async getGroupUsers(groupId, filterObject, page, limit) {
     await checkGroup(groupId, "Group with such id doesn't exists");
 
@@ -82,12 +131,15 @@ class UserGroupService {
       groupId,
     });
 
-    if (!userGroupConnections) {
-      return [];
+    if (!userGroupConnections.length) {
+      return { count: 0, rows: [] };
     }
 
+    const limitValue = limit || 5;
+    const pageValue = page || 1;
+    const skipValue = (pageValue - 1) * limitValue;
+
     const parsedFilterObject = createModelSearchQuery(filterObject);
-    const skipValue = (page - 1) * limit;
 
     userGroupConnections = userGroupConnections.map((connection) =>
       String(connection.userId)
@@ -97,8 +149,8 @@ class UserGroupService {
       _id: { $in: [...userGroupConnections] },
       ...parsedFilterObject,
     })
-      .skip(skipValue || 0)
-      .limit(limit || 5);
+      .skip(skipValue)
+      .limit(limitValue);
 
     const usersCount = await UserModel.count({
       _id: { $in: [...userGroupConnections] },
@@ -115,17 +167,22 @@ class UserGroupService {
       groupId,
     });
 
-    if (!userGroupConnections) {
-      const allUsers = UserModel.find();
-      return allUsers;
-    }
-
     const parsedFilterObj = createModelSearchQuery(filterObject);
-    const skipValue = (page - 1) * limit;
+    const limitValue = limit || 5;
+    const pageValue = page || 1;
+    const skipValue = (pageValue - 1) * limitValue;
+
+    if (!userGroupConnections.length) {
+      const allUsers = await UserModel.find({ ...parsedFilterObj })
+        .skip(skipValue)
+        .limit(limitValue);
+      return { count: allUsers.length, rows: allUsers };
+    }
 
     userGroupConnections = userGroupConnections.map(
       (connection) => connection.userId
     );
+
     const notMembers = await UserModel.find({
       _id: { $nin: userGroupConnections },
       ...parsedFilterObj,
@@ -139,45 +196,6 @@ class UserGroupService {
     });
 
     return { count: notMembersCount, rows: notMembers };
-  }
-
-  static async getGroupsUserNotParticipateIn(
-    userId,
-    filterObject,
-    page,
-    limit
-  ) {
-    await checkUser(userId, "User with such id doesn't exists");
-
-    const userGroupConnections = await UsersGroupsModel.find({
-      userId,
-    });
-
-    if (!userGroupConnections) {
-      const allGroups = GroupModel.find();
-      return allGroups;
-    }
-
-    const userGroupsIds = userGroupConnections.map(
-      (connection) => connection.groupId
-    );
-
-    const parsedFilterObj = createModelSearchQuery(filterObject);
-    const skipValue = (page - 1) * limit;
-
-    const groups = await GroupModel.find({
-      _id: { $nin: userGroupsIds },
-      ...parsedFilterObj,
-    })
-      .skip(skipValue || 0)
-      .limit(limit || 5);
-
-    const groupsCount = await GroupModel.count({
-      _id: { $nin: userGroupsIds },
-      ...parsedFilterObj,
-    });
-
-    return { count: groupsCount, rows: groups };
   }
 
   static async addUserToGroup(userId, groupId) {

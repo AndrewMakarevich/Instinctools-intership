@@ -103,7 +103,7 @@ describe('Group service: group searching', () => {
     expect(foundGroup).toEqual([String(secTestGroup.group._id)]);
   });
 
-  test('Checking filteringin methid getGroups', async () => {
+  test('Checking filtering in methid getGroups', async () => {
     await createCorrectTestGroup();
     const secTestGroup = await createAlterCorrectTestGroup();
     let foundGroup = await GroupService.getGroups('{"groupTitle":"-alter"}');

@@ -7,7 +7,7 @@ import tableStyles from './table.module.css';
 const Table = ({
   entityParamsToShow,
   thArray,
-  actionsArray,
+  actionsArray = [],
   entitiesArray,
   entitiesLoading,
   navigateLinkLayout,
