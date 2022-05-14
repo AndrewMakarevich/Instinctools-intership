@@ -16,10 +16,7 @@ class GroupService {
     return group;
   }
 
-  static async getGroups(searchObj, pageNum, limitNum) {
-    const page = Number(pageNum) || 1;
-    const limit = Number(limitNum) || 5;
-
+  static async getGroups(searchObj, page = 1, limit = 5) {
     const searchQuery = createModelSearchQuery(searchObj);
     const groupsCount = await GroupModel.count(searchQuery);
     const groupsRows = await GroupModel.find(searchQuery)
