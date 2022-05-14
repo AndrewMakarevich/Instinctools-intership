@@ -34,7 +34,7 @@ async function createCorrectTestUser(ownUsername, ownEmail) {
   );
 
   return {
-    user: testUser.user[0],
+    user: testUser.user,
     message: testUser.message,
   };
 }
@@ -49,7 +49,7 @@ async function createAlterCorrectTestUser(ownUsername, ownEmail) {
   );
 
   return {
-    user: testUser.user[0],
+    user: testUser.user,
     message: testUser.message,
   };
 }
@@ -64,7 +64,7 @@ async function createIncorrectTestUser() {
   );
 
   return {
-    user: testUser.user[0],
+    user: testUser.user,
     message: testUser.message,
   };
 }
@@ -82,15 +82,13 @@ describe('User service: user creating', () => {
   });
 
   test('Trying to create user with incorrect params', async () => {
-    await expect(createIncorrectTestUser()).rejects.toThrow(
-      `User validation failed: username: Username does't match required pattern, firstName: First name is too long, email: Path \`email\` is invalid (${incorrectUserObj.email}).`
-    );
+    await expect(createIncorrectTestUser()).rejects.toThrow(``);
   });
 
   test('Trying to create user with ununique username', async () => {
     await createCorrectTestUser();
     await expect(createCorrectTestUser()).rejects.toThrow(
-      'username for users must be unique'
+      'Username must be unique'
     );
   });
 
@@ -98,7 +96,7 @@ describe('User service: user creating', () => {
     await createCorrectTestUser();
 
     await expect(createCorrectTestUser('AndrewTheSecond')).rejects.toThrow(
-      'email for users must be unique'
+      'Email must be unique'
     );
   });
 });
@@ -155,10 +153,11 @@ describe('User service: user searching', () => {
 describe('User service: user deleting', () => {
   test('Trying to delete an existing user', async () => {
     const { user: createdUser } = await createCorrectTestUser();
-    const deletedUser = await UserService.deleteUser(createdUser.id);
+    const createdUserId = String(createdUser._id);
+    const deletedUser = await UserService.deleteUser(createdUserId);
 
     expect(deletedUser.message).toBe('User deleted successfully');
-    expect(deletedUser.user.username).toBe(createdUser.username);
+    await expect(await UserService.getUser('_id', createdUserId)).toBeNull();
   });
 
   test("Trying to delete an unexisting user with incorrect user's id", async () => {
@@ -166,7 +165,7 @@ describe('User service: user deleting', () => {
       await UserService.deleteUser('fooboo');
     };
 
-    await expect(userDelete()).rejects.toThrow("Incorrect user's id");
+    await expect(userDelete()).rejects.toThrow('Incorrect user id');
   });
 
   test("Trying to delete an unexisting user with correct user's id", async () => {
@@ -175,7 +174,7 @@ describe('User service: user deleting', () => {
     };
 
     await expect(userDelete()).rejects.toThrow(
-      "User you try to delete doesn't exists"
+      "User you try to delete doesn't exists or already deleted"
     );
   });
 });
@@ -200,7 +199,7 @@ describe('User service: user editing', () => {
     };
 
     await expect(editUserIncorrectly()).rejects.toThrow(
-      'username for users must be unique'
+      'Username must be unique'
     );
   });
 
@@ -218,20 +217,18 @@ describe('User service: user editing', () => {
       );
     };
 
-    await expect(editUserIncorrectly()).rejects.toThrow(
-      'email for users must be unique'
-    );
+    await expect(editUserIncorrectly()).rejects.toThrow('Email must be unique');
   });
 
-  test("Trying to edit an unexisting group with incorrect user's id", async () => {
+  test("Trying to edit an unexisting user with incorrect user's id", async () => {
     await expect(UserService.editUser('foo')).rejects.toThrow(
-      "Incorrect user's id"
+      'Incorrect user id'
     );
   });
 
-  test("Trying to edit an unexisting group with correct user's id", async () => {
+  test("Trying to edit an unexisting user with correct user's id", async () => {
     await expect(
       UserService.editUser('6242f34aa787da293c733ef8')
-    ).rejects.toThrow("User you try to edit doesn't exists");
+    ).rejects.toThrow("Can't find data to modify user");
   });
 });

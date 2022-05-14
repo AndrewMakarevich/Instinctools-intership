@@ -11,6 +11,7 @@ import {
 import UserGroupsList from '../../lists/userGroupsPanel/userGroupsList';
 
 import modalStyles from './userGroupsModal.module.css';
+import RenderIf from '../../../renderIf/renderIf';
 
 const UserGroupsModal = ({ userId }) => {
   const dispatch = useDispatch();
@@ -75,7 +76,7 @@ const UserGroupsModal = ({ userId }) => {
         setIsOpen={setUserGroupsIsOpen}
         modalContentClassName={modalStyles['user-groups-content__wrapper']}
       >
-        {leaveState ? (
+        <RenderIf isTrue={leaveState}>
           <UserGroupsList
             key={1}
             userId={userId}
@@ -84,7 +85,9 @@ const UserGroupsModal = ({ userId }) => {
             actionsArr={userGroupsActionsArray}
             limit={userGroupsListLimitValue}
           />
-        ) : (
+        </RenderIf>
+
+        <RenderIf isTrue={!leaveState}>
           <UserGroupsList
             key={2}
             userId={userId}
@@ -93,7 +96,7 @@ const UserGroupsModal = ({ userId }) => {
             actionsArr={groupsNotPartOfActionsArray}
             limit={groupsUserNotPartOfListLimitValue}
           />
-        )}
+        </RenderIf>
 
         <MyButton onClick={() => setLeaveState(!leaveState)}>
           {leaveState ? 'Enter into other groups' : 'Leave groups'}

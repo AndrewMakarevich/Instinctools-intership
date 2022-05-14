@@ -29,7 +29,7 @@ async function createTestUser(myUsername, myFirstName, myLastName, myEmail) {
     myEmail || email
   );
 
-  return testUser.user[0];
+  return testUser.user;
 }
 
 async function createTestGroup(myName, myTitle) {
@@ -39,7 +39,7 @@ async function createTestGroup(myName, myTitle) {
     myTitle || groupTitle
   );
 
-  return testGroup.group[0];
+  return testGroup.group;
 }
 
 describe('UserGroupService: getting user groups', () => {
@@ -64,8 +64,8 @@ describe('UserGroupService: getting user groups', () => {
 
   test('Trying to get groups of unexisting user', async () => {
     await expect(
-      UserGroupService.getUsersGroups('624189fa131989eaef2453e3')
-    ).rejects.toThrow("User with such id doesn't exists");
+      await UserGroupService.getUsersGroups('624189fa131989eaef2453e3')
+    ).toEqual({ count: 0, rows: [] });
   });
 });
 
@@ -77,7 +77,7 @@ describe('UserGroupService: getting groups user not participate in', () => {
 
     const testUser = await createTestUser();
     // first group added
-    await UserGroupService.addUserToGroup(testUser._id, firstTestGroup);
+    await UserGroupService.addUserToGroup(testUser._id, firstTestGroup._id);
     // trying to get second page of groups user not participate in, third group expected
     const groups = await UserGroupService.getGroupsUserNotParticipateIn(
       testUser._id,
@@ -92,13 +92,13 @@ describe('UserGroupService: getting groups user not participate in', () => {
 
   test('Trying to get groups, using id of an unexisting user', async () => {
     await expect(
-      UserGroupService.getGroupsUserNotParticipateIn(
+      await UserGroupService.getGroupsUserNotParticipateIn(
         '624189fa131989eaef2453e3',
         '',
         2,
         1
       )
-    ).rejects.toThrow("User with such id doesn't exists");
+    ).toEqual({ count: 0, rows: [] });
   });
 });
 
@@ -131,8 +131,8 @@ describe('UserGroupService: getting group users', () => {
 
   test('Trying to get users of unexisting group', async () => {
     await expect(
-      UserGroupService.getGroupUsers('6241b1b517692d26ffbd18b3')
-    ).rejects.toThrow("Group with such id doesn't exists");
+      await UserGroupService.getGroupUsers('6241b1b517692d26ffbd18b3')
+    ).toEqual({ count: 0, rows: [] });
   });
 });
 
@@ -175,8 +175,8 @@ describe('UserGroupService: getting users, wich are not members of this group', 
 
   test('Trying to get users, using id of an unexisting group', async () => {
     await expect(
-      UserGroupService.getNotGroupMembers('6241b1b517692d26ffbd18b3')
-    ).rejects.toThrow("Group with such id doesn't exists");
+      await UserGroupService.getNotGroupMembers('6241b1b517692d26ffbd18b3')
+    ).toEqual({ count: 0, rows: [] });
   });
 });
 
@@ -195,7 +195,7 @@ describe('UserGroupService: adding user to the group', () => {
       );
 
     expect(addingUserToGroupResponse.message).toBe(
-      `User ${testUser.username} successfully added to the ${testGroup.groupName} group`
+      `User successfully added to the group`
     );
     expect(userGroupConnectionRecord).not.toBeNull();
   });
@@ -209,7 +209,7 @@ describe('UserGroupService: adding user to the group', () => {
 
     await addUserToGroup();
     await expect(addUserToGroup()).rejects.toThrow(
-      'User is already in the group'
+      'User is already a member of this group'
     );
   });
 
@@ -219,9 +219,7 @@ describe('UserGroupService: adding user to the group', () => {
       await UserGroupService.addUserToGroup('foo', testGroup._id);
     };
 
-    await expect(addUserToGroupResponse()).rejects.toThrow(
-      "Incorrect user's id"
-    );
+    await expect(addUserToGroupResponse()).rejects.toThrow('Incorrect user id');
   });
 
   test("Trying to add an unexisitng user to the existing group with correct user's id", async () => {
@@ -234,7 +232,7 @@ describe('UserGroupService: adding user to the group', () => {
     };
 
     await expect(addUserToGroupResponse()).rejects.toThrow(
-      "User you want add to the group, doesn't exists"
+      "User you try to add to the group doesn't exists"
     );
   });
 
@@ -245,7 +243,7 @@ describe('UserGroupService: adding user to the group', () => {
     };
 
     await expect(addUserToGroupResponse()).rejects.toThrow(
-      "Incorrect group's id"
+      'Incorrect group id'
     );
   });
 
@@ -259,7 +257,7 @@ describe('UserGroupService: adding user to the group', () => {
     };
 
     await expect(addUserToGroupResponse()).rejects.toThrow(
-      "Group in what you want to add the User, doesn't exists"
+      "Group in what you try to add user doesn't exists"
     );
   });
 });
@@ -276,9 +274,7 @@ describe('UserGroupService: deleting user from the group', () => {
       group._id
     );
 
-    await expect(message).toBe(
-      `User ${user.username} successfully deleted from the group ${group.groupName}`
-    );
+    await expect(message).toBe(`User successfully deleted from the group`);
   });
 
   test('Trying to delete an unexisting connection between user and group', async () => {
@@ -287,9 +283,7 @@ describe('UserGroupService: deleting user from the group', () => {
 
     await expect(
       UserGroupService.deleteUserFromGroup(user._id, group._id)
-    ).rejects.toThrow(
-      `Connection between ${user.username}(User) and ${group.groupName}(Group) doesn't exists`
-    );
+    ).rejects.toThrow(`User's not a member of this group`);
   });
 
   test('Trying to delete an unexisting user from the group', async () => {
@@ -300,7 +294,7 @@ describe('UserGroupService: deleting user from the group', () => {
         '6241b1b517692d26ffbd18b2',
         group._id
       )
-    ).rejects.toThrow("User you want to delete from the group, doesn't exists");
+    ).rejects.toThrow("User's not a member of this group");
   });
 
   test('Trying to delete a user from an unexisting group', async () => {
@@ -308,8 +302,6 @@ describe('UserGroupService: deleting user from the group', () => {
 
     await expect(
       UserGroupService.deleteUserFromGroup(user._id, '6241b1b517692d26ffbd18b2')
-    ).rejects.toThrow(
-      "Group in what you want to delete the User, doesn't exists"
-    );
+    ).rejects.toThrow("User's not a member of this group");
   });
 });

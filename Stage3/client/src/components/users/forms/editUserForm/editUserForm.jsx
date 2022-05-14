@@ -10,6 +10,7 @@ import { userPaths } from '../../../router/routes';
 
 const EditUserForm = ({ userObj, actualizeUserInfo }) => {
   const navigate = useNavigate();
+  const [formIsLoading, setFormIsLoading] = useState(false);
   const [newUserInfo, setNewUserInfo] = useState({
     username: '',
     firstName: '',
@@ -28,6 +29,7 @@ const EditUserForm = ({ userObj, actualizeUserInfo }) => {
 
   const submitUserChanges = async () => {
     try {
+      setFormIsLoading(true);
       const paramsObject = parseDataToEdit(userObj, newUserInfo);
 
       if (!Object.keys(paramsObject).length) {
@@ -49,6 +51,8 @@ const EditUserForm = ({ userObj, actualizeUserInfo }) => {
       }
     } catch (e) {
       alert(e.isAxiosError ? e.response.data.message : e.message);
+    } finally {
+      setFormIsLoading(false);
     }
   };
 
@@ -65,6 +69,7 @@ const EditUserForm = ({ userObj, actualizeUserInfo }) => {
       newParamValues={newUserInfo}
       setNewParamValues={setNewUserInfo}
       onSubmit={submitUserChanges}
+      isLoading={formIsLoading}
     />
   );
 };

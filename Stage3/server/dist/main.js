@@ -472,6 +472,8 @@ const UsersGroupsSchema = new Schema({
   },
 });
 
+UsersGroupsSchema.index({ userId: 1, groupId: 1 }, { unique: true });
+
 const UserModel = model('User', UserSchema);
 const GroupModel = model('Group', GroupSchema);
 const UsersGroupsModel = model('UsersGroups', UsersGroupsSchema);
@@ -588,6 +590,7 @@ module.exports = userRouter;
 
 const ApiError = __webpack_require__(/*! ../apiError/apiError */ "./src/apiError/apiError.js");
 const { GroupModel } = __webpack_require__(/*! ../models/models */ "./src/models/models.js");
+const checkId = __webpack_require__(/*! ../utils/checkId */ "./src/utils/checkId.js");
 const createModelSearchQuery = __webpack_require__(/*! ../utils/createModelSearchQuery */ "./src/utils/createModelSearchQuery.js");
 
 class GroupService {
@@ -617,55 +620,74 @@ class GroupService {
   }
 
   static async createGroup(groupName, groupTitle) {
-    for (const arg of arguments) {
-      if (!arg) {
-        throw ApiError.badRequest('Not enough data for the Group creating');
+    const group = await GroupModel.create({
+      groupName,
+      groupTitle,
+    }).catch((e) => {
+      if (
+        e.name === 'MongoServerError' &&
+        e.code === 11000 &&
+        e.message.includes('groupName')
+      ) {
+        throw ApiError.badRequest('Group name must be unique');
       }
-    }
 
-    const group = await GroupModel.create(
-      [
-        {
-          groupName,
-          groupTitle,
-        },
-      ],
-      { checkForDuplications: ['groupName'] }
-    );
+      throw ApiError.badRequest(e.message);
+    });
 
     return { message: `Group ${groupName} created successfully`, group };
   }
 
   static async editGroup(groupId, groupName, groupTitle) {
-    const groupToEdit = await GroupModel.findById(groupId).catch(() => {
-      throw ApiError.badRequest("Incorrect group's id");
-    });
+    checkId(groupId, 'Incorrect group id');
 
-    if (!groupToEdit) {
-      throw ApiError.badRequest("Group you try to edit doesn't exists");
-    }
-
-    await GroupModel.updateOne(
+    const editResult = await GroupModel.updateOne(
       { _id: groupId },
       { groupName, groupTitle },
-      { checkForDuplications: ['groupName'], runValidators: true }
-    );
+      { runValidators: true }
+    ).catch((e) => {
+      if (
+        e.name === 'MongoServerError' &&
+        e.code === 11000 &&
+        e.message.includes('groupName')
+      ) {
+        throw ApiError.badRequest('Group name must be unique');
+      }
+
+      throw ApiError.badRequest(e.message);
+    });
+
+    if (!editResult.acknowledged) {
+      throw ApiError.badRequest("Can't find data to modify user");
+    }
+
+    if (editResult.matchedCount === 0) {
+      throw ApiError.badRequest("Group you try to modify doesn't exists");
+    }
+
+    if (editResult.modifiedCount === 0) {
+      throw ApiError.badRequest('Nothing to change');
+    }
 
     return { message: 'Group updated successfully' };
   }
 
   static async deleteGroup(groupId) {
-    const groupToDelete = await GroupModel.findById(groupId).catch(() => {
-      throw ApiError.badRequest("Incorrect group's id");
-    });
+    checkId(groupId, 'Incorrect group id');
 
-    if (!groupToDelete) {
-      throw ApiError.badRequest("Group you try to delete doesn't exists");
+    const deletedGroup = await GroupModel.deleteOne({ _id: groupId }).catch(
+      (e) => {
+        throw ApiError.badRequest(e);
+      }
+    );
+
+    if (deletedGroup.deletedCount === 0) {
+      throw ApiError.badRequest(
+        "Group you try to delete doesn't exists or already deleted"
+      );
     }
 
-    const deletedGroup = await groupToDelete.deleteOne({ _id: groupId });
-
-    return { message: `Group deleted succesfully`, group: deletedGroup };
+    return { message: `Group deleted succesfully` };
   }
 }
 
@@ -682,43 +704,8 @@ module.exports = GroupService;
 
 const ApiError = __webpack_require__(/*! ../apiError/apiError */ "./src/apiError/apiError.js");
 const { GroupModel, UserModel, UsersGroupsModel } = __webpack_require__(/*! ../models/models */ "./src/models/models.js");
+const checkId = __webpack_require__(/*! ../utils/checkId */ "./src/utils/checkId.js");
 const createModelSearchQuery = __webpack_require__(/*! ../utils/createModelSearchQuery */ "./src/utils/createModelSearchQuery.js");
-
-async function checkUser(userId, userErrorMessage) {
-  const user = await UserModel.findById(userId).catch(() => {
-    throw ApiError.badRequest("Incorrect user's id");
-  });
-
-  if (!user) {
-    throw ApiError.badRequest(userErrorMessage);
-  }
-
-  return user;
-}
-
-async function checkGroup(groupId, groupErrorMessage) {
-  const group = await GroupModel.findById(groupId).catch(() => {
-    throw ApiError.badRequest("Incorrect group's id");
-  });
-
-  if (!group) {
-    throw ApiError.badRequest(groupErrorMessage);
-  }
-
-  return group;
-}
-
-async function checkUserAndGroup(
-  userId,
-  groupId,
-  userErrorMessage,
-  groupErrorMessage
-) {
-  const user = await checkUser(userId, userErrorMessage);
-  const group = await checkGroup(groupId, groupErrorMessage);
-
-  return { user, group };
-}
 
 class UserGroupService {
   static async getUserGroupConnection(userId, groupId) {
@@ -727,8 +714,8 @@ class UserGroupService {
     return userGroupRecord;
   }
 
-  static async getUsersGroups(userId, filterObject, page, limit) {
-    await checkUser(userId, "User with such id doesn't exists");
+  static async getUsersGroups(userId, filterObject, page = 1, limit = 5) {
+    checkId(userId, 'Incorrect user id');
 
     let userGroupsConnections = await UsersGroupsModel.find({
       userId,
@@ -739,9 +726,7 @@ class UserGroupService {
     }
 
     const parsedFilterObj = createModelSearchQuery(filterObject);
-    const limitValue = limit || 5;
-    const pageValue = page || 1;
-    const skipValue = (pageValue - 1) * limitValue;
+    const skipValue = (page - 1) * limit;
 
     // convert an array of user-group connections to the array of groups ids, wich have connection with the user
     userGroupsConnections = userGroupsConnections.map((connection) =>
@@ -753,7 +738,7 @@ class UserGroupService {
       ...parsedFilterObj,
     })
       .skip(skipValue)
-      .limit(limitValue);
+      .limit(limit);
 
     const userGroupsCount = await GroupModel.count({
       _id: { $in: [...userGroupsConnections] },
@@ -766,26 +751,17 @@ class UserGroupService {
   static async getGroupsUserNotParticipateIn(
     userId,
     filterObject,
-    page,
-    limit
+    page = 1,
+    limit = 5
   ) {
-    await checkUser(userId, "User with such id doesn't exists");
+    await checkId(userId, 'Incorrect userId');
 
     const userGroupConnections = await UsersGroupsModel.find({
       userId,
     });
 
     const parsedFilterObj = createModelSearchQuery(filterObject);
-    const limitValue = limit || 5;
-    const pageValue = page || 1;
-    const skipValue = (pageValue - 1) * limitValue;
-
-    if (!userGroupConnections.length) {
-      const allGroups = await GroupModel.find({ ...parsedFilterObj })
-        .skip(skipValue)
-        .limit(limitValue);
-      return { count: allGroups.length, rows: allGroups };
-    }
+    const skipValue = (page - 1) * limit;
 
     const userGroupsIds = userGroupConnections.map(
       (connection) => connection.groupId
@@ -796,7 +772,7 @@ class UserGroupService {
       ...parsedFilterObj,
     })
       .skip(skipValue)
-      .limit(limitValue);
+      .limit(limit);
 
     const groupsCount = await GroupModel.count({
       _id: { $nin: userGroupsIds },
@@ -806,8 +782,8 @@ class UserGroupService {
     return { count: groupsCount, rows: groups };
   }
 
-  static async getGroupUsers(groupId, filterObject, page, limit) {
-    await checkGroup(groupId, "Group with such id doesn't exists");
+  static async getGroupUsers(groupId, filterObject, page = 1, limit = 5) {
+    await checkId(groupId, 'Incorrect group id');
 
     let userGroupConnections = await UsersGroupsModel.find({
       groupId,
@@ -817,9 +793,7 @@ class UserGroupService {
       return { count: 0, rows: [] };
     }
 
-    const limitValue = limit || 5;
-    const pageValue = page || 1;
-    const skipValue = (pageValue - 1) * limitValue;
+    const skipValue = (page - 1) * limit;
 
     const parsedFilterObject = createModelSearchQuery(filterObject);
 
@@ -832,7 +806,7 @@ class UserGroupService {
       ...parsedFilterObject,
     })
       .skip(skipValue)
-      .limit(limitValue);
+      .limit(limit);
 
     const usersCount = await UserModel.count({
       _id: { $in: [...userGroupConnections] },
@@ -842,24 +816,15 @@ class UserGroupService {
     return { count: usersCount, rows: users };
   }
 
-  static async getNotGroupMembers(groupId, filterObject, page, limit) {
-    await checkGroup(groupId, "Group with such id doesn't exists");
+  static async getNotGroupMembers(groupId, filterObject, page = 1, limit = 5) {
+    await checkId(groupId, 'Incorrect group id');
 
     let userGroupConnections = await UsersGroupsModel.find({
       groupId,
     });
 
     const parsedFilterObj = createModelSearchQuery(filterObject);
-    const limitValue = limit || 5;
-    const pageValue = page || 1;
-    const skipValue = (pageValue - 1) * limitValue;
-
-    if (!userGroupConnections.length) {
-      const allUsers = await UserModel.find({ ...parsedFilterObj })
-        .skip(skipValue)
-        .limit(limitValue);
-      return { count: allUsers.length, rows: allUsers };
-    }
+    const skipValue = (page - 1) * limit;
 
     userGroupConnections = userGroupConnections.map(
       (connection) => connection.userId
@@ -869,8 +834,8 @@ class UserGroupService {
       _id: { $nin: userGroupConnections },
       ...parsedFilterObj,
     })
-      .skip(skipValue || 0)
-      .limit(limit || 5);
+      .skip(skipValue)
+      .limit(limit);
 
     const notMembersCount = await UserModel.count({
       _id: { $nin: userGroupConnections },
@@ -881,55 +846,54 @@ class UserGroupService {
   }
 
   static async addUserToGroup(userId, groupId) {
-    const userAndGroup = await checkUserAndGroup(
-      userId,
-      groupId,
-      "User you want add to the group, doesn't exists",
-      "Group in what you want to add the User, doesn't exists"
-    );
+    checkId(userId, 'Incorrect user id');
+    checkId(groupId, 'Incorrect group id');
 
-    const userGroupConnection = await UsersGroupsModel.findOne({
-      userId: userAndGroup.user._id,
-      groupId: userAndGroup.group._id,
-    });
+    const user = await UserModel.findById(userId);
+    const group = await GroupModel.findById(groupId);
 
-    if (userGroupConnection) {
-      throw ApiError.badRequest('User is already in the group');
+    if (!user) {
+      throw ApiError.badRequest(
+        "User you try to add to the group doesn't exists"
+      );
+    }
+
+    if (!group) {
+      throw ApiError.badRequest(
+        "Group in what you try to add user doesn't exists"
+      );
     }
 
     await UsersGroupsModel.create({
-      userId: userAndGroup.user._id,
-      groupId: userAndGroup.group._id,
+      userId,
+      groupId,
+    }).catch((e) => {
+      if (e.code === 11000) {
+        throw ApiError.badRequest('User is already a member of this group');
+      }
+      throw ApiError.badRequest(e.message);
     });
 
     return {
-      message: `User ${userAndGroup.user.username} successfully added to the ${userAndGroup.group.groupName} group`,
+      message: `User successfully added to the group`,
     };
   }
 
   static async deleteUserFromGroup(userId, groupId) {
-    const userAndGroup = await checkUserAndGroup(
+    checkId(userId, 'Incorrect user id');
+    checkId(groupId, 'Incorrect group id');
+
+    const deletionResult = await UsersGroupsModel.deleteOne({
       userId,
       groupId,
-      "User you want to delete from the group, doesn't exists",
-      "Group in what you want to delete the User, doesn't exists"
-    );
-
-    const userGroupConnection = await UsersGroupsModel.findOne({
-      userId: userAndGroup.user._id,
-      groupId: userAndGroup.group._id,
     });
 
-    if (!userGroupConnection) {
-      throw ApiError.badRequest(
-        `Connection between ${userAndGroup.user.username}(User) and ${userAndGroup.group.groupName}(Group) doesn't exists`
-      );
+    if (deletionResult.deletedCount === 0) {
+      throw ApiError.badRequest("User's not a member of this group");
     }
 
-    userGroupConnection.deleteOne({ _id: userAndGroup.user.id });
-
     return {
-      message: `User ${userAndGroup.user.username} successfully deleted from the group ${userAndGroup.group.groupName}`,
+      message: `User successfully deleted from the group`,
     };
   }
 }
@@ -947,6 +911,7 @@ module.exports = UserGroupService;
 
 const ApiError = __webpack_require__(/*! ../apiError/apiError */ "./src/apiError/apiError.js");
 const { UserModel } = __webpack_require__(/*! ../models/models */ "./src/models/models.js");
+const checkId = __webpack_require__(/*! ../utils/checkId */ "./src/utils/checkId.js");
 const createModelSearchQuery = __webpack_require__(/*! ../utils/createModelSearchQuery */ "./src/utils/createModelSearchQuery.js");
 
 class UserService {
@@ -962,10 +927,7 @@ class UserService {
     return user;
   }
 
-  static async getUsers(filterObj, pageNum, limitNum) {
-    const page = Number(pageNum) || 1;
-    const limit = Number(limitNum) || 5;
-
+  static async getUsers(filterObj, page = 1, limit = 5) {
     const searchQuery = createModelSearchQuery(filterObj);
     const usersCount = await UserModel.count(searchQuery);
     const usersRows = await UserModel.find(searchQuery)
@@ -976,37 +938,31 @@ class UserService {
   }
 
   static async createUser(username, firstName, lastName, email) {
-    for (const argValue of arguments) {
-      if (!argValue) {
-        throw ApiError.badRequest('Not enough data for the user creating');
-      }
-    }
+    const user = await UserModel.create({
+      username,
+      firstName,
+      lastName,
+      email,
+    }).catch((e) => {
+      if (e.name === 'MongoServerError' && e.code === 11000) {
+        if (e.message.includes('username')) {
+          throw ApiError.badRequest('Username must be unique');
+        }
 
-    const user = await UserModel.create(
-      [
-        {
-          username,
-          firstName,
-          lastName,
-          email,
-        },
-      ],
-      { checkForDuplications: ['username', 'email', 'what'] }
-    );
+        if (e.message.includes('email')) {
+          throw ApiError.badRequest('Email must be unique');
+        }
+      }
+      throw ApiError.badRequest(e.message);
+    });
 
     return { message: 'User created successfully', user };
   }
 
   static async editUser(userId, username, firstName, lastName, email) {
-    const userToEdit = await UserModel.findById(userId).catch(() => {
-      throw ApiError.badRequest("Incorrect user's id");
-    });
+    checkId(userId, 'Incorrect user id');
 
-    if (!userToEdit) {
-      throw ApiError.badRequest("User you try to edit doesn't exists");
-    }
-
-    await UserModel.updateOne(
+    const updateResult = await UserModel.updateOne(
       { _id: userId },
       {
         username,
@@ -1014,27 +970,69 @@ class UserService {
         lastName,
         email,
       },
-      { checkForDuplications: ['username', 'email'], runValidators: true }
-    );
+      { runValidators: true }
+    ).catch((e) => {
+      if (e.name === 'MongoServerError' && e.code === 11000) {
+        if (e.message.includes('username')) {
+          throw ApiError.badRequest('Username must be unique');
+        }
 
-    return { message: 'User updated successfully' };
+        if (e.message.includes('email')) {
+          throw ApiError.badRequest('Email must be unique');
+        }
+      }
+      throw ApiError.badRequest(e.message);
+    });
+
+    if (!updateResult.acknowledged) {
+      throw ApiError.badRequest("Can't find data to modify user");
+    }
+
+    if (updateResult.matchedCount === 0) {
+      throw ApiError.badRequest("User you try to modify, doesn't exists");
+    }
+
+    if (updateResult.modifiedCount === 0) {
+      throw ApiError.badRequest('Nothing to change');
+    }
+
+    return { message: updateResult };
   }
 
   static async deleteUser(userId) {
-    const userToDelete = await UserModel.findById(userId).catch(() => {
-      throw ApiError.badRequest("Incorrect user's id");
-    });
+    checkId(userId, 'Incorrect user id');
+    const deletionReault = await UserModel.deleteOne({ _id: userId });
 
-    if (!userToDelete) {
-      throw ApiError.badRequest("User you try to delete doesn't exists");
+    if (deletionReault.deletedCount === 0) {
+      throw ApiError.badRequest(
+        "User you try to delete doesn't exists or already deleted"
+      );
     }
-    const user = await userToDelete.deleteOne({ _id: userId });
 
-    return { message: 'User deleted successfully', user };
+    return { message: 'User deleted successfully' };
   }
 }
 
 module.exports = UserService;
+
+
+/***/ }),
+
+/***/ "./src/utils/checkId.js":
+/*!******************************!*\
+  !*** ./src/utils/checkId.js ***!
+  \******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+const ApiError = __webpack_require__(/*! ../apiError/apiError */ "./src/apiError/apiError.js");
+
+function checkId(id, errorMessage) {
+  if (!/^[a-fA-F0-9]{24}$/.test(id)) {
+    throw ApiError.badRequest(errorMessage);
+  }
+}
+
+module.exports = checkId;
 
 
 /***/ }),

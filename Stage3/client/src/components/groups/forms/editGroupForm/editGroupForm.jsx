@@ -9,6 +9,7 @@ import { groupPaths } from '../../../router/routes';
 
 const EditGroupForm = ({ groupObj, actualizeGroupInfo }) => {
   const navigate = useNavigate();
+  const [formIsLoading, setFormIsLoading] = useState(false);
   const [newGroupInfo, setNewGroupInfo] = useState({
     groupName: '',
     groupTitle: '',
@@ -16,6 +17,7 @@ const EditGroupForm = ({ groupObj, actualizeGroupInfo }) => {
 
   const submitGroupChanges = async () => {
     try {
+      setFormIsLoading(true);
       const paramsObject = parseDataToEdit(groupObj, newGroupInfo);
 
       if (!Object.keys(paramsObject).length) {
@@ -35,6 +37,8 @@ const EditGroupForm = ({ groupObj, actualizeGroupInfo }) => {
       }
     } catch (error) {
       alert(error.isAxiosError ? error.response.data.message : error.message);
+    } finally {
+      setFormIsLoading(false);
     }
   };
 
@@ -54,6 +58,7 @@ const EditGroupForm = ({ groupObj, actualizeGroupInfo }) => {
       newParamValues={newGroupInfo}
       setNewParamValues={setNewGroupInfo}
       onSubmit={submitGroupChanges}
+      isLoading={formIsLoading}
     />
   );
 };

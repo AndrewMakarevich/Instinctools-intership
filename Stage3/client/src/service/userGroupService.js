@@ -1,80 +1,60 @@
 import $host from '../http';
 
 class UserGroupService {
-  static async getUserGroups(userId, filterObject, page, limit) {
-    const response = await $host.get(`user-group/get-groups/${userId}`, {
+  static getUserGroups(userId, filterObject, page, limit) {
+    return $host.get(`user-group/get-groups/${userId}`, {
       params: {
         filterObject,
         page,
         limit,
       },
     });
-
-    return response;
   }
 
-  static async getGroupUsers(groupId, filterObject, page, limit) {
-    const response = await $host.get(`user-group/get-users/${groupId}`, {
+  static getGroupUsers(groupId, filterObject, page, limit) {
+    return $host.get(`user-group/get-users/${groupId}`, {
       params: {
         filterObject,
         page,
         limit,
       },
     });
-
-    return response;
   }
 
-  static async getGroupsUserNotParticipateIn(
-    userId,
-    filterObject,
-    page,
-    limit,
-  ) {
-    const response = await $host.get(
-      `user-group/get-groups-user-not-participate/${userId}`,
-      {
-        params: {
-          filterObject,
-          page,
-          limit,
-        },
-      },
-    );
-
-    return response;
-  }
-
-  static async getNotGroupMembers(groupId, filterObject, page, limit) {
-    const response = await $host.get(`user-group/get-not-members/${groupId}`, {
+  static getGroupsUserNotParticipateIn(userId, filterObject, page, limit) {
+    return $host.get(`user-group/get-groups-user-not-participate/${userId}`, {
       params: {
         filterObject,
         page,
         limit,
       },
     });
-
-    return response;
   }
 
-  static async addUserToTheGroup(userId, groupId) {
-    const response = await $host.post('user-group/add-user', {
+  static getNotGroupMembers(groupId, filterObject, page, limit) {
+    return $host.get(`user-group/get-not-members/${groupId}`, {
+      params: {
+        filterObject,
+        page,
+        limit,
+      },
+    });
+  }
+
+  static addUserToTheGroup(userId, groupId) {
+    return $host.post('user-group/add-user', {
       userId,
       groupId,
     });
-
-    return response;
   }
 
-  static async deleteUserFromTheGroup(userId, groupId) {
-    const response = await $host.delete('user-group/delete-user', {
+  static deleteUserFromTheGroup(userId, groupId) {
+    return $host.delete('user-group/delete-user', {
       params: {
         userId,
         groupId,
       },
     });
-
-    return response;
   }
 }
 

@@ -1,5 +1,6 @@
 const ApiError = require('../apiError/apiError');
 const { GroupModel } = require('../models/models');
+const checkId = require('../utils/checkId');
 const createModelSearchQuery = require('../utils/createModelSearchQuery');
 
 class GroupService {
@@ -29,55 +30,74 @@ class GroupService {
   }
 
   static async createGroup(groupName, groupTitle) {
-    for (const arg of arguments) {
-      if (!arg) {
-        throw ApiError.badRequest('Not enough data for the Group creating');
+    const group = await GroupModel.create({
+      groupName,
+      groupTitle,
+    }).catch((e) => {
+      if (
+        e.name === 'MongoServerError' &&
+        e.code === 11000 &&
+        e.message.includes('groupName')
+      ) {
+        throw ApiError.badRequest('Group name must be unique');
       }
-    }
 
-    const group = await GroupModel.create(
-      [
-        {
-          groupName,
-          groupTitle,
-        },
-      ],
-      { checkForDuplications: ['groupName'] }
-    );
+      throw ApiError.badRequest(e.message);
+    });
 
     return { message: `Group ${groupName} created successfully`, group };
   }
 
   static async editGroup(groupId, groupName, groupTitle) {
-    const groupToEdit = await GroupModel.findById(groupId).catch(() => {
-      throw ApiError.badRequest("Incorrect group's id");
-    });
+    checkId(groupId, 'Incorrect group id');
 
-    if (!groupToEdit) {
-      throw ApiError.badRequest("Group you try to edit doesn't exists");
-    }
-
-    await GroupModel.updateOne(
+    const editResult = await GroupModel.updateOne(
       { _id: groupId },
       { groupName, groupTitle },
-      { checkForDuplications: ['groupName'], runValidators: true }
-    );
+      { runValidators: true }
+    ).catch((e) => {
+      if (
+        e.name === 'MongoServerError' &&
+        e.code === 11000 &&
+        e.message.includes('groupName')
+      ) {
+        throw ApiError.badRequest('Group name must be unique');
+      }
+
+      throw ApiError.badRequest(e.message);
+    });
+
+    if (!editResult.acknowledged) {
+      throw ApiError.badRequest("Can't find data to modify user");
+    }
+
+    if (editResult.matchedCount === 0) {
+      throw ApiError.badRequest("Group you try to modify doesn't exists");
+    }
+
+    if (editResult.modifiedCount === 0) {
+      throw ApiError.badRequest('Nothing to change');
+    }
 
     return { message: 'Group updated successfully' };
   }
 
   static async deleteGroup(groupId) {
-    const groupToDelete = await GroupModel.findById(groupId).catch(() => {
-      throw ApiError.badRequest("Incorrect group's id");
-    });
+    checkId(groupId, 'Incorrect group id');
 
-    if (!groupToDelete) {
-      throw ApiError.badRequest("Group you try to delete doesn't exists");
+    const deletedGroup = await GroupModel.deleteOne({ _id: groupId }).catch(
+      (e) => {
+        throw ApiError.badRequest(e);
+      }
+    );
+
+    if (deletedGroup.deletedCount === 0) {
+      throw ApiError.badRequest(
+        "Group you try to delete doesn't exists or already deleted"
+      );
     }
 
-    const deletedGroup = await groupToDelete.deleteOne({ _id: groupId });
-
-    return { message: `Group deleted succesfully`, group: deletedGroup };
+    return { message: `Group deleted succesfully` };
   }
 }
 

@@ -67,6 +67,8 @@ const UsersGroupsSchema = new Schema({
   },
 });
 
+UsersGroupsSchema.index({ userId: 1, groupId: 1 }, { unique: true });
+
 const UserModel = model('User', UserSchema);
 const GroupModel = model('Group', GroupSchema);
 const UsersGroupsModel = model('UsersGroups', UsersGroupsSchema);

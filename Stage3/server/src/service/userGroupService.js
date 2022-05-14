@@ -1,42 +1,7 @@
 const ApiError = require('../apiError/apiError');
 const { GroupModel, UserModel, UsersGroupsModel } = require('../models/models');
+const checkId = require('../utils/checkId');
 const createModelSearchQuery = require('../utils/createModelSearchQuery');
-
-async function checkUser(userId, userErrorMessage) {
-  const user = await UserModel.findById(userId).catch(() => {
-    throw ApiError.badRequest("Incorrect user's id");
-  });
-
-  if (!user) {
-    throw ApiError.badRequest(userErrorMessage);
-  }
-
-  return user;
-}
-
-async function checkGroup(groupId, groupErrorMessage) {
-  const group = await GroupModel.findById(groupId).catch(() => {
-    throw ApiError.badRequest("Incorrect group's id");
-  });
-
-  if (!group) {
-    throw ApiError.badRequest(groupErrorMessage);
-  }
-
-  return group;
-}
-
-async function checkUserAndGroup(
-  userId,
-  groupId,
-  userErrorMessage,
-  groupErrorMessage
-) {
-  const user = await checkUser(userId, userErrorMessage);
-  const group = await checkGroup(groupId, groupErrorMessage);
-
-  return { user, group };
-}
 
 class UserGroupService {
   static async getUserGroupConnection(userId, groupId) {
@@ -45,8 +10,8 @@ class UserGroupService {
     return userGroupRecord;
   }
 
-  static async getUsersGroups(userId, filterObject, page, limit) {
-    await checkUser(userId, "User with such id doesn't exists");
+  static async getUsersGroups(userId, filterObject, page = 1, limit = 5) {
+    checkId(userId, 'Incorrect user id');
 
     let userGroupsConnections = await UsersGroupsModel.find({
       userId,
@@ -57,9 +22,7 @@ class UserGroupService {
     }
 
     const parsedFilterObj = createModelSearchQuery(filterObject);
-    const limitValue = limit || 5;
-    const pageValue = page || 1;
-    const skipValue = (pageValue - 1) * limitValue;
+    const skipValue = (page - 1) * limit;
 
     // convert an array of user-group connections to the array of groups ids, wich have connection with the user
     userGroupsConnections = userGroupsConnections.map((connection) =>
@@ -71,7 +34,7 @@ class UserGroupService {
       ...parsedFilterObj,
     })
       .skip(skipValue)
-      .limit(limitValue);
+      .limit(limit);
 
     const userGroupsCount = await GroupModel.count({
       _id: { $in: [...userGroupsConnections] },
@@ -84,26 +47,17 @@ class UserGroupService {
   static async getGroupsUserNotParticipateIn(
     userId,
     filterObject,
-    page,
-    limit
+    page = 1,
+    limit = 5
   ) {
-    await checkUser(userId, "User with such id doesn't exists");
+    await checkId(userId, 'Incorrect userId');
 
     const userGroupConnections = await UsersGroupsModel.find({
       userId,
     });
 
     const parsedFilterObj = createModelSearchQuery(filterObject);
-    const limitValue = limit || 5;
-    const pageValue = page || 1;
-    const skipValue = (pageValue - 1) * limitValue;
-
-    if (!userGroupConnections.length) {
-      const allGroups = await GroupModel.find({ ...parsedFilterObj })
-        .skip(skipValue)
-        .limit(limitValue);
-      return { count: allGroups.length, rows: allGroups };
-    }
+    const skipValue = (page - 1) * limit;
 
     const userGroupsIds = userGroupConnections.map(
       (connection) => connection.groupId
@@ -114,7 +68,7 @@ class UserGroupService {
       ...parsedFilterObj,
     })
       .skip(skipValue)
-      .limit(limitValue);
+      .limit(limit);
 
     const groupsCount = await GroupModel.count({
       _id: { $nin: userGroupsIds },
@@ -124,8 +78,8 @@ class UserGroupService {
     return { count: groupsCount, rows: groups };
   }
 
-  static async getGroupUsers(groupId, filterObject, page, limit) {
-    await checkGroup(groupId, "Group with such id doesn't exists");
+  static async getGroupUsers(groupId, filterObject, page = 1, limit = 5) {
+    await checkId(groupId, 'Incorrect group id');
 
     let userGroupConnections = await UsersGroupsModel.find({
       groupId,
@@ -135,9 +89,7 @@ class UserGroupService {
       return { count: 0, rows: [] };
     }
 
-    const limitValue = limit || 5;
-    const pageValue = page || 1;
-    const skipValue = (pageValue - 1) * limitValue;
+    const skipValue = (page - 1) * limit;
 
     const parsedFilterObject = createModelSearchQuery(filterObject);
 
@@ -150,7 +102,7 @@ class UserGroupService {
       ...parsedFilterObject,
     })
       .skip(skipValue)
-      .limit(limitValue);
+      .limit(limit);
 
     const usersCount = await UserModel.count({
       _id: { $in: [...userGroupConnections] },
@@ -160,24 +112,15 @@ class UserGroupService {
     return { count: usersCount, rows: users };
   }
 
-  static async getNotGroupMembers(groupId, filterObject, page, limit) {
-    await checkGroup(groupId, "Group with such id doesn't exists");
+  static async getNotGroupMembers(groupId, filterObject, page = 1, limit = 5) {
+    await checkId(groupId, 'Incorrect group id');
 
     let userGroupConnections = await UsersGroupsModel.find({
       groupId,
     });
 
     const parsedFilterObj = createModelSearchQuery(filterObject);
-    const limitValue = limit || 5;
-    const pageValue = page || 1;
-    const skipValue = (pageValue - 1) * limitValue;
-
-    if (!userGroupConnections.length) {
-      const allUsers = await UserModel.find({ ...parsedFilterObj })
-        .skip(skipValue)
-        .limit(limitValue);
-      return { count: allUsers.length, rows: allUsers };
-    }
+    const skipValue = (page - 1) * limit;
 
     userGroupConnections = userGroupConnections.map(
       (connection) => connection.userId
@@ -187,8 +130,8 @@ class UserGroupService {
       _id: { $nin: userGroupConnections },
       ...parsedFilterObj,
     })
-      .skip(skipValue || 0)
-      .limit(limit || 5);
+      .skip(skipValue)
+      .limit(limit);
 
     const notMembersCount = await UserModel.count({
       _id: { $nin: userGroupConnections },
@@ -199,55 +142,54 @@ class UserGroupService {
   }
 
   static async addUserToGroup(userId, groupId) {
-    const userAndGroup = await checkUserAndGroup(
-      userId,
-      groupId,
-      "User you want add to the group, doesn't exists",
-      "Group in what you want to add the User, doesn't exists"
-    );
+    checkId(userId, 'Incorrect user id');
+    checkId(groupId, 'Incorrect group id');
 
-    const userGroupConnection = await UsersGroupsModel.findOne({
-      userId: userAndGroup.user._id,
-      groupId: userAndGroup.group._id,
-    });
+    const user = await UserModel.findById(userId);
+    const group = await GroupModel.findById(groupId);
 
-    if (userGroupConnection) {
-      throw ApiError.badRequest('User is already in the group');
+    if (!user) {
+      throw ApiError.badRequest(
+        "User you try to add to the group doesn't exists"
+      );
+    }
+
+    if (!group) {
+      throw ApiError.badRequest(
+        "Group in what you try to add user doesn't exists"
+      );
     }
 
     await UsersGroupsModel.create({
-      userId: userAndGroup.user._id,
-      groupId: userAndGroup.group._id,
+      userId,
+      groupId,
+    }).catch((e) => {
+      if (e.code === 11000) {
+        throw ApiError.badRequest('User is already a member of this group');
+      }
+      throw ApiError.badRequest(e.message);
     });
 
     return {
-      message: `User ${userAndGroup.user.username} successfully added to the ${userAndGroup.group.groupName} group`,
+      message: `User successfully added to the group`,
     };
   }
 
   static async deleteUserFromGroup(userId, groupId) {
-    const userAndGroup = await checkUserAndGroup(
+    checkId(userId, 'Incorrect user id');
+    checkId(groupId, 'Incorrect group id');
+
+    const deletionResult = await UsersGroupsModel.deleteOne({
       userId,
       groupId,
-      "User you want to delete from the group, doesn't exists",
-      "Group in what you want to delete the User, doesn't exists"
-    );
-
-    const userGroupConnection = await UsersGroupsModel.findOne({
-      userId: userAndGroup.user._id,
-      groupId: userAndGroup.group._id,
     });
 
-    if (!userGroupConnection) {
-      throw ApiError.badRequest(
-        `Connection between ${userAndGroup.user.username}(User) and ${userAndGroup.group.groupName}(Group) doesn't exists`
-      );
+    if (deletionResult.deletedCount === 0) {
+      throw ApiError.badRequest("User's not a member of this group");
     }
 
-    userGroupConnection.deleteOne({ _id: userAndGroup.user.id });
-
     return {
-      message: `User ${userAndGroup.user.username} successfully deleted from the group ${userAndGroup.group.groupName}`,
+      message: `User successfully deleted from the group`,
     };
   }
 }
