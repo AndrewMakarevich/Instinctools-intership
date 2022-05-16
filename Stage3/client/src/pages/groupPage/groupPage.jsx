@@ -6,7 +6,7 @@ import GroupUsersModal from '../../components/groups/modals/groupUsersModal/grou
 import useFetching from '../../hooks/useFetching';
 import { getGroupThunk } from '../../store/reducers/groupReducer/actionCreators';
 
-import pageStyles from './groupPage.module.css';
+import { StyledEditGroupSection, StyledHeader } from './styled';
 
 const GroupPage = () => {
   const { groupname } = useParams();
@@ -49,17 +49,14 @@ const GroupPage = () => {
   return (
     <article>
       {groupReducer.group ? (
-        <section className={pageStyles['edit-group-section']}>
-          <p className={pageStyles['edit-user-section-header']}>
-            {groupname}
-            group page
-          </p>
+        <StyledEditGroupSection>
+          <StyledHeader>{groupname}</StyledHeader>
           <EditGroupForm
             groupObj={groupReducer.group}
             actualizeGroupInfo={fetchGroup}
           />
           <GroupUsersModal groupId={groupReducer.group._id} />
-        </section>
+        </StyledEditGroupSection>
       ) : (
         <p>Can&apos;t find group with such groupname</p>
       )}

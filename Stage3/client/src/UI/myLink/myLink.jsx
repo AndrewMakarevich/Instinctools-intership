@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import linkStyles from './myLink.module.css';
+import { MyStyledLink } from './styled';
 
 const MyLink = ({ className: propClass, children, ...restProps }) => (
-  <Link className={`${linkStyles.link} ${propClass}`} {...restProps}>
+  <MyStyledLink className={propClass} {...restProps}>
     {children}
-  </Link>
+  </MyStyledLink>
 );
 
 MyLink.propTypes = {

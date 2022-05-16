@@ -1,25 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SearchIcon from '../../assets/icons/searchIcon/searchIcon';
-import inputStyles from './searchInput.module.css';
+import {
+  StyledSearchInput,
+  StyledSearchInputIcon,
+  StyledSearchInputLabel,
+} from './styled';
 
 const SearchInput = (props) => {
   const { className, ...restProps } = props;
   return (
-    <label
-      data-testid='search-input'
-      htmlFor='search-input'
-      className={inputStyles.label}
-    >
-      <input
+    <StyledSearchInputLabel>
+      <StyledSearchInput
         id='search-input'
-        className={`${inputStyles.input} ${className}`}
+        className={className}
         {...restProps}
       />
-      <span className={inputStyles.icon}>
-        <SearchIcon />
-      </span>
-    </label>
+      <StyledSearchInputIcon />
+    </StyledSearchInputLabel>
   );
 };
 

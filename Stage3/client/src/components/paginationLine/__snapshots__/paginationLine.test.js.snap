@@ -2,49 +2,49 @@
 
 exports[`Correct pagination line render 1`] = `
 <div
-  class="pagination-line"
+  class="sc-hKMtZM ieiOfP"
   data-testid="pagination-line"
 >
   <div
-    class="custom-page-block"
+    class="sc-eCYdqJ bElTwV"
   >
     <input
-      class="my-input custom-page-input"
+      class="sc-gsnTZi VpLuI sc-jSMfEi eyfztT"
       placeholder="Page number"
-      title="Enter your page here"
+      title="Enter tour page here"
       type="number"
     />
   </div>
   <button
-    class="pagination-btn"
+    class="sc-gKXOVf dZAerA"
     data-testid="pagination-btn"
     type="button"
   >
     &lt;
   </button>
   <button
-    class="pagination-btn active"
+    class="sc-gKXOVf bLgqpu"
     data-testid="pagination-btn"
     type="button"
   >
     1
   </button>
   <button
-    class="pagination-btn "
+    class="sc-gKXOVf dZAerA"
     data-testid="pagination-btn"
     type="button"
   >
     2
   </button>
   <button
-    class="pagination-btn "
+    class="sc-gKXOVf dZAerA"
     data-testid="pagination-btn"
     type="button"
   >
     3
   </button>
   <button
-    class="pagination-btn"
+    class="sc-gKXOVf dZAerA"
     data-testid="pagination-btn"
     type="button"
   >

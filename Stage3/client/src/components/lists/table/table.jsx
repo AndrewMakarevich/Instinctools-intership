@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import TableRow from './tableRow';
 
-import tableStyles from './table.module.css';
+import { StyledTable, StyledTableWrapper } from './styled';
 
 const Table = ({
   entityParamsToShow,
@@ -26,16 +26,8 @@ const Table = ({
   );
 
   return (
-    <article
-      data-testid='table-wrapper'
-      className={tableStyles['table-wrapper']}
-    >
-      <table
-        data-testid='table'
-        className={`${tableStyles.table} ${
-          entitiesLoading ? tableStyles.loading : ''
-        }`}
-      >
+    <StyledTableWrapper>
+      <StyledTable isLoading={entitiesLoading}>
         <thead>
           <tr>
             {thArray.map((th) => (
@@ -58,8 +50,8 @@ const Table = ({
           ))}
         </tbody>
         <tfoot />
-      </table>
-    </article>
+      </StyledTable>
+    </StyledTableWrapper>
   );
 };
 

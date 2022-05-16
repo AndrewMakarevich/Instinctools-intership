@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { v4 } from 'uuid';
-import MyLink from '../../UI/myLink/myLink';
-
-import crumbStyles from './breadCrumb.module.css';
+import {
+  StyledCrumbLink,
+  StyledCrumbLinkItem,
+  StyledCrumbWrapper,
+} from './styled';
 
 const BreadCrumb = () => {
   const history = useLocation();
@@ -25,19 +27,15 @@ const BreadCrumb = () => {
   }, [history]);
 
   return (
-    <article className={crumbStyles['crumb-wrapper']} data-testid='bread-crumb'>
+    <StyledCrumbWrapper>
       {paths.map(({ id, name, path }) => (
-        <div key={id} className={crumbStyles['crumb-link__item']}>
-          <MyLink
-            data-testid={`crumb-${name}-link`}
-            className={crumbStyles['crumb-link']}
-            to={path}
-          >
+        <StyledCrumbLinkItem key={id}>
+          <StyledCrumbLink pathname={name} to={path}>
             {name}
-          </MyLink>
-        </div>
+          </StyledCrumbLink>
+        </StyledCrumbLinkItem>
       ))}
-    </article>
+    </StyledCrumbWrapper>
   );
 };
 

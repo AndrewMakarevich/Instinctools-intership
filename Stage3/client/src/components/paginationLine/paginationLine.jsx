@@ -1,9 +1,12 @@
 import React, { useMemo } from 'react';
 import { v4 } from 'uuid';
 import PropTypes from 'prop-types';
-import MyInput from '../../UI/myInput/myInput';
-
-import lineStyles from './paginationLine.module.css';
+import {
+  StyledCustomPageInput,
+  StyledCustomPageInputWrapper,
+  StyledPaginationButton,
+  StyledPaginationLine,
+} from './styled';
 
 const PaginationLine = ({ count, page, limit, setPage }) => {
   const pages = useMemo(() => {
@@ -92,38 +95,25 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
   }
 
   return (
-    <div
-      data-testid='pagination-line'
-      className={lineStyles['pagination-line']}
-    >
-      <div className={lineStyles['custom-page-block']}>
-        <MyInput
-          type='number'
-          className={lineStyles['custom-page-input']}
-          placeholder='Page number'
-          title='Enter your page here'
+    <StyledPaginationLine>
+      <StyledCustomPageInputWrapper>
+        <StyledCustomPageInput
           disabled={pages.length === 1}
           onChange={setCustomPage}
         />
-      </div>
+      </StyledCustomPageInputWrapper>
 
-      <button
-        data-testid='pagination-btn'
+      <StyledPaginationButton
         disabled={pages.length === 1}
-        type='button'
-        className={lineStyles['pagination-btn']}
         onClick={setPrevPage}
       >
         {'<'}
-      </button>
+      </StyledPaginationButton>
+
       {paginationLineStateArr.map(({ id, pageNumber }) => (
-        <button
+        <StyledPaginationButton
           key={id}
-          data-testid='pagination-btn'
-          type='button'
-          className={`${lineStyles['pagination-btn']} ${
-            pageNumber === page ? lineStyles.active : ''
-          }`}
+          isActive={pageNumber === page}
           onClick={(e) => {
             if (Number(pageNumber) && pageNumber !== page) {
               setPage(pageNumber, e);
@@ -131,18 +121,16 @@ const PaginationLine = ({ count, page, limit, setPage }) => {
           }}
         >
           {pageNumber}
-        </button>
+        </StyledPaginationButton>
       ))}
-      <button
-        data-testid='pagination-btn'
+
+      <StyledPaginationButton
         disabled={pages.length === 1}
-        type='button'
-        className={lineStyles['pagination-btn']}
         onClick={setNextPage}
       >
         {'>'}
-      </button>
-    </div>
+      </StyledPaginationButton>
+    </StyledPaginationLine>
   );
 };
 PaginationLine.propTypes = {

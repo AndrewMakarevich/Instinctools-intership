@@ -1,9 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import MyButton from '../../../UI/myButton/myButton';
-
-import tableStyles from './table.module.css';
+import { StyledActionButton, StyledTableCell, StyledTableRow } from './styled';
 
 const TableRow = ({
   entity,
@@ -33,41 +31,34 @@ const TableRow = ({
   };
 
   return (
-    <tr
-      data-testid='table-row'
-      key={entity._id}
-      className={tableStyles['table-row']}
-      onClick={() => navigate(navigateLink)}
-    >
+    <StyledTableRow onClick={() => navigate(navigateLink)}>
       {Object.keys(entity).map((entityParam) => {
         if (entityParamsToShow.some((param) => param === entityParam)) {
           return (
-            <td key={entityParam} className={tableStyles['table-cell']}>
+            <StyledTableCell key={entityParam}>
               {entity[entityParam]}
-            </td>
+            </StyledTableCell>
           );
         }
         return null;
       })}
 
       {Boolean(actionsArray.length) && (
-        <td className={tableStyles['table-cell']}>
+        <StyledTableCell>
           {actionsArray.map((action) => (
-            <MyButton
+            <StyledActionButton
               key={action.header}
-              data-testid='group-row-action-btn'
-              className={tableStyles['action-cell-btn']}
               disabled={actionLoading}
               onClick={async (e) => {
                 await actionHandler(e, action);
               }}
             >
               {action.header}
-            </MyButton>
+            </StyledActionButton>
           ))}
-        </td>
+        </StyledTableCell>
       )}
-    </tr>
+    </StyledTableRow>
   );
 };
 

@@ -9,9 +9,7 @@ import {
   getUserGroupsThunk,
 } from '../../../../store/reducers/userGroupReducer/actionCreator';
 import UserGroupsList from '../../lists/userGroupsPanel/userGroupsList';
-
-import modalStyles from './userGroupsModal.module.css';
-import RenderIf from '../../../renderIf/renderIf';
+import { modalWindowContentWrapperStyles } from './styled';
 
 const UserGroupsModal = ({ userId }) => {
   const dispatch = useDispatch();
@@ -74,9 +72,9 @@ const UserGroupsModal = ({ userId }) => {
       <ModalWindow
         isOpen={userGroupsIsOpen}
         setIsOpen={setUserGroupsIsOpen}
-        modalContentClassName={modalStyles['user-groups-content__wrapper']}
+        modalContentStyles={modalWindowContentWrapperStyles}
       >
-        <RenderIf isTrue={leaveState}>
+        {leaveState ? (
           <UserGroupsList
             key={1}
             userId={userId}
@@ -85,9 +83,7 @@ const UserGroupsModal = ({ userId }) => {
             actionsArr={userGroupsActionsArray}
             limit={userGroupsListLimitValue}
           />
-        </RenderIf>
-
-        <RenderIf isTrue={!leaveState}>
+        ) : (
           <UserGroupsList
             key={2}
             userId={userId}
@@ -96,7 +92,7 @@ const UserGroupsModal = ({ userId }) => {
             actionsArr={groupsNotPartOfActionsArray}
             limit={groupsUserNotPartOfListLimitValue}
           />
-        </RenderIf>
+        )}
 
         <MyButton onClick={() => setLeaveState(!leaveState)}>
           {leaveState ? 'Enter into other groups' : 'Leave groups'}

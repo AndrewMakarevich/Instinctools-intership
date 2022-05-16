@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MyInput from './myInput';
-
-import inputStyles from './myInput.module.css';
+import { LabelText, MyStylesInputLabel } from './styled';
 
 const MyInputWithLabel = ({
   labelClassName,
@@ -11,13 +10,13 @@ const MyInputWithLabel = ({
   className,
   ...restProps
 }) => (
-  <label
+  <MyStylesInputLabel
     data-testid='my-label-input'
-    className={`${inputStyles.label} ${labelClassName || ''}`}
+    className={`${labelClassName || ''}`}
   >
     <MyInput className={className} {...restProps} />
-    <span className={spanClassName}>{labelText}</span>
-  </label>
+    <LabelText className={spanClassName}>{labelText}</LabelText>
+  </MyStylesInputLabel>
 );
 
 MyInputWithLabel.propTypes = {

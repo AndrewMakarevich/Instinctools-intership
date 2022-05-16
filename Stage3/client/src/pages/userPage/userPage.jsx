@@ -5,8 +5,8 @@ import EditUserForm from '../../components/users/forms/editUserForm/editUserForm
 import useFetching from '../../hooks/useFetching';
 import { getUserThunk } from '../../store/reducers/userReducer/actionCreators';
 import UserGroupsModal from '../../components/users/modals/userGroupsModal/userGroupsModal';
-
-import pageStyles from './userPage.module.css';
+import { StyledEditUserSection } from './styled';
+import { StyledHeader } from '../groupPage/styled';
 
 const UserPage = () => {
   const { username } = useParams();
@@ -48,17 +48,14 @@ const UserPage = () => {
   return (
     <article>
       {userReducer.user ? (
-        <section className={pageStyles['edit-user-section']}>
-          <p className={pageStyles['edit-user-section-header']}>
-            {username}
-            user page
-          </p>
+        <StyledEditUserSection>
+          <StyledHeader>{username}</StyledHeader>
           <EditUserForm
             userObj={userReducer.user}
             actualizeUserInfo={fetchUser}
           />
           <UserGroupsModal userId={userReducer.user._id} />
-        </section>
+        </StyledEditUserSection>
       ) : (
         "Can't find user with such username"
       )}

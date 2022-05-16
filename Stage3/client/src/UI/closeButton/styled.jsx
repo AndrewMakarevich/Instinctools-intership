@@ -1,4 +1,6 @@
-.close-button {
+import styled from 'styled-components';
+
+export const StyledCloseButton = styled.button.attrs({ type: 'button' })`
   cursor: pointer;
   color: var(--extra-light);
   width: 35px;
@@ -8,8 +10,8 @@
   background-color: transparent;
   font-size: 1rem;
   transition: color 0.3s;
-}
-
-.close-button:hover {
-  color: var(--extra-dark);
-}
+  &:hover,
+  &:focus {
+    color: var(--extra-dark);
+  }
+`;

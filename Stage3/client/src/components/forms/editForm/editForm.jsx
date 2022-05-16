@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MyButton from '../../../UI/myButton/myButton';
 import MyInputWithLabel from '../../../UI/myInput/myInputWithLabel';
 
-import formStyles from './editForm.module.css';
+import { StyledFormButtonsWrapper, StyledFormInputsWrapper } from './styled';
 
 const EditForm = ({
   essenceName,
@@ -29,8 +29,8 @@ const EditForm = ({
   };
 
   return (
-    <form data-testid='edit-form' className={formStyles.form}>
-      <div className={formStyles['form-inputs__wrapper']}>
+    <form data-testid='edit-form'>
+      <StyledFormInputsWrapper>
         {Object.keys(newParamValues).map((paramKey) => (
           <MyInputWithLabel
             key={paramKey}
@@ -44,8 +44,9 @@ const EditForm = ({
             }
           />
         ))}
-      </div>
-      <div className={formStyles['form-buttons__wrapper']}>
+      </StyledFormInputsWrapper>
+
+      <StyledFormButtonsWrapper>
         <MyButton
           disabled={isLoading}
           data-testid='clear-changes-btn'
@@ -62,7 +63,7 @@ const EditForm = ({
         >
           Submit changes
         </MyButton>
-      </div>
+      </StyledFormButtonsWrapper>
     </form>
   );
 };

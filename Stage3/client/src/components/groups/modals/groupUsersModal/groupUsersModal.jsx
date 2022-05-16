@@ -10,9 +10,7 @@ import {
 import MyButton from '../../../../UI/myButton/myButton';
 import ModalWindow from '../../../modalWindow/modalWindow';
 import GroupUsersList from '../../lists/groupUsersPanel/groupUsersList';
-
-import modalStyles from './groupUsersModal.module.css';
-import RenderIf from '../../../renderIf/renderIf';
+import { modalWindowContentStyles } from './styled';
 
 const GroupUsersModal = ({ groupId }) => {
   const dispatch = useDispatch();
@@ -88,9 +86,9 @@ const GroupUsersModal = ({ groupId }) => {
         testId='group-users-modal'
         isOpen={groupUsersIsOpen}
         setIsOpen={setGroupUsersIsOpen}
-        modalContentClassName={modalStyles['group-users-content__wrapper']}
+        modalContentStyles={modalWindowContentStyles}
       >
-        <RenderIf isTrue={deleteState}>
+        {deleteState ? (
           <GroupUsersList
             key={1}
             groupId={groupId}
@@ -99,9 +97,7 @@ const GroupUsersModal = ({ groupId }) => {
             actionsArr={groupUsersActionsArray}
             limit={groupUsersListLimitValue}
           />
-        </RenderIf>
-
-        <RenderIf isTrue={!deleteState}>
+        ) : (
           <GroupUsersList
             key={2}
             groupId={groupId}
@@ -110,8 +106,7 @@ const GroupUsersModal = ({ groupId }) => {
             actionsArr={notGroupMembersActionsArray}
             limit={notGroupMembersListLimit}
           />
-        </RenderIf>
-
+        )}
         <MyButton onClick={() => setDeleteState(!deleteState)}>
           {deleteState ? 'Add new users to the group' : 'Delete users'}
         </MyButton>

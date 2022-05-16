@@ -1,11 +1,11 @@
 import React from 'react';
-import footerStyles from './footer.module.css';
+import { StyledFooter } from './styled';
 
 const Footer = () => (
-  <article className={footerStyles.footer}>
+  <StyledFooter>
     <p>Andrew Makarevich</p>
     <p>2022</p>
-  </article>
+  </StyledFooter>
 );
 
 export default Footer;

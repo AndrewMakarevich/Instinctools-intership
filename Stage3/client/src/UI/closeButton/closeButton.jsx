@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import buttonStyles from './closeButton.module.css';
+import { StyledCloseButton } from './styled';
 
 const CloseButton = React.forwardRef(({ className, ...restProps }, ref) => (
-  <button
+  <StyledCloseButton
     type='button'
     ref={ref}
-    className={`${buttonStyles['close-button']} ${className || ''}`}
+    className={className}
     {...restProps}
   >
     ✕
-  </button>
+  </StyledCloseButton>
 ));
 
 CloseButton.propTypes = {

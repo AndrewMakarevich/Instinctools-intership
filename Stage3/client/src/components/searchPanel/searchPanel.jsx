@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MyButton from '../../UI/myButton/myButton';
 import SearchInput from '../../UI/searchInput/searchInput';
 
-import panelStyles from './searchPanel.module.css';
+import { StyledInputsWrapper, StyledSearchPanel } from './styled';
 
 const SearchPanel = ({
   paramsMap,
@@ -27,8 +27,8 @@ const SearchPanel = ({
   };
 
   return (
-    <section data-testid='search-panel' className={panelStyles['search-panel']}>
-      <div className={panelStyles['search-panel__inputs']}>
+    <StyledSearchPanel>
+      <StyledInputsWrapper>
         {paramsMap.map((param) => (
           <SearchInput
             key={param}
@@ -39,12 +39,12 @@ const SearchPanel = ({
             }}
           />
         ))}
-      </div>
+      </StyledInputsWrapper>
 
       <MyButton disabled={filterObjectIsEmpty()} onClick={clearFieldsFunction}>
         Clear search inputs
       </MyButton>
-    </section>
+    </StyledSearchPanel>
   );
 };
 

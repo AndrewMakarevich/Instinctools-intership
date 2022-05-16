@@ -2,16 +2,17 @@
 
 exports[`Bread crumb renders correctly: Bread crumb: component final version 1`] = `
 <article
-  class="crumb-wrapper"
+  class="sc-iIPllB clgHkR"
   data-testid="bread-crumb"
 >
   <div
-    class="crumb-link__item"
+    class="sc-gicCDI YpKsL"
   >
     <a
-      class="link crumb-link"
+      class="sc-llJcti iCzjVp sc-ezWOiH fdBITi"
       data-testid="crumb--link"
       href="/"
+      pathname=""
     />
   </div>
 </article>

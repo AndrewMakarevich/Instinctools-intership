@@ -2,25 +2,24 @@
 
 exports[`Correct search panel render 1`] = `
 <section
-  class="search-panel"
+  class="sc-eCYdqJ eLaAvh"
   data-testid="search-panel"
 >
   <div
-    class="search-panel__inputs"
+    class="sc-jSMfEi eeQFHx"
   >
     <label
-      class="label"
+      class="sc-gsnTZi kBVLDw"
       data-testid="search-input"
-      for="search-input"
     >
       <input
-        class="input PropTypes.string"
+        class="sc-dkzDqf dbAKRW PropTypes.string"
         id="search-input"
         placeholder="Search by groupName"
         value=""
       />
       <span
-        class="icon"
+        class="sc-hKMtZM exkuXX"
       >
         <svg
           class="icon "
@@ -39,18 +38,17 @@ exports[`Correct search panel render 1`] = `
       </span>
     </label>
     <label
-      class="label"
+      class="sc-gsnTZi kBVLDw"
       data-testid="search-input"
-      for="search-input"
     >
       <input
-        class="input PropTypes.string"
+        class="sc-dkzDqf dbAKRW PropTypes.string"
         id="search-input"
         placeholder="Search by groupTitle"
         value=""
       />
       <span
-        class="icon"
+        class="sc-hKMtZM exkuXX"
       >
         <svg
           class="icon "
@@ -70,7 +68,7 @@ exports[`Correct search panel render 1`] = `
     </label>
   </div>
   <button
-    class="my-button "
+    class="sc-bczRLJ bJUkpm"
     disabled=""
     type="button"
   >

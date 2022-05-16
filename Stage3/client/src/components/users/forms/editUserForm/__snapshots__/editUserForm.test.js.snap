@@ -2,79 +2,86 @@
 
 exports[`Correct edit user form render 1`] = `
 <form
-  class="form"
   data-testid="edit-form"
 >
   <div
-    class="form-inputs__wrapper"
+    class="sc-jSMfEi cgQTUG"
   >
     <label
-      class="label "
+      class="sc-gsnTZi mhuyQ"
       data-testid="my-label-input"
     >
       <input
-        class="my-input "
+        class="sc-dkzDqf fWXHEX"
         placeholder=" "
         value="AndrewTheFirst"
       />
-      <span>
+      <span
+        class="sc-hKMtZM cnSXuh"
+      >
         User's username
       </span>
     </label>
     <label
-      class="label "
+      class="sc-gsnTZi mhuyQ"
       data-testid="my-label-input"
     >
       <input
-        class="my-input "
+        class="sc-dkzDqf fWXHEX"
         placeholder=" "
         value="Andrew"
       />
-      <span>
+      <span
+        class="sc-hKMtZM cnSXuh"
+      >
         User's firstName
       </span>
     </label>
     <label
-      class="label "
+      class="sc-gsnTZi mhuyQ"
       data-testid="my-label-input"
     >
       <input
-        class="my-input "
+        class="sc-dkzDqf fWXHEX"
         placeholder=" "
         value="Makarevich"
       />
-      <span>
+      <span
+        class="sc-hKMtZM cnSXuh"
+      >
         User's lastName
       </span>
     </label>
     <label
-      class="label "
+      class="sc-gsnTZi mhuyQ"
       data-testid="my-label-input"
     >
       <input
-        class="my-input "
+        class="sc-dkzDqf fWXHEX"
         placeholder=" "
         value="andrei1@mail.ru"
       />
-      <span>
+      <span
+        class="sc-hKMtZM cnSXuh"
+      >
         User's email
       </span>
     </label>
   </div>
   <div
-    class="form-buttons__wrapper"
+    class="sc-eCYdqJ fuUAfF"
   >
     <button
-      class="my-button "
+      class="sc-bczRLJ bJUkpm"
       data-testid="clear-changes-btn"
       type="button"
     >
       Clear changes
     </button>
     <button
-      class="my-button "
+      class="sc-bczRLJ bJUkpm"
       data-testid="submit-changes-btn"
-      type="submit"
+      type="button"
     >
       Submit changes
     </button>
